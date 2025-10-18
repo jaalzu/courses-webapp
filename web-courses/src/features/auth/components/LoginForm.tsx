@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { UserIcon, LockIcon, EyeIcon, EnvelopeIcon } from "./icons/icons"
+import {  LockIcon, EnvelopeIcon } from "./icons/icons"
 
 
 export function LoginForm() {
@@ -40,7 +40,7 @@ export function LoginForm() {
   <Input
     type="email"
     
-    placeholder="Correo electrónico"
+    placeholder="javieralzuu@gmail.com"
     className="pl-10 w-full"
   />
 </div>
@@ -49,7 +49,7 @@ export function LoginForm() {
   <LockIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
   <Input
     type="password"
-    placeholder="Contraseña"
+    placeholder="Javier.20"
     className="pl-10 w-full"
   />
 </div>
