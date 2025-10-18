@@ -58,21 +58,20 @@ export function LoginForm() {
       <Button
   variant="secondary"
   size="lg"
-  className="w-full font-bold border border-gray-300 shadow-sm hover:shadow-lg transition-shadow"
+  className="w-full font-bold  hover:shadow-lg border border-gray-300 shadow-sm transition-shadow"
 >
   Iniciar sesión
 </Button>
 
-
       <div className="text-center text-sm mb-3">
-        <a href="#" className="text-black hover:underline">
+        <a href="#" className="text-black underline">
           ¿Olvidaste tu contraseña?
         </a>
       </div>
 
-      <div className="text-center text-sm text-muted-foreground">
+      <div className="text-center text-sm ">
         ¿No tienes una cuenta?{" "}
-        <a href="/register" className="text-primary underline">
+        <a href="/register" className="text-primary font-semibold underline">
           Regístrate
         </a>
       </div>
