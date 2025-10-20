@@ -4,7 +4,7 @@ import "../styles/globals.css";
 
 const montserrat = Montserrat({
   subsets: ['latin'],
-  weight: ['400', '600', '700'], // elegí los pesos que quieras
+  weight: ['400', '600', '700'], 
   variable: '--font-sans',
   display: 'swap',
 })
