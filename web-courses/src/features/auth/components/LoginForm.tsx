@@ -14,11 +14,11 @@ export function LoginForm() {
       </div>
 
      <Button variant="default"  size="lg" className="w-full flex items-center justify-center gap-2">
-  <img
-    src="/google-icon.svg"
-    alt="Google"
-    className="w-5 h-5"
-  />
+    <img
+      src="/google-icon.svg"
+      alt="Google"
+      className="w-5 h-5"
+    />
   Iniciar sesión con Google
 </Button>
 
@@ -55,13 +55,13 @@ export function LoginForm() {
 </div>
       </div>
 
-      <Button
-  variant="secondary"
-  size="lg"
-  className="w-full font-bold  hover:shadow-lg border border-gray-300 shadow-sm transition-shadow"
->
-  Iniciar sesión
-</Button>
+          <Button
+      variant="secondary"
+      size="lg"
+      className="w-full font-bold  hover:shadow-lg border border-gray-300 shadow-sm transition-shadow"
+    >
+      Iniciar sesión
+    </Button>
 
       <div className="text-center text-sm mb-3">
         <a href="#" className="text-black underline">
