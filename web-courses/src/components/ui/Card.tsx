@@ -1,5 +1,6 @@
 'use client'
 
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 
@@ -14,6 +15,7 @@ interface CardProps {
   description: string
   progress: number
   completed?: Completed
+  href: string 
   className?: string
 }
 
@@ -23,31 +25,37 @@ export default function Card({
   description,
   progress = 0,
   completed,
+  href,
   className = '',
 }: CardProps) {
   return (
-    <div className={`bg-white rounded-xl shadow-md overflow-hidden flex flex-col ${className}`}>
+    <Link
+      href={href}
+      className={`bg-white rounded-md overflow-hidden flex flex-col transition-transform shadow-sm hover:shadow-md duration-300 ${className}`}
+    >
       {/* Imagen */}
       <img src={image} alt={title} className="w-full h-40 object-cover" />
 
       {/* Contenido */}
-      <div className="p-4 flex flex-col flex-1">
-        <h3 className="text-lg font-semibold mb-2">{title}</h3>
-        <p className="text-gray-600 mb-4">{description}</p>
-
-        <Button className="w-full mb-4">Entrar</Button>
-
-        {completed && (
-  <div className="flex justify-between mt-3">
-    <span className="text-sm text-gray-600 font-medium">Completadas</span>
-    <span className="text-sm text-gray-600 font-medium">
-      {completed.done}/{completed.total}
-    </span>
+    <div className="p-4 flex flex-col flex-1 min-h-[260px] md:min-h-[260px] justify-between">
+  <div>
+    <h3 className="text-lg font-semibold leading-tight mb-2">{title}</h3>
+    <p className="text-gray-500 text-sm mb-6">{description}</p>
   </div>
-)}
+  <div>
+    <Button className="w-full mb-4 pointer-events-none">Entrar</Button>
+    {completed && (
+      <div className="flex justify-between mt-6">
+        <span className="text-sm text-gray-600 font-medium">Completadas</span>
+        <span className="text-sm text-gray-600 font-medium">{completed.done}/{completed.total}</span>
       </div>
+    )}
+  </div>
+</div>
+
+
       {/* Barra de progreso al borde del card */}
-      <Progress value={progress} className="h-1.5  w-full" />
-    </div>
+      <Progress value={progress} className="h-1.5 w-full" />
+    </Link>
   )
 }
