@@ -26,7 +26,7 @@ export function Navbar({ onToggleTheme, isDark }: { onToggleTheme: () => void, i
 
           {/* Mobile: Logo a la derecha */}
           <div className="md:hidden">
-            <span className="font-bold text-lg text-gray-900 dark:text-white">Mi App</span>
+            <span className="font-bold text-lg text-gray-900 dark:text-white">javacourses</span>
           </div>
 
           {/* Desktop SOLO: Botón tema + Avatar */}
@@ -52,7 +52,7 @@ export function Navbar({ onToggleTheme, isDark }: { onToggleTheme: () => void, i
                 <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                   <Avatar className="h-10 w-10">
                     <AvatarImage src="/avatar.jpg" alt="Usuario" />
-                    <AvatarFallback className="bg-blue-500 text-white">
+                    <AvatarFallback className="bg-primary text-white">
                       JD
                     </AvatarFallback>
                   </Avatar>

@@ -55,7 +55,7 @@ export default function Card({
 
 
       {/* Barra de progreso al borde del card */}
-      <Progress value={progress} className="h-1.5 w-full" />
+      <Progress value={progress} className="h-1.5 w-full " />
     </Link>
   )
 }
