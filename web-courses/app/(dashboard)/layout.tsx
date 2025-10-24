@@ -1,44 +1,50 @@
 'use client'
 
-import { useState } from "react"
-import { SidebarProvider, SidebarTrigger } from "@/components/sidebar/sidebar"
+import { useEffect, useState } from "react"
+import { SidebarProvider } from "@/components/sidebar/sidebar"
 import { AppSidebar } from "@/components/sidebar/app-sidebar"
 import { Navbar } from "@/components/ui/navbar"
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const [isDark, setIsDark] = useState(false)
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const [isDark, setIsDark] = useState<boolean | null>(null)
 
   const toggleTheme = () => {
-    setIsDark(!isDark)
-    // Acá podés agregar lógica para persistir el tema
-    document.documentElement.classList.toggle('dark')
+    const newTheme = !isDark
+    setIsDark(newTheme)
+    document.documentElement.classList.toggle("dark", newTheme)
+    localStorage.setItem("theme", newTheme ? "dark" : "light")
   }
 
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme")
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+    const activeTheme = savedTheme === "dark" || (!savedTheme && prefersDark)
+
+    setIsDark(activeTheme)
+    document.documentElement.classList.toggle("dark", activeTheme)
+  }, [])
+
+  if (isDark === null) return null
+
   return (
-    <html lang="en" className={isDark ? 'dark' : ''}>
-      <body className="bg-gray-50 dark:bg-gray-900">
-        <SidebarProvider>
-          <div className="flex min-h-screen">
-            
-            {/* Sidebar fijo en desktop */}
-            <div className="hidden md:flex">
-              <AppSidebar />
-            </div>
+    <SidebarProvider>
+      <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+        {/* Sidebar fijo en desktop */}
+        <div className="hidden md:flex">
+          <AppSidebar />
+        </div>
 
-            {/* Contenido principal */}
-            <div className="flex-1 flex flex-col w-full">
-              
-              {/* Navbar */}
-              <Navbar onToggleTheme={toggleTheme} isDark={isDark} />
+        {/* Contenido principal */}
+        <div className="flex-1 flex flex-col w-full">
+          {/* Navbar */}
+          <Navbar onToggleTheme={toggleTheme} isDark={isDark} />
 
-              {/* Main content */}
-              <main className="flex-1 p-6 overflow-auto">
-                {children}
-              </main>
-            </div>
-          </div>
-        </SidebarProvider>
-      </body>
-    </html>
+          {/* Main content */}
+          <main className="flex-1 overflow-auto">
+            {children}
+          </main>
+        </div>
+      </div>
+    </SidebarProvider>
   )
 }
