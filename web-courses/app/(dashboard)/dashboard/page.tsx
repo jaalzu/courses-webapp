@@ -1,7 +1,6 @@
 'use client'
 import Card from "@/components/ui/Card"
 import { useCourseStore } from "@/lib/store/courses"
-import { cursos } from "@/lib/data/cursos"
 
 
 

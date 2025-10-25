@@ -1,8 +1,9 @@
 import {
   HomeIcon,
-  InboxIcon,
+  UserIcon,
   MagnifyingGlassIcon,
   Cog6ToothIcon,
+  QuestionMarkCircleIcon
 } from "@heroicons/react/24/outline"
 
 import {
@@ -20,10 +21,10 @@ import {
 } from "@/components/sidebar/sidebar"
 
 const items = [
-  { title: "Home", url: "/", icon: HomeIcon },
-  { title: "Inbox", url: "/inbox", icon: InboxIcon },
-  { title: "Search", url: "/search", icon: MagnifyingGlassIcon },
-  { title: "Settings", url: "/settings", icon: Cog6ToothIcon },
+  { title: "Inicio", url: "/dashboard", icon: HomeIcon },
+  { title: "Buscar curso", url: "/search", icon: MagnifyingGlassIcon },
+  { title: "Perfil", url: "/perfil", icon: UserIcon },
+  { title: "FAQS", url: "/faqs", icon: QuestionMarkCircleIcon },
 ]
 
 export function AppSidebar() {
@@ -36,8 +37,8 @@ export function AppSidebar() {
         <HomeIcon className="size-4" />
       </div>
       <div className="flex flex-col gap-0.5 leading-none">
-        <span className="font-semibold">Mi Aplicación</span>
-        <span className="text-xs">v1.0.0</span>
+        <span className="font-semibold">javalzu</span>
+        <span className="text-xs"></span>
       </div>
     </div>
     {/* Botón para cerrar el sidebar solo en mobile */}
