@@ -8,7 +8,7 @@ interface CourseContentProps {   // 🔹 define la interfaz
 
 export default function CourseContent({ course }: CourseContentProps) {
   return (
-    <section className="space-y-4 bg-white p-4 rounded-lg shadow-sm">
+    <section className="space-y-4 bg-white p-4 dark:bg-neutral-900 rounded-lg shadow-sm">
       <div>
         <h1 className="text-2xl font-semibold">{course.title}</h1>
         <p className="text-sm text-gray-500">

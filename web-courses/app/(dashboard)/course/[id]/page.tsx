@@ -41,12 +41,14 @@ export default function CoursePage() {
   const handleTimestampClick = (lesson: any, seconds: number) => console.log('Saltar a:', seconds)
 
   return (
-    <div className="p-4 md:p-8 space-y-6 bg-gray-50">
-      <p className="text-sm text-gray-500">
-        Dashboard / Cursos / <span className="font-medium text-gray-700">{course.title}</span>
+    // <div className="p-4 md:p-8 space-y-6 bg-gray-50 dark:bg-neutral-800">
+      <div className="w-full p-4 md:p-8 space-y-6 bg-gray-50 dark:bg-neutral-800 ">
+
+      <p className="text-sm text-gray-500 dark:text-gray-300">
+        Dashboard / Cursos / <span className="font-medium text-gray-700  dark:text-gray-200">{course.title}</span>
       </p>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr]  gap-10 ">
         <CourseContent course={course} />
 
         <LessonList

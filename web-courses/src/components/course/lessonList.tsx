@@ -33,9 +33,9 @@ export function LessonList({
   const progress = Math.round((completedCount / totalLessons) * 100)
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm overflow-hidden">
+    <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm overflow-hidden overflow-x-hidden">
       {/* Header */}
-      <div className="p-6 border-b border-gray-100 dark:border-gray-800">
+      <div className="p-6 border-b border-gray-100 dark:border-gray-400" >
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
             Contenido del curso
@@ -60,8 +60,8 @@ export function LessonList({
       </div>
       
       {/* Lessons List */}
-      <ScrollArea className="h-[600px]">
-        <div className="px-6 py-2">
+      <ScrollArea className="h-[600px] w-full">
+        <div className="px-6 py-2 w-full">
           <Accordion type="single" collapsible className="w-full">
             {lessons.map((lesson) => {
               const isActive = currentLessonId === lesson.id
