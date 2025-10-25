@@ -49,11 +49,11 @@ export function LessonList({
         <div>
           <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2">
             <div 
-              className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
+              className="bg-green-400 h-2 rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+          <p className="text-xs text-gray-500 dark:text-blue-200 mt-1">
             {progress}% completado
           </p>
         </div>
@@ -61,7 +61,7 @@ export function LessonList({
       
       {/* Lessons List */}
       <ScrollArea className="h-[600px] w-full">
-        <div className="px-6 py-2 w-full">
+        <div className="px-2 py-2 w-full">
           <Accordion type="single" collapsible className="w-full">
             {lessons.map((lesson) => {
               const isActive = currentLessonId === lesson.id
@@ -70,7 +70,7 @@ export function LessonList({
                 <AccordionItem 
                   key={lesson.id} 
                   value={`lesson-${lesson.id}`}
-                  className="border-b border-gray-100 dark:border-gray-800"
+                  className="border-b border-gray-200  dark:border-gray-700"
                 >
                   <AccordionTrigger 
                     className={cn(
@@ -94,7 +94,7 @@ export function LessonList({
                             {lesson.duration}
                           </Badge>
                           {isActive && (
-                            <Badge className="text-xs bg-indigo-600 hover:bg-indigo-700">
+                            <Badge className="text-xs bg-blue-700 hover:bg-blue-700 dark:text-blue-100">
                               Reproduciendo
                             </Badge>
                           )}
@@ -104,14 +104,14 @@ export function LessonList({
                   </AccordionTrigger>
 
                   <AccordionContent>
-                    <div className="pl-8 pr-4 pb-4 space-y-3">
+                    <div className="pl-8 pr-4 pb-4 space-y-4 mt-2">
                       {/* Botón reproducir lección completa */}
                       <button 
                         onClick={() => onLessonSelect(lesson)}
                         className={cn(
                           "w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm transition-colors",
                           isActive 
-                            ? "bg-indigo-600 hover:bg-indigo-700 text-white" 
+                            ? "bg-blue-700 hover:bg-blue-700 text-white" 
                             : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-900 dark:text-white"
                         )}
                       >

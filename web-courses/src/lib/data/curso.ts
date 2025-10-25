@@ -131,4 +131,144 @@ export const courses: Course[] = [
       },
     ],
   },
+  {
+    id: 3,
+    title: "Node.js y Express: Backend desde cero",
+    description: "Domina el desarrollo backend con Node.js y Express. Aprende a crear APIs RESTful, autenticación, bases de datos y deploy. Perfecto para convertirte en fullstack developer.",
+    image: "/curso3.jpg",
+    duration: "4h 20m",
+    video: "https://www.youtube.com/embed/1hpc70_OoAg",
+    level: 'intermediate',
+    instructor: "Carlos Rodríguez",
+    lessons: [
+      { 
+        id: 1, title: "Introducción a Node.js", duration: "5:15", completed: false,
+        timestamps: [
+          { time: "00:00", seconds: 0, label: "¿Qué es Node.js?" },
+          { time: "01:45", seconds: 105, label: "Event Loop explicado" },
+          { time: "03:30", seconds: 210, label: "Instalación y setup" }
+        ]
+      },
+      { 
+        id: 2, title: "Express.js fundamentals", duration: "12:30", completed: false,
+        timestamps: [
+          { time: "00:00", seconds: 0, label: "¿Qué es Express?" },
+          { time: "02:00", seconds: 120, label: "Primer servidor" },
+          { time: "05:30", seconds: 330, label: "Routing básico" },
+          { time: "08:45", seconds: 525, label: "Middlewares" },
+          { time: "10:30", seconds: 630, label: "Manejo de errores" }
+        ]
+      },
+      { 
+        id: 3, title: "APIs RESTful", duration: "15:45", completed: false,
+        timestamps: [
+          { time: "00:00", seconds: 0, label: "Principios REST" },
+          { time: "03:00", seconds: 180, label: "Métodos HTTP" },
+          { time: "06:30", seconds: 390, label: "CRUD completo" },
+          { time: "11:00", seconds: 660, label: "Validación de datos" },
+          { time: "13:30", seconds: 810, label: "Testing con Postman" }
+        ]
+      },
+      { 
+        id: 4, title: "MongoDB y Mongoose", duration: "18:20", completed: false,
+        timestamps: [
+          { time: "00:00", seconds: 0, label: "Introducción a MongoDB" },
+          { time: "04:00", seconds: 240, label: "Mongoose setup" },
+          { time: "08:30", seconds: 510, label: "Schemas y Models" },
+          { time: "12:00", seconds: 720, label: "Queries avanzadas" },
+          { time: "15:30", seconds: 930, label: "Relaciones entre documentos" }
+        ]
+      },
+      { 
+        id: 5, title: "Autenticación JWT", duration: "14:30", completed: false,
+        timestamps: [
+          { time: "00:00", seconds: 0, label: "¿Qué es JWT?" },
+          { time: "02:30", seconds: 150, label: "Bcrypt para passwords" },
+          { time: "06:00", seconds: 360, label: "Login y Register" },
+          { time: "10:00", seconds: 600, label: "Middleware de autenticación" },
+          { time: "12:30", seconds: 750, label: "Refresh tokens" }
+        ]
+      },
+      { 
+        id: 6, title: "Deploy en producción", duration: "10:00", completed: false,
+        timestamps: [
+          { time: "00:00", seconds: 0, label: "Variables de entorno" },
+          { time: "02:30", seconds: 150, label: "Deploy en Railway" },
+          { time: "05:00", seconds: 300, label: "MongoDB Atlas" },
+          { time: "07:30", seconds: 450, label: "Testing en producción" }
+        ]
+      },
+    ],
+  },
+  {
+    id: 4,
+    title: "TypeScript: JavaScript con superpoderes",
+    description: "Lleva tu JavaScript al siguiente nivel con TypeScript. Aprende tipado estático, interfaces, generics y cómo aplicarlo en proyectos React y Node.js para código más robusto y mantenible.",
+    image: "/curso4.webp",
+    duration: "3h 10m",
+    video: "https://www.youtube.com/embed/BwuLxPH8IDs",
+    level: 'intermediate',
+    instructor: "Ana Martínez",
+    lessons: [
+      { 
+        id: 1, title: "¿Por qué TypeScript?", duration: "6:30", completed: false,
+        timestamps: [
+          { time: "00:00", seconds: 0, label: "Problemas de JavaScript" },
+          { time: "02:00", seconds: 120, label: "Ventajas del tipado" },
+          { time: "04:15", seconds: 255, label: "TypeScript vs JavaScript" },
+          { time: "05:30", seconds: 330, label: "Setup inicial" }
+        ]
+      },
+      { 
+        id: 2, title: "Tipos básicos", duration: "11:45", completed: false,
+        timestamps: [
+          { time: "00:00", seconds: 0, label: "string, number, boolean" },
+          { time: "02:30", seconds: 150, label: "Arrays y tuplas" },
+          { time: "05:00", seconds: 300, label: "any, unknown, never" },
+          { time: "07:30", seconds: 450, label: "Union types" },
+          { time: "09:45", seconds: 585, label: "Type aliases" }
+        ]
+      },
+      { 
+        id: 3, title: "Interfaces y tipos avanzados", duration: "13:20", completed: false,
+        timestamps: [
+          { time: "00:00", seconds: 0, label: "Interfaces básicas" },
+          { time: "03:30", seconds: 210, label: "Propiedades opcionales" },
+          { time: "06:00", seconds: 360, label: "Extending interfaces" },
+          { time: "09:00", seconds: 540, label: "Type vs Interface" },
+          { time: "11:30", seconds: 690, label: "Intersection types" }
+        ]
+      },
+      { 
+        id: 4, title: "Generics y utilidades", duration: "15:00", completed: false,
+        timestamps: [
+          { time: "00:00", seconds: 0, label: "¿Qué son los generics?" },
+          { time: "04:00", seconds: 240, label: "Funciones genéricas" },
+          { time: "08:00", seconds: 480, label: "Clases genéricas" },
+          { time: "11:00", seconds: 660, label: "Utility types: Partial, Pick, Omit" },
+          { time: "13:30", seconds: 810, label: "Record y ReadOnly" }
+        ]
+      },
+      { 
+        id: 5, title: "TypeScript con React", duration: "16:30", completed: false,
+        timestamps: [
+          { time: "00:00", seconds: 0, label: "Setup React + TypeScript" },
+          { time: "03:00", seconds: 180, label: "Tipar componentes" },
+          { time: "06:30", seconds: 390, label: "Props e interfaces" },
+          { time: "10:00", seconds: 600, label: "Hooks tipados" },
+          { time: "13:30", seconds: 810, label: "Context API con TypeScript" }
+        ]
+      },
+      { 
+        id: 6, title: "Proyecto: API REST tipada", duration: "20:00", completed: false,
+        timestamps: [
+          { time: "00:00", seconds: 0, label: "Estructura del proyecto" },
+          { time: "04:00", seconds: 240, label: "Express con TypeScript" },
+          { time: "09:00", seconds: 540, label: "Controllers tipados" },
+          { time: "13:00", seconds: 780, label: "Mongoose + TypeScript" },
+          { time: "17:00", seconds: 1020, label: "Testing y deployment" }
+        ]
+      },
+    ],
+  },
 ]

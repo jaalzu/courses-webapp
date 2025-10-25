@@ -11,7 +11,7 @@ export default function CourseContent({ course }: CourseContentProps) {
     <section className="space-y-4 bg-white p-4 dark:bg-neutral-900 rounded-lg shadow-sm">
       <div>
         <h1 className="text-2xl font-semibold">{course.title}</h1>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-500 dark:text-blue-200">
           {course.lessons.length} lecciones · {course.duration}
         </p>
       </div>
@@ -26,7 +26,7 @@ export default function CourseContent({ course }: CourseContentProps) {
 
       <div>
         <h2 className="text-lg font-semibold mb-1">Descripción</h2>
-        <p className="text-gray-600 text-sm leading-relaxed">{course.description}</p>
+        <p className="text-gray-600 text-sm leading-relaxed dark:text-blue-200">{course.description}</p>
       </div>
     </section>
   )
