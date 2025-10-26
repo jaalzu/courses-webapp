@@ -1,6 +1,7 @@
 'use client'
 
 import Link from "next/link"
+import { CheckCircleIcon } from '@heroicons/react/24/solid' // ← Sólido (relleno)
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 
@@ -60,12 +61,22 @@ export default function Card({
         <div>
           <Button className="w-full mb-4 pointer-events-none">Entrar</Button>
           {completed && (
-            <div className="flex justify-between mt-6">
-              <span className="text-sm text-gray-600 dark:text-gray-200 font-medium">Completadas</span>
-              <span className="text-sm text-gray-600 dark:text-gray-200 font-medium">
-                {completed.done}/{completed.total}
-              </span>
-            </div>
+           <div className="flex justify-between items-center mt-6">
+  <span className="text-sm text-gray-600 dark:text-gray-200 font-medium">
+    Lecciones
+  </span>
+  
+  {completed.done === completed.total ? (
+    <div className="flex items-center gap-1.5 text-green-600 dark:text-green-400">
+      <CheckCircleIcon className="w-5 h-5" />
+      <span className="text-sm font-semibold">¡Completado!</span>
+    </div>
+  ) : (
+    <span className="text-sm text-gray-600 dark:text-gray-200 font-medium">
+      {completed.done}/{completed.total}
+    </span>
+  )}
+</div>
           )}
         </div>
       </div>
