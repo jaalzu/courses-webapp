@@ -39,3 +39,5 @@ export const useCourseStore = create<CourseStore>()(
     }
   )
 )
+
+// localStorage.clear()

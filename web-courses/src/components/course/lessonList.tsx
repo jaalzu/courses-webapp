@@ -60,7 +60,7 @@ export function LessonList({
       </div>
       
       {/* Lessons List */}
-      <ScrollArea className="h-[600px] w-full">
+      <ScrollArea className="h-[600px] w-full pb-8">
         <div className="px-2 py-2 w-full">
           <Accordion type="single" collapsible className="w-full">
             {lessons.map((lesson) => {
@@ -103,7 +103,7 @@ export function LessonList({
                     </div>
                   </AccordionTrigger>
 
-                  <AccordionContent>
+                  <AccordionContent >
                     <div className="pl-8 pr-4 pb-4 space-y-4 mt-2">
                       {/* Botón reproducir lección completa */}
                       <button 
@@ -148,7 +148,7 @@ export function LessonList({
                       {!lesson.completed && (
                         <button
                           onClick={() => onToggleComplete(lesson.id)}
-                          className="mt-3 w-full bg-green-500 hover:bg-green-600 text-white font-medium py-2 rounded-lg transition-colors"
+                          className="mt-3 w-full bg-green-jhn00 hover:bg-green-600 text-white font-medium py-2 rounded-lg transition-colors"
                         >
                           Marcar como completada
                         </button>
