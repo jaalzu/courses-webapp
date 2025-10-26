@@ -23,7 +23,7 @@ export default function DashboardPage() {
             description={course.description}
             progress={progress}  // ← Progreso calculado dinámicamente
             completed={{ done: completedCount, total: totalLessons }}
-            href={`/course/${course.id}`}
+            href={`/curso/${course.id}`}
             className="w-[100%] sm:w-[90%] md:w-[100%] lg:w-[95%] xl:w-[97%]"
           />
         )
