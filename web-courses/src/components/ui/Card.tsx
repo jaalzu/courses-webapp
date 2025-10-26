@@ -33,7 +33,7 @@ export default function Card({
       href={href}
       className={`
         bg-white 
-        dark:bg-neutral-900
+        dark:bg-gray-900
         text-black 
         dark:text-gray-100
         rounded-md 
@@ -42,7 +42,9 @@ export default function Card({
         transition-transform 
         shadow-sm 
         hover:shadow-md 
-        duration-300 
+        duration-300
+         border border-gray-200 
+  dark:border-gray-600 
         ${className}
       `}
     >
