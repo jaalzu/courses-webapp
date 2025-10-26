@@ -1,8 +1,9 @@
+// 📁 components/course/courseContent.tsx
 'use client'
 
 import { Course } from "@/lib/data/curso"
 
-interface CourseContentProps {   // 🔹 define la interfaz
+interface CourseContentProps {
   course: Course
 }
 
@@ -26,7 +27,9 @@ export default function CourseContent({ course }: CourseContentProps) {
 
       <div>
         <h2 className="text-lg font-semibold mb-1">Descripción</h2>
-        <p className="text-gray-600 text-sm leading-relaxed dark:text-blue-200">{course.description}</p>
+        <p className="text-gray-600 text-sm leading-relaxed dark:text-blue-200">
+          {course.description}
+        </p>
       </div>
     </section>
   )
