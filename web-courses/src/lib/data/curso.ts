@@ -4,134 +4,152 @@ import type { Course } from '@/types/course'
 export const courses: Course[] = [
   {
     id: 1,
-    title: "React desde cero: crea interfaces modernas",
+    title: "HTML y CSS: Fundamentos del desarrollo web",
     description:
-      "Aprende React paso a paso desde los fundamentos hasta la creación de componentes avanzados, hooks y buenas prácticas. Ideal para construir proyectos reales con un enfoque moderno.",
+      "Aprende HTML y CSS desde cero. Domina la estructura semántica, estilos modernos, Flexbox, Grid y diseño responsive. El punto de partida perfecto para cualquier desarrollador web.",
     image: "/curso1.jpg",
-    duration: "3h 45m",
-    video: "https://www.youtube.com/embed/dGcsHMXbSOA",
+    duration: "3h 30m",
+    video: "https://www.youtube.com/embed/rr2H086z16s",
     level: 'beginner',
     instructor: "Juan Pérez",
 
     extraInfo:
-      "React cambió la manera en que pensamos las interfaces. Aprenderlo bien te da una ventaja brutal como frontend, porque enseña la filosofía declarativa que domina la web moderna.",
+      "HTML y CSS son la base de todo en la web. Dominarlos bien te da fundamentos sólidos para cualquier tecnología frontend que aprendas después.",
     keyPoints: [
-      "Comprender cómo funciona el Virtual DOM y el renderizado eficiente",
-      "Crear componentes reutilizables y escalables",
-      "Aprender hooks esenciales como useState y useEffect",
-      "Construir una app completa desde cero",
+      "Escribir HTML semántico y accesible",
+      "Crear layouts modernos con Flexbox y Grid",
+      "Diseñar interfaces responsive para todos los dispositivos",
+      "Aplicar buenas prácticas de CSS y organización de código",
     ],
     quote:
-      "Aprender React no es solo aprender una librería: es entender cómo piensa la interfaz.",
+      "Antes de correr con frameworks, hay que caminar bien con HTML y CSS.",
 
     lessons: [
       {
         id: 1,
-        title: "Introducción al curso",
-        duration: "3:20",
+        title: "Introducción al desarrollo web",
+        duration: "4:20",
         completed: false,
         timestamps: [
-          { time: "00:00", seconds: 0, label: "Bienvenida" },
-          { time: "01:30", seconds: 90, label: "Qué aprenderás" },
-          { time: "02:45", seconds: 165, label: "Requisitos previos" },
+          { time: "00:00", seconds: 0, label: "Bienvenida al curso" },
+          { time: "01:30", seconds: 90, label: "Cómo funciona la web" },
+          { time: "03:00", seconds: 180, label: "Setup del entorno" },
         ],
       },
       {
         id: 2,
-        title: "¿Qué es React?",
-        duration: "7:45",
+        title: "HTML Semántico",
+        duration: "8:45",
         completed: false,
         timestamps: [
-          { time: "00:00", seconds: 0, label: "Historia de React" },
-          { time: "02:00", seconds: 120, label: "Virtual DOM" },
-          { time: "04:30", seconds: 270, label: "Comparación con otros frameworks" },
-          { time: "06:15", seconds: 375, label: "Casos de uso" },
+          { time: "00:00", seconds: 0, label: "Estructura básica HTML" },
+          { time: "02:00", seconds: 120, label: "Etiquetas semánticas" },
+          { time: "04:30", seconds: 270, label: "Formularios y validación" },
+          { time: "06:45", seconds: 405, label: "Accesibilidad básica" },
         ],
       },
       {
         id: 3,
-        title: "JSX y componentes",
-        duration: "10:30",
+        title: "CSS: Estilos y selectores",
+        duration: "10:15",
         completed: false,
         timestamps: [
-          { time: "00:00", seconds: 0, label: "¿Qué es JSX?" },
-          { time: "02:30", seconds: 150, label: "Sintaxis básica" },
-          { time: "05:00", seconds: 300, label: "Componentes funcionales" },
-          { time: "07:45", seconds: 465, label: "Props básicas" },
+          { time: "00:00", seconds: 0, label: "Sintaxis de CSS" },
+          { time: "02:30", seconds: 150, label: "Selectores y especificidad" },
+          { time: "05:00", seconds: 300, label: "Box model" },
+          { time: "07:45", seconds: 465, label: "Colores y tipografía" },
         ],
       },
       {
         id: 4,
-        title: "Props y estado",
-        duration: "9:10",
+        title: "Flexbox y Grid",
+        duration: "12:30",
         completed: false,
         timestamps: [
-          { time: "00:00", seconds: 0, label: "Diferencia entre props y state" },
-          { time: "02:15", seconds: 135, label: "Pasar props entre componentes" },
-          { time: "05:30", seconds: 330, label: "useState hook" },
-          { time: "07:00", seconds: 420, label: "Ejemplo práctico" },
+          { time: "00:00", seconds: 0, label: "Introducción a Flexbox" },
+          { time: "04:00", seconds: 240, label: "Propiedades de Flexbox" },
+          { time: "07:30", seconds: 450, label: "CSS Grid básico" },
+          { time: "10:00", seconds: 600, label: "Layouts prácticos" },
         ],
       },
       {
         id: 5,
-        title: "Proyecto final",
-        duration: "25:00",
+        title: "Responsive Design",
+        duration: "11:00",
         completed: false,
         timestamps: [
-          { time: "00:00", seconds: 0, label: "Presentación del proyecto" },
-          { time: "03:00", seconds: 180, label: "Estructura de carpetas" },
-          { time: "08:00", seconds: 480, label: "Componentes principales" },
-          { time: "15:00", seconds: 900, label: "Estado global" },
-          { time: "20:00", seconds: 1200, label: "Deploy" },
+          { time: "00:00", seconds: 0, label: "Mobile-first approach" },
+          { time: "03:00", seconds: 180, label: "Media queries" },
+          { time: "06:00", seconds: 360, label: "Unidades responsive" },
+          { time: "08:30", seconds: 510, label: "Proyecto landing page" },
         ],
       },
     ],
   },
   {
     id: 2,
-    title: "Next.js avanzado: rutas, SSR y API Routes",
-    description: "Domina Next.js creando aplicaciones dinámicas con Server Side Rendering, rutas protegidas y conexión a APIs modernas.",
+    title: "JavaScript Moderno: De cero a profesional",
+    description: "Domina JavaScript ES6+ con todos sus fundamentos: variables, funciones, arrays, objetos, DOM, eventos, async/await y más. El curso completo para programar en JavaScript.",
     image: "/curso2.jpg",
-    duration: "4h 10m",
-    video: "https://www.youtube.com/embed/Tn6-PIqc4UM",
-    level: 'advanced',
+    duration: "5h 20m",
+    video: "https://www.youtube.com/embed/ivdTnPl1ND0",
+    level: 'beginner',
     instructor: "María González",
     lessons: [
       { 
-        id: 1, title: "Introducción", duration: "5:15", completed: false,
+        id: 1, title: "Fundamentos de JavaScript", duration: "8:15", completed: false,
         timestamps: [
-          { time: "00:00", seconds: 0, label: "Overview del curso" },
-          { time: "02:00", seconds: 120, label: "Setup del proyecto" },
-          { time: "04:00", seconds: 240, label: "Estructura de Next.js" }
+          { time: "00:00", seconds: 0, label: "¿Qué es JavaScript?" },
+          { time: "02:00", seconds: 120, label: "Variables: let, const, var" },
+          { time: "04:30", seconds: 270, label: "Tipos de datos" },
+          { time: "06:00", seconds: 360, label: "Operadores" }
         ]
       },
       { 
-        id: 2, title: "Páginas y rutas dinámicas", duration: "12:40", completed: false,
+        id: 2, title: "Funciones y scope", duration: "11:40", completed: false,
         timestamps: [
-          { time: "00:00", seconds: 0, label: "Sistema de routing" },
-          { time: "03:30", seconds: 210, label: "Rutas dinámicas [id]" },
-          { time: "07:00", seconds: 420, label: "Catch-all routes" },
-          { time: "10:00", seconds: 600, label: "Link component" }
+          { time: "00:00", seconds: 0, label: "Declaración de funciones" },
+          { time: "03:30", seconds: 210, label: "Arrow functions" },
+          { time: "06:00", seconds: 360, label: "Scope y closure" },
+          { time: "09:00", seconds: 540, label: "Callbacks" }
         ]
       },
       { 
-        id: 3, title: "SSR y SSG", duration: "15:00", completed: false,
+        id: 3, title: "Arrays y objetos", duration: "13:00", completed: false,
         timestamps: [
-          { time: "00:00", seconds: 0, label: "¿Qué es SSR?" },
-          { time: "04:00", seconds: 240, label: "getServerSideProps" },
-          { time: "08:00", seconds: 480, label: "¿Qué es SSG?" },
-          { time: "11:00", seconds: 660, label: "getStaticProps" },
-          { time: "13:00", seconds: 780, label: "ISR - Regeneración incremental" }
+          { time: "00:00", seconds: 0, label: "Arrays básicos" },
+          { time: "03:00", seconds: 180, label: "Métodos: map, filter, reduce" },
+          { time: "07:00", seconds: 420, label: "Objetos literales" },
+          { time: "10:00", seconds: 600, label: "Destructuring" }
         ]
       },
       { 
-        id: 4, title: "API Routes", duration: "14:20", completed: false,
+        id: 4, title: "DOM y Eventos", duration: "15:20", completed: false,
         timestamps: [
-          { time: "00:00", seconds: 0, label: "Intro a API Routes" },
-          { time: "02:30", seconds: 150, label: "Crear primera API" },
-          { time: "06:00", seconds: 360, label: "Métodos HTTP" },
-          { time: "10:00", seconds: 600, label: "Middleware" },
-          { time: "12:30", seconds: 750, label: "Autenticación" }
+          { time: "00:00", seconds: 0, label: "¿Qué es el DOM?" },
+          { time: "03:30", seconds: 210, label: "Seleccionar elementos" },
+          { time: "07:00", seconds: 420, label: "Manipular contenido" },
+          { time: "10:30", seconds: 630, label: "Event listeners" },
+          { time: "13:00", seconds: 780, label: "Event delegation" }
+        ]
+      },
+      { 
+        id: 5, title: "Asincronía: Promises y Async/Await", duration: "14:30", completed: false,
+        timestamps: [
+          { time: "00:00", seconds: 0, label: "JavaScript asíncrono" },
+          { time: "03:00", seconds: 180, label: "Promises" },
+          { time: "07:00", seconds: 420, label: "Async/Await" },
+          { time: "10:30", seconds: 630, label: "Fetch API" },
+          { time: "12:45", seconds: 765, label: "Manejo de errores" }
+        ]
+      },
+      { 
+        id: 6, title: "Proyecto: App de tareas", duration: "18:00", completed: false,
+        timestamps: [
+          { time: "00:00", seconds: 0, label: "Estructura del proyecto" },
+          { time: "04:00", seconds: 240, label: "CRUD completo" },
+          { time: "10:00", seconds: 600, label: "LocalStorage" },
+          { time: "14:00", seconds: 840, label: "Validaciones y UX" }
         ]
       },
     ],
@@ -272,6 +290,55 @@ export const courses: Course[] = [
           { time: "09:00", seconds: 540, label: "Controllers tipados" },
           { time: "13:00", seconds: 780, label: "Mongoose + TypeScript" },
           { time: "17:00", seconds: 1020, label: "Testing y deployment" }
+        ]
+      },
+    ],
+  },
+  {
+    id: 5,
+    title: "Next.js avanzado: rutas, SSR y API Routes",
+    description: "Domina Next.js creando aplicaciones dinámicas con Server Side Rendering, rutas protegidas y conexión a APIs modernas. Nivel avanzado para crear apps en producción.",
+    image: "/curso2.jpg",
+    duration: "4h 10m",
+    video: "https://www.youtube.com/embed/Tn6-PIqc4UM",
+    level: 'advanced',
+    instructor: "María González",
+    lessons: [
+      { 
+        id: 1, title: "Introducción", duration: "5:15", completed: false,
+        timestamps: [
+          { time: "00:00", seconds: 0, label: "Overview del curso" },
+          { time: "02:00", seconds: 120, label: "Setup del proyecto" },
+          { time: "04:00", seconds: 240, label: "Estructura de Next.js" }
+        ]
+      },
+      { 
+        id: 2, title: "Páginas y rutas dinámicas", duration: "12:40", completed: false,
+        timestamps: [
+          { time: "00:00", seconds: 0, label: "Sistema de routing" },
+          { time: "03:30", seconds: 210, label: "Rutas dinámicas [id]" },
+          { time: "07:00", seconds: 420, label: "Catch-all routes" },
+          { time: "10:00", seconds: 600, label: "Link component" }
+        ]
+      },
+      { 
+        id: 3, title: "SSR y SSG", duration: "15:00", completed: false,
+        timestamps: [
+          { time: "00:00", seconds: 0, label: "¿Qué es SSR?" },
+          { time: "04:00", seconds: 240, label: "getServerSideProps" },
+          { time: "08:00", seconds: 480, label: "¿Qué es SSG?" },
+          { time: "11:00", seconds: 660, label: "getStaticProps" },
+          { time: "13:00", seconds: 780, label: "ISR - Regeneración incremental" }
+        ]
+      },
+      { 
+        id: 4, title: "API Routes", duration: "14:20", completed: false,
+        timestamps: [
+          { time: "00:00", seconds: 0, label: "Intro a API Routes" },
+          { time: "02:30", seconds: 150, label: "Crear primera API" },
+          { time: "06:00", seconds: 360, label: "Métodos HTTP" },
+          { time: "10:00", seconds: 600, label: "Middleware" },
+          { time: "12:30", seconds: 750, label: "Autenticación" }
         ]
       },
     ],
