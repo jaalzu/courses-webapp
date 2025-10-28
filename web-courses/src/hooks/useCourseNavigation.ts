@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from "react"
 import { useCourseStore } from "@/lib/store/courses"
-import type { Lesson } from "@/lib/data/curso"
+import type { Lesson } from "@/types" // ← Cambiado
 
 export function useCourseNavigation(courseId: number) {
   // ✅ Suscribirse directamente al curso específico

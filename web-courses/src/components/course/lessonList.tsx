@@ -1,7 +1,7 @@
 'use client'
 
 import { Play, Clock, CheckCircle2, Circle } from "lucide-react"
-import type { Lesson } from "@/lib/data/curso"
+import type { Lesson } from "@/types" // ← Cambiado
 import {
   Accordion,
   AccordionContent,

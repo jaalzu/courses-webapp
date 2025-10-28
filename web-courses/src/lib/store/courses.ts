@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { Course } from '@/lib/data/curso'
+import type { Course } from '@/types' // ← Ahora desde /types
 import { courses as initialCourses } from '@/lib/data/curso'
 
 interface CourseStore {

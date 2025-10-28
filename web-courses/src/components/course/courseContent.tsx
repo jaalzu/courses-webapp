@@ -1,7 +1,7 @@
 // 📁 components/course/courseContent.tsx
 'use client'
 
-import { Course } from "@/lib/data/curso"
+import type { Course } from "@/types" 
 
 interface CourseContentProps {
   course: Course
