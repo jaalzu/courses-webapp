@@ -2,9 +2,12 @@
 'use client'
 
 import { useParams } from "next/navigation"
+import Link from "next/link"
+import { ChevronRightIcon } from "@heroicons/react/24/outline"
 import { useCourseNavigation } from "@/hooks/useCourseNavigation"
 import CourseContent from "@/components/course/courseContent"
 import { LessonList } from "@/components/course/lessonList"
+import CourseNotFound from "@/components/course/courseNotFound"
 
 export default function CoursePage() {
   const { id } = useParams()
@@ -17,19 +20,36 @@ export default function CoursePage() {
     handleTimestampClick
   } = useCourseNavigation(Number(id))
 
+  // SIN <section> wrapper!
   if (!course) {
-    return (
-      <div className="p-6 text-gray-600 dark:text-gray-400">
-        Curso no encontrado.
-      </div>
-    )
+    return <CourseNotFound />
   }
 
   return (
     <div className="w-full p-4 md:p-8 space-y-6 bg-gray-50 dark:bg-neutral-900">
-      <p className="text-sm text-gray-500 dark:text-gray-300">
-        Dashboard / Cursos / <span className="font-medium text-gray-700 dark:text-gray-200">{course.title}</span>
-      </p>
+      <nav className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+        <Link 
+          href="/" 
+          className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+        >
+          Dashboard
+        </Link>
+        
+        <ChevronRightIcon className="w-4 h-4" />
+        
+        <Link 
+          href="/" 
+          className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+        >
+          Cursos
+        </Link>
+        
+        <ChevronRightIcon className="w-4 h-4" />
+        
+        <span className="font-medium text-gray-700 dark:text-gray-200">
+          {course.title}
+        </span>
+      </nav>
 
       <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-10">
         <CourseContent course={course} />
