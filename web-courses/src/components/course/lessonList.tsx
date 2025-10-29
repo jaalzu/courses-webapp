@@ -148,15 +148,15 @@ export function LessonList({
                       {!lesson.completed && (
                         <button
                           onClick={() => onToggleComplete(lesson.id)}
-                          className="mt-3 w-full bg-green-jhn00 hover:bg-green-600 text-white font-medium py-2 rounded-lg transition-colors"
+                          className="mt-3 w-full bg-green-500 hover:bg-green-400 text-white font-medium py-2 rounded-lg transition-colors"
                         >
-                          Marcar como completada
+                          Marcar como finalizado
                         </button>
                       )}
 
                       {/* Mensaje si ya está completada */}
                       {lesson.completed && (
-                        <div className="mt-3 w-full bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-300 font-medium py-2 rounded-lg text-center">
+                        <div className="mt-3 w-full bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300 font-medium py-2 rounded-lg text-center">
                           Lección completada ✅
                         </div>
                       )}

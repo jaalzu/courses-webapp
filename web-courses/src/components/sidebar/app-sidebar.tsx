@@ -1,3 +1,6 @@
+'use client'
+
+import Link from "next/link"
 import {
   HomeIcon,
   UserIcon,
@@ -29,22 +32,22 @@ const items = [
 
 export function AppSidebar() {
   return (
-    <Sidebar >
-     <SidebarHeader>
-  <div className="flex items-center justify-between gap-2 px-2 py-2">
-    <div className="flex items-center gap-2">
-      <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-        <HomeIcon className="size-4" />
-      </div>
-      <div className="flex flex-col gap-0.5 leading-none">
-        <span className="font-semibold">javalzu</span>
-        <span className="text-xs"></span>
-      </div>
-    </div>
-    {/* Botón para cerrar el sidebar solo en mobile */}
-    <SidebarTrigger className="md:hidden -mr-1" />
-  </div>
-</SidebarHeader>
+    <Sidebar>
+      <SidebarHeader>
+        <div className="flex items-center justify-between gap-2 px-2 py-2">
+          <div className="flex items-center gap-2">
+            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+              <HomeIcon className="size-4" />
+            </div>
+            <div className="flex flex-col gap-0.5 leading-none">
+              <span className="font-semibold">javalzu</span>
+              <span className="text-xs"></span>
+            </div>
+          </div>
+          {/* Botón para cerrar el sidebar solo en mobile */}
+          <SidebarTrigger className="md:hidden -mr-1" />
+        </div>
+      </SidebarHeader>
 
       <SidebarContent>
         <SidebarGroup>
@@ -54,10 +57,13 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
+                    <Link
+                      href={item.url}
+                      className="flex items-center gap-2 w-full"
+                    >
+                      <item.icon className="w-5 h-5" />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -69,9 +75,11 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton>
-              <Cog6ToothIcon />
-              <span>Configuración</span>
+            <SidebarMenuButton asChild>
+              <Link href="/settings" className="flex items-center gap-2 w-full">
+                <Cog6ToothIcon className="w-5 h-5" />
+                <span>Configuración</span>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
