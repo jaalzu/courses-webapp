@@ -1,5 +1,6 @@
 'use client'
 
+import Link from "next/link";
 import { Button } from "@/components/ui/button"
 import { Moon, Sun, User, Settings, LogOut } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -24,10 +25,20 @@ export function Navbar({ onToggleTheme, isDark }: { onToggleTheme: () => void, i
     <SidebarTrigger />
   </div>
 
-  {/* Logo - centrado en mobile, a la izquierda en desktop */}
-  <div className="md:flex-1">
-    <span className="font-bold text-lg text-gray-900 dark:text-white">javacourses</span>
-  </div>
+ {/* Logo - centrado en mobile, a la izquierda en desktop */}
+{/* Logo + texto - centrado en mobile, a la izquierda en desktop */}
+<div className="md:flex-1 flex items-center justify-center md:justify-start gap-2">
+  <img 
+    src="/logo1.svg" 
+    alt="javacourses logo" 
+    className="h-8 w-auto "
+  />
+  <span className="font-bold text-lg text-gray-900 dark:text-white tracking-tight">
+    javacourses
+  </span>
+</div>
+
+
 
   {/* Botón tema + Avatar - visible en TODOS los tamaños */}
   <div className="flex items-center gap-2 md:gap-3">
@@ -69,15 +80,14 @@ export function Navbar({ onToggleTheme, isDark }: { onToggleTheme: () => void, i
         
         <DropdownMenuSeparator />
         
-        <DropdownMenuItem className="cursor-pointer">
-          <User className="mr-2 h-4 w-4" />
-          Perfil
-        </DropdownMenuItem>
+       <Link href="/perfil">
+  <DropdownMenuItem className="cursor-pointer">
+    <User className="mr-2 h-4 w-4" />
+    Perfil
+  </DropdownMenuItem>
+</Link>
         
-        <DropdownMenuItem className="cursor-pointer">
-          <Settings className="mr-2 h-4 w-4" />
-          Configuración
-        </DropdownMenuItem>
+       
         
         <DropdownMenuSeparator />
         

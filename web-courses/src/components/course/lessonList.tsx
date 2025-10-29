@@ -60,7 +60,7 @@ export function LessonList({
       </div>
       
       {/* Lessons List */}
-      <ScrollArea className="h-[600px] w-full pb-8">
+      <ScrollArea className=" w-full h-full pb-8">
         <div className="px-2 py-2 w-full">
           <Accordion type="single" collapsible className="w-full">
             {lessons.map((lesson) => {

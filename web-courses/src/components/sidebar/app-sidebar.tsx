@@ -36,11 +36,14 @@ export function AppSidebar() {
       <SidebarHeader>
         <div className="flex items-center justify-between gap-2 px-2 py-2">
           <div className="flex items-center gap-2">
-            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-              <HomeIcon className="size-4" />
-            </div>
+           <div className="flex aspect-square size-8 items-center justify-center rounded-lg 
+                bg-black text-white 
+                dark:bg-white dark:text-black transition-colors duration-300">
+  <HomeIcon className="size-4" />
+</div>
+
             <div className="flex flex-col gap-0.5 leading-none">
-              <span className="font-semibold">javalzu</span>
+              <span className="font-semibold">Menu</span>
               <span className="text-xs"></span>
             </div>
           </div>
