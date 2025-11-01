@@ -1,9 +1,9 @@
 // types/course.ts
 
 export interface Timestamp {
-  time: string      // Formato "MM:SS" ej: "02:15"
-  seconds: number   // Segundos totales para el salto
-  label: string     // Descripción del momento
+  time: string     
+  seconds: number  
+  label: string   
 }
 
 export interface Lesson {
@@ -29,10 +29,16 @@ export interface Course {
   quote?: string
 }
 
-// 🎁 BONUS: Types auxiliares útiles
 export interface CourseProgress {
   done: number
   total: number
+}
+
+export interface InstructorCardProps {
+  name: string
+  profession: string
+  image: string
+  description: string
 }
 
 export type CourseLevel = 'beginner' | 'intermediate' | 'advanced'

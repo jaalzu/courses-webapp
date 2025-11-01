@@ -3,5 +3,6 @@ export type {
   Lesson,
   Timestamp,
   CourseProgress,
+  InstructorCardProps,
   CourseLevel
 } from './course'

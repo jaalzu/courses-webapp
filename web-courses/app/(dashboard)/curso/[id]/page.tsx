@@ -9,25 +9,24 @@ import { useCourseNavigation } from "@/hooks/useCourseNavigation"
 import CourseContent from "@/components/course/courseContent"
 import { LessonList } from "@/components/course/lessonList"
 import CourseNotFound from "@/components/course/courseNotFound"
+import InstructorCard from "@/components/course/instructorCard"
 
 export default function CoursePage() {
-    const [seekTo, setSeekTo] = useState<(seconds: number) => void>(() => () => {})
   const { id } = useParams()
-  
+  const [seekTo, setSeekTo] = useState<(seconds: number) => void>(() => () => {})
+
   const {
     course,
     currentLesson,
     handleToggleComplete,
     handleLessonSelect,
-    handleTimestampClick
   } = useCourseNavigation(Number(id))
-
+ 
   // SIN <section> wrapper!
   if (!course) {
     return <CourseNotFound />
   }
-
-  return (
+return (
   <div className="w-full p-4 md:p-8 space-y-6 bg-gray-50 dark:bg-neutral-900">
     {/* Breadcrumb */}
     <nav className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
@@ -54,22 +53,32 @@ export default function CoursePage() {
       </span>
     </nav>
 
-    {/* Grid: Video + LessonList */}
+    {/* Grid: Video + LessonList + Instructor */}
     <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-10">
-      {/* Video / Curso */}
+      {/* Columna izquierda: Video */}
       <CourseContent 
         course={course} 
         onPlayerReady={(seekFn) => setSeekTo(() => seekFn)} 
       />
 
-      {/* Lista de lecciones */}
-      <LessonList
-        lessons={course.lessons}
-        currentLessonId={currentLesson?.id || course.lessons[0]?.id}
-        onLessonSelect={handleLessonSelect}
-        onToggleComplete={handleToggleComplete}
-        onTimestampClick={(lesson, seconds) => seekTo(seconds)} // <-- conexión timestamps
-      />
+      {/* Columna derecha: LessonList + Instructor */}
+      <div className="flex flex-col gap-6">
+        <LessonList
+          lessons={course.lessons}
+          currentLessonId={currentLesson?.id || course.lessons[0]?.id}
+          onLessonSelect={handleLessonSelect}
+          onToggleComplete={handleToggleComplete}
+          onTimestampClick={(lesson, seconds) => seekTo(seconds)} 
+        />
+
+        {/* InstructorCard debajo del LessonList */}
+        <InstructorCard
+          name="Juan Pérez"
+          profession="Frontend Developer"
+          image="/instructor.jpg"
+          description="Juan tiene más de 10 años de experiencia en desarrollo web y enseñanza de tecnologías frontend. Siempre le gusta enseñar buenas prácticas y diseño limpio."
+        />
+      </div>
     </div>
   </div>
 )
