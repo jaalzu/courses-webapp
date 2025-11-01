@@ -27,16 +27,18 @@ export function Navbar({ onToggleTheme, isDark }: { onToggleTheme: () => void, i
 
  {/* Logo - centrado en mobile, a la izquierda en desktop */}
 {/* Logo + texto - centrado en mobile, a la izquierda en desktop */}
-<div className="md:flex-1 flex items-center justify-center md:justify-start gap-2">
+{/* Logo + texto - centrado en mobile, a la izquierda en desktop */}
+<Link href="/" className="md:flex-1 flex items-center justify-center md:justify-start gap-2">
   <img 
     src="/logo1.svg" 
     alt="javacourses logo" 
-    className="h-8 w-auto "
+    className="h-8 w-auto"
   />
   <span className="font-bold text-lg text-gray-900 dark:text-white tracking-tight">
     javacourses
   </span>
-</div>
+</Link>
+
 
 
 

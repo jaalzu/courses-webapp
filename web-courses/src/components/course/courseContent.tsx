@@ -52,12 +52,11 @@ export default function CourseContent({ course, onPlayerReady }: CourseContentPr
 </div>
 
       )}
-
       <div>
         <h2 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
           Descripción del curso
         </h2>
-        <p className="text-gray-600 text-sm leading-relaxed dark:text-blue-200">
+        <p className="text-gray-700 text-sm leading-relaxed dark:text-blue-100">
           {course.description}
         </p>
       </div>

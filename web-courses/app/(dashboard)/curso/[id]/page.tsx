@@ -73,10 +73,11 @@ return (
 
         {/* InstructorCard debajo del LessonList */}
         <InstructorCard
-          name="Juan Pérez"
+          name="Juan Pepe"
           profession="Frontend Developer"
-          image="/instructor.jpg"
-          description="Juan tiene más de 10 años de experiencia en desarrollo web y enseñanza de tecnologías frontend. Siempre le gusta enseñar buenas prácticas y diseño limpio."
+          image="/avatar.png"
+          description="Juan es un apasionado del desarrollo web con más de 10 años de experiencia. Ha trabajado en proyectos de todo tipo, desde startups hasta grandes empresas.
+          Le encanta enseñar: disfruta compartir su conocimiento de manera clara y práctica, ayudando a otros a crecer como desarrolladores."
         />
       </div>
     </div>
