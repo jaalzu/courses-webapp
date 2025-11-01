@@ -1,5 +1,6 @@
 'use client'
 
+import { usePathname } from "next/navigation"
 import Link from "next/link"
 import {
   HomeIcon,
@@ -31,6 +32,8 @@ const items = [
 ]
 
 export function AppSidebar() {
+  const pathname = usePathname()
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -57,19 +60,28 @@ export function AppSidebar() {
           <SidebarGroupLabel>Navegación</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link
-                      href={item.url}
-                      className="flex items-center gap-2 w-full"
-                    >
-                      <item.icon className="w-5 h-5" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {items.map((item) => {
+      const isActive = pathname === item.url
+
+  return (
+    <SidebarMenuItem key={item.title}>
+      <SidebarMenuButton asChild>
+        <Link
+          href={item.url}
+          className={`flex items-center gap-2 w-full px-2 py-1 rounded-md transition-colors duration-200
+            ${isActive
+              ? "bg-black text-white dark:bg-white dark:text-black"
+              : "hover:bg-gray-200 dark:hover:bg-gray-800"
+            }`}
+        >
+          <item.icon className="w-5 h-5" />
+          <span>{item.title}</span>
+        </Link>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  )
+})}
+
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
