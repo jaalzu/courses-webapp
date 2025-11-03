@@ -15,7 +15,7 @@ export default function InstructorCard({ name, profession, image, description }:
 
         <div>
           <h3 className="text-md font-semibold text-green-600">{name}</h3>
-          <p className="text-sm text-gray-300 underline" >{profession}</p>
+          <p className="text-sm text-gray-700 dark:text-gray-300 underline" >{profession}</p>
         </div>
       </div>
 

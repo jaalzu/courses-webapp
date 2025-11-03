@@ -67,8 +67,7 @@ export default function PerfilPage() {
 
               <p className="text-gray-600 dark:text-gray-400">estudiante@ejemplo.com</p>
               <div className="flex flex-wrap justify-center md:justify-start gap-2">
-                <Badge variant="secondary" className="text-sm">🎓 Estudiante</Badge>
-                <Badge variant="outline" className="text-sm">Miembro desde 2024</Badge>
+                <Badge variant="secondary" className="text-sm"> Estudiante</Badge>
               </div>
             </div>
           </div>
