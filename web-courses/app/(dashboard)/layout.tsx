@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { SidebarProvider } from "@/components/sidebar/sidebar"
 import { AppSidebar } from "@/components/sidebar/app-sidebar"
-import { Navbar } from "@/components/ui/navbar"
+import { Navbar } from "@/components/navbar/navbar"
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [isDark, setIsDark] = useState<boolean | null>(null)

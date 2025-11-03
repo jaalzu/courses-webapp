@@ -1,7 +1,7 @@
 // 📁 app/faq/page.tsx
 'use client'
 
-import FAQ from '@/components/ui/FAQS'
+import FAQ from '@/components/faqs/FAQS'
 
 export default function FAQPage() {
   return (

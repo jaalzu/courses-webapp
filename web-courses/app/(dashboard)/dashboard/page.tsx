@@ -1,7 +1,7 @@
 'use client'
-import Card from "@/components/ui/Card"
+import Card from "@/components/dashboard/Card"
 import { useCourseStore } from "@/lib/store/courses"
-import CoursesSkeleton from "@/components/ui/coursesSkeleton"
+import CoursesSkeleton from "@/components/dashboard/coursesSkeleton"
 
 export default function DashboardPage() {
   const courses = useCourseStore(state => state.courses)
