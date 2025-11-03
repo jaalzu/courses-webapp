@@ -1,9 +1,21 @@
 'use client'
 import Card from "@/components/ui/Card"
 import { useCourseStore } from "@/lib/store/courses"
+import CoursesSkeleton from "@/components/ui/coursesSkeleton"
 
 export default function DashboardPage() {
   const courses = useCourseStore(state => state.courses)
+
+
+    if (!courses || courses.length === 0) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 p-6 lg:p-10">
+        {[...Array(6)].map((_, i) => (
+          <CoursesSkeleton key={i} />
+        ))}
+      </div>
+    )
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-3 xl:gap-x-8 gap-y-9 justify-items-center p-6 lg:p-10">
@@ -21,7 +33,8 @@ export default function DashboardPage() {
             progress={progress}
             completed={{ done: completedCount, total: totalLessons }}
             href={`/curso/${id}`}
-            className="w-[100%] sm:w-[90%] md:w-[100%] lg:w-[95%] xl:w-[97%]"
+            className="w-[100%] sm:w-[90%] md:w-[100%] lg:w-[95%] xl:w-[97%]
+            "
             level={level}
           />
         )

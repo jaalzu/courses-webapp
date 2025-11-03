@@ -28,7 +28,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen bg-gray-50 dark:bg-neutral-900">
+      <div className="flex min-h-screen ">
         {/* Sidebar fijo en desktop */}
         <div className="hidden md:flex">
           <AppSidebar />

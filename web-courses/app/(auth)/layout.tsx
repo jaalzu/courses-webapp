@@ -10,7 +10,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         {/* Logo arriba del formulario */}
         <div className="flex justify-center ">
           <img
-            src="/logo1.svg"
+            src="/icons/svg/logo1.svg"
             alt="Logo"
             className="w-12 h-12 opacity-90 hover:opacity-100 transition-opacity duration-200"
           />

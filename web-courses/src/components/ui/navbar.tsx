@@ -30,7 +30,7 @@ export function Navbar({ onToggleTheme, isDark }: { onToggleTheme: () => void, i
 {/* Logo + texto - centrado en mobile, a la izquierda en desktop */}
 <Link href="/" className="md:flex-1 flex items-center justify-center md:justify-start gap-2">
   <img 
-    src="/logo1.svg" 
+    src="/icons/svg/logo1.svg" 
     alt="javacourses logo" 
     className="h-8 w-auto"
   />
@@ -64,7 +64,7 @@ export function Navbar({ onToggleTheme, isDark }: { onToggleTheme: () => void, i
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <Avatar className="h-10 w-10">
-            <AvatarImage src="/avatar.jpg" alt="Usuario" />
+            <AvatarImage src="/avatar.png" alt="Usuario" />
             <AvatarFallback className="bg-primary text-white dark:text-black dark:bg-white">
               JD
             </AvatarFallback>

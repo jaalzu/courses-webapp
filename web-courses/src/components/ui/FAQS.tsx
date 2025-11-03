@@ -12,8 +12,8 @@ const faqs = [
 
 export default function FAQ() {
   return (
-    <section className="max-w-3xl mx-auto p-6 bg-white dark:bg-gray-900 rounded-2xl shadow-md space-y-6">
-      <h2 className="text-2xl font-semibold text-gray-900 dark:text-white text-center">Preguntas frecuentes</h2>
+    <section className="max-w-3xl mx-auto p-6 bg-white dark:bg-neutral-900 rounded-2xl shadow-md space-y-6">
+     
       
       <Accordion type="multiple" className="space-y-3">
         {faqs.map((faq, index) => (
@@ -21,7 +21,7 @@ export default function FAQ() {
             <AccordionTrigger className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 px-4 py-3 text-left text-gray-900 dark:text-white font-medium transition-colors">
               {faq.question}
             </AccordionTrigger>
-            <AccordionContent className="px-4 py-3 text-gray-700 dark:text-gray-300">
+            <AccordionContent className="px-4 py-3 text-gray-700 dark:text-gray-200">
               {faq.answer}
             </AccordionContent>
           </AccordionItem>
