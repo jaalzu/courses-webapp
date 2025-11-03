@@ -3,29 +3,42 @@
 
 import { useParams } from "next/navigation"
 import Link from "next/link"
-import { useState } from "react"
+import { useState ,useEffect} from "react"
 import { ChevronRightIcon } from "@heroicons/react/24/outline"
 import { useCourseNavigation } from "@/hooks/useCourseNavigation"
 import CourseContent from "@/components/course/courseContent"
 import { LessonList } from "@/components/course/lessonList"
 import CourseNotFound from "@/components/course/courseNotFound"
 import InstructorCard from "@/components/course/instructorCard"
+import  CourseSkeleton  from "@/components/course/courseSkeleton"
 
 export default function CoursePage() {
   const { id } = useParams()
+  const courseId = Number(id)
   
   const [seekTo, setSeekTo] = useState<((seconds: number) => void) | null>  (null)
+  const [isReady, setIsReady] = useState(false)
 
-  const {
-    course,
-    currentLesson,
-    handleToggleComplete,
-    handleLessonSelect,
-  } = useCourseNavigation(Number(id))
- 
-  if (!course) {
+ const { course,
+   currentLesson, 
+   handleToggleComplete, 
+   handleLessonSelect } = useCourseNavigation(courseId)
+
+  useEffect(() => {
+  if (course) setIsReady(true)
+}, [course])
+
+
+
+
+  if (isNaN(courseId)) {
     return <CourseNotFound />
   }
+ 
+
+if (!isReady) return <CourseSkeleton />
+if (!course) return <CourseNotFound />
+
 
 return (
   <main className="w-full p-4 md:p-8 space-y-6 bg-gray-50 dark:bg-neutral-900">
