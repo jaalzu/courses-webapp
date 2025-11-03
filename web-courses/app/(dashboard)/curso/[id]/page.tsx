@@ -13,7 +13,8 @@ import InstructorCard from "@/components/course/instructorCard"
 
 export default function CoursePage() {
   const { id } = useParams()
-  const [seekTo, setSeekTo] = useState<(seconds: number) => void>(() => () => {})
+  
+  const [seekTo, setSeekTo] = useState<((seconds: number) => void) | null>  (null)
 
   const {
     course,
@@ -22,12 +23,12 @@ export default function CoursePage() {
     handleLessonSelect,
   } = useCourseNavigation(Number(id))
  
-  // SIN <section> wrapper!
   if (!course) {
     return <CourseNotFound />
   }
+
 return (
-  <div className="w-full p-4 md:p-8 space-y-6 bg-gray-50 dark:bg-neutral-900">
+  <main className="w-full p-4 md:p-8 space-y-6 bg-gray-50 dark:bg-neutral-900">
     {/* Breadcrumb */}
     <nav className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
       <Link 
@@ -68,7 +69,8 @@ return (
           currentLessonId={currentLesson?.id || course.lessons[0]?.id}
           onLessonSelect={handleLessonSelect}
           onToggleComplete={handleToggleComplete}
-          onTimestampClick={(lesson, seconds) => seekTo(seconds)} 
+          onTimestampClick={(lesson, seconds) => seekTo?.(seconds)}
+
         />
 
         {/* InstructorCard debajo del LessonList */}
@@ -81,7 +83,7 @@ return (
         />
       </div>
     </div>
-  </div>
+  </main>
 )
 
 }
