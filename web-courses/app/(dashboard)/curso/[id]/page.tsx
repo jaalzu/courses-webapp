@@ -1,7 +1,7 @@
 'use client'
 
 import { useParams } from "next/navigation"
-import Link from "next/link"
+import { ForumSection } from '@/components/ui/ForumSection';
 import { useState } from "react"
 import { useCourseNavigation } from "@/hooks/useCourseNavigation"
 import CourseContent from "@/components/course/courseContent"
@@ -57,6 +57,16 @@ export default function CoursePage() {
             description="Juan es un apasionado del desarrollo web con más de 10 años de experiencia. Ha trabajado en proyectos de todo tipo, desde startups hasta grandes empresas. Le encanta enseñar: disfruta compartir su conocimiento de manera clara y práctica."
           />
         </div>
+      </div>
+
+      {/* 🔹 Sección de Foro (debajo de todo) */}
+      <div className="border-t border-gray-200 dark:border-gray-700 pt-8 mt-8">
+        <ForumSection
+          courseId={String(courseId)}
+          lessonId={currentLesson?.id ? String(currentLesson.id) : undefined}
+          currentUserId="user_123" // 👈 Reemplaza con tu sistema de auth
+          currentUserName="Usuario Demo" // 👈 Reemplaza con el nombre del usuario actual
+        />
       </div>
     </main>
   )

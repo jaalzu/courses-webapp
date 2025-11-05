@@ -59,8 +59,7 @@ export default function Card({
     dark:text-red-400 dark:hover:text-red-500
     hover:backdrop-blur-2xl hover:bg-white/40 dark:hover:bg-black/50
     hover:border-white/80 dark:hover:border-white/30
-    transition-all duration-300 ease-out
-    "
+    transition-all duration-300 ease-out"
   onClick={handleToggleFavorite}
   aria-label="Toggle Favorite"
 >
