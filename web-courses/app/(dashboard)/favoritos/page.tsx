@@ -4,6 +4,7 @@ import { useFavorites } from '@/hooks/useFavorites'
 import { localStorageFavorites } from '@/lib/favoriteStorage'
 import { useCourseStore } from '@/lib/store/courses'
 import Card from '@/components/dashboard/Card'
+import { calculateCourseProgress } from '@/lib/utils'
 
 export default function FavoritosPage() {
   const { favorites } = useFavorites(localStorageFavorites)
@@ -24,12 +25,9 @@ export default function FavoritosPage() {
     <main className="p-6 lg:p-10 space-y-6">
       <h1 className="text-2xl font-bold">Tus Favoritos</h1>
       
-      {/* Grid que respeta el tamaño de las cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-3 xl:gap-x-8 gap-y-9 justify-items-center">
         {favoriteCourses.map(course => {
-          const completed = course.lessons
-            ? { done: course.lessons.filter(l => l.completed).length, total: course.lessons.length }
-            : undefined
+          const { progress, completed } = calculateCourseProgress(course.lessons || [])
 
           return (
             <Card
@@ -40,6 +38,7 @@ export default function FavoritosPage() {
               description={course.description}
               href={`/curso/${course.id}`}
               completed={completed}
+              progress={progress}
               level={course.level}
               className="w-[100%] sm:w-[90%] md:w-[100%] lg:w-[95%] xl:w-[97%]"
             />

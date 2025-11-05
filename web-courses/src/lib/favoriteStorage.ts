@@ -26,7 +26,6 @@ export const localStorageFavorites: FavoritesStorage = {
     if (!favs.includes(id)) {
       const newFavs = [...favs, id];
       localStorage.setItem(STORAGE_KEY, JSON.stringify(newFavs));
-      console.log('Added to favorites:', id, 'New array:', newFavs); // DEBUG
       window.dispatchEvent(new Event(FAVORITES_EVENT));
     }
   },
@@ -36,17 +35,14 @@ export const localStorageFavorites: FavoritesStorage = {
     const favs = localStorageFavorites.get();
     const newFavs = favs.filter(fav => fav !== id);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newFavs));
-    console.log('Removed from favorites:', id, 'New array:', newFavs); // DEBUG
     window.dispatchEvent(new Event(FAVORITES_EVENT));
   },
 
   subscribe: (callback: () => void) => {
     if (typeof window === 'undefined') return () => {};
     
-    console.log('Subscribed to favorites changes'); // DEBUG
     window.addEventListener(FAVORITES_EVENT, callback);
     return () => {
-      console.log('Unsubscribed from favorites changes'); // DEBUG
       window.removeEventListener(FAVORITES_EVENT, callback);
     };
   },
