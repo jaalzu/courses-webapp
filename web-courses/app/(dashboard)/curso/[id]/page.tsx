@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation"
 import Link from "next/link"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { ChevronRightIcon } from "@heroicons/react/24/outline"
 import { useCourseNavigation } from "@/hooks/useCourseNavigation"
 import CourseContent from "@/components/course/courseContent"
