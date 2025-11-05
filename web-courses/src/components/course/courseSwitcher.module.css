@@ -1,0 +1,27 @@
+/* CourseSwitcher.module.css */
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.link {
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 600;    /* font-semibold */
+  color: #2563eb;      /* blue-600 */
+  transition: color 0.2s;
+}
+
+.link:hover {
+  color: #1d4ed8;      /* blue-800 */
+}
+
+.dark .link {
+  color: #60a5fa;      /* blue-400 */
+}
+
+.dark .link:hover {
+  color: #93c5fd;      /* blue-300 */
+}

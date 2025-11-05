@@ -3,60 +3,58 @@
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import { useState } from "react"
-import { ChevronRightIcon } from "@heroicons/react/24/outline"
 import { useCourseNavigation } from "@/hooks/useCourseNavigation"
 import CourseContent from "@/components/course/courseContent"
 import { LessonList } from "@/components/course/lessonList"
 import InstructorCard from "@/components/course/instructorCard"
 import CourseNotFound from "@/components/course/courseNotFound"
+import { CourseSwitcher } from "@/components/course/courseSwitcher"
 
 export default function CoursePage() {
   const { id } = useParams()
   const courseId = Number(id)
 
-  // Función para saltar en el video
   const [seekTo, setSeekTo] = useState<((seconds: number) => void) | null>(null)
 
   const { course, currentLesson, handleToggleComplete, handleLessonSelect } =
     useCourseNavigation(courseId)
 
+  const lessons = course?.lessons || []
+  const currentIndex = lessons.findIndex(l => l.id === currentLesson?.id)
+  const nextLesson = currentIndex >= 0 ? lessons[currentIndex + 1] : null
+  const prevLesson = currentIndex > 0 ? lessons[currentIndex - 1] : null
+
   if (isNaN(courseId)) return <CourseNotFound />
   if (!course) return <CourseNotFound />
 
   return (
-    <main className="w-full p-4 md:p-8 space-y-6 ">
-      {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-        <Link href="/" className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors">
-          Dashboard
-        </Link>
-        <ChevronRightIcon className="w-4 h-4" />
-        <span className="font-medium text-gray-700 dark:text-gray-200">{course.title}</span>
-      </nav>
+    <main className="w-full p-4 md:p-8 space-y-6">
+      {/* 🔹 Navegación entre cursos (arriba) */}
+      <div className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-4">
+        <CourseSwitcher currentCourseId={courseId} />
+      </div>
 
-      {/* Grid: Video + LessonList + Instructor */}
+      {/* 🔹 Contenido principal */}
       <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-10">
-        {/* Columna izquierda: Video */}
         <CourseContent
           course={course}
           onPlayerReady={(seekFn) => setSeekTo(() => seekFn)}
         />
 
-        {/* Columna derecha: LessonList + Instructor */}
         <div className="flex flex-col gap-6">
           <LessonList
             lessons={course.lessons}
             currentLessonId={currentLesson?.id || course.lessons[0]?.id}
             onLessonSelect={handleLessonSelect}
             onToggleComplete={handleToggleComplete}
-            onTimestampClick={(_, seconds) => seekTo?.(seconds)} // <-- aquí vuelve el seek real
+            onTimestampClick={(_, seconds) => seekTo?.(seconds)}
           />
 
           <InstructorCard
             name="Juan Pepe"
             profession="Frontend Developer"
             image="/avatar.png"
-            description="Juan es un apasionado del desarrollo web con más de 10 años de experiencia. Ha trabajado en proyectos de todo tipo, desde startups hasta grandes empresas. Le encanta enseñar: disfruta compartir su conocimiento de manera clara y práctica, ayudando a otros a crecer como desarrolladores."
+            description="Juan es un apasionado del desarrollo web con más de 10 años de experiencia. Ha trabajado en proyectos de todo tipo, desde startups hasta grandes empresas. Le encanta enseñar: disfruta compartir su conocimiento de manera clara y práctica."
           />
         </div>
       </div>
