@@ -16,6 +16,7 @@ interface CardProps {
   href: string
   className?: string
   level?: CourseLevel
+  progress?: number
 }
 
 export default function Card({
