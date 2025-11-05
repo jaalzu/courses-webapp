@@ -28,6 +28,7 @@ const items = [
   { title: "Inicio", url: "/dashboard", icon: HomeIcon },
   { title: "Buscar curso", url: "/search", icon: MagnifyingGlassIcon },
   { title: "Perfil", url: "/perfil", icon: UserIcon },
+  { title: "Favoritos", url: "/favoritos", icon: UserIcon },
   { title: "FAQS", url: "/faqs", icon: QuestionMarkCircleIcon },
 ]
 
