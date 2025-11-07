@@ -1,6 +1,6 @@
 // hooks/useFavorites.ts
 import { useState, useEffect, useCallback } from 'react';
-import type { FavoritesStorage } from '@/lib/favoriteStorage';
+import type { FavoritesStorage } from '@/features/favorites/lib/favoriteStorage';
 
 export function useFavorites(storage: FavoritesStorage) {
   const [favorites, setFavorites] = useState<number[]>([]);

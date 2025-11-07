@@ -3,9 +3,9 @@
 import YouTube from "react-youtube";
 import { useRef } from "react";
 import type { Course } from "@/types";
-import { FavoriteButton } from "@/components/ui/favoriteButton";
-import { useFavorites } from "@/hooks/useFavorites";
-import { localStorageFavorites } from "@/lib/favoriteStorage";
+import { FavoriteButton } from "@/features/favorites/components/favoriteButton";
+import { useFavorites } from "@/features/favorites/hooks/useFavorites";
+import { localStorageFavorites } from "@/features/favorites/lib/favoriteStorage";
 
 interface CourseContentProps {
   course: Course;

@@ -7,10 +7,10 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import type { CourseProgress, CourseLevel } from '@/types/course'
 import Image from "next/image"
-import { useFavorites } from "@/hooks/useFavorites"
-import { localStorageFavorites } from "@/lib/favoriteStorage"
+import { useFavorites } from "@/features/favorites/hooks/useFavorites"
+import { localStorageFavorites } from "@/features/favorites/lib/favoriteStorage"
 import { getLevelConfig } from "@/lib/utils"
-import { FavoriteButton } from "@/components/ui/favoriteButton" // 👈 ojo acá, con mayúscula
+import { FavoriteButton } from "@/features/favorites/components/favoriteButton" // 👈 ojo acá, con mayúscula
 
 interface CardProps {
   image: string

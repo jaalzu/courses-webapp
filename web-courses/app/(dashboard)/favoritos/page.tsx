@@ -1,7 +1,7 @@
 'use client'
 
-import { useFavorites } from '@/hooks/useFavorites'
-import { localStorageFavorites } from '@/lib/favoriteStorage'
+import { useFavorites } from '@/features/favorites/hooks/useFavorites'
+import { localStorageFavorites } from '@/features/favorites/lib/favoriteStorage'
 import { useCourseStore } from '@/lib/store/useCoursesStore'
 import Card from '@/components/dashboard/Card'
 import { calculateCourseProgress } from '@/lib/utils'
