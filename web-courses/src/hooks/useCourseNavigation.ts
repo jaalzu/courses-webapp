@@ -2,7 +2,7 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { useCourseStore } from "@/lib/store/courses"
+import { useCourseStore } from "@/lib/store/useCoursesStore"
 import type { Lesson } from "@/types" 
 
 export function useCourseNavigation(courseId: number) {

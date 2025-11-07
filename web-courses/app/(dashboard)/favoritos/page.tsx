@@ -2,7 +2,7 @@
 
 import { useFavorites } from '@/hooks/useFavorites'
 import { localStorageFavorites } from '@/lib/favoriteStorage'
-import { useCourseStore } from '@/lib/store/courses'
+import { useCourseStore } from '@/lib/store/useCoursesStore'
 import Card from '@/components/dashboard/Card'
 import { calculateCourseProgress } from '@/lib/utils'
 

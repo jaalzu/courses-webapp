@@ -1,6 +1,6 @@
 'use client'
 import Card from "@/components/dashboard/Card"
-import { useCourseStore } from "@/lib/store/courses"
+import { useCourseStore } from "@/lib/store/useCoursesStore"
 import CoursesSkeleton from "@/components/dashboard/coursesSkeleton"
 import { calculateCourseProgress } from "@/lib/utils/index"
 

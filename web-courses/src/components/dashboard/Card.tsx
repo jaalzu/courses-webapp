@@ -2,8 +2,6 @@
 
 import Link from "next/link"
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
-import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline'
-import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid'
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
@@ -12,7 +10,7 @@ import Image from "next/image"
 import { useFavorites } from "@/hooks/useFavorites"
 import { localStorageFavorites } from "@/lib/favoriteStorage"
 import { getLevelConfig } from "@/lib/utils"
-
+import { FavoriteButton } from "@/components/ui/favoriteButton" // 👈 ojo acá, con mayúscula
 
 interface CardProps {
   image: string
@@ -22,7 +20,7 @@ interface CardProps {
   href: string
   className?: string
   level?: CourseLevel
-  progress: number // Ya calculado desde afuera
+  progress: number
   courseId: number
 }
 
@@ -50,25 +48,15 @@ export default function Card({
   return (
     <div className={`relative ${className} flex flex-col h-full`}>
       {/* Botón de favorito */}
-    <button
-  className="absolute top-2 right-2 z-10 
-    backdrop-blur-xl bg-white/30 dark:bg-black/30 
-    border border-white/40 dark:border-white/40
-    rounded-full p-1.5
-    text-red-500 hover:text-red-600 
-    dark:text-red-400 dark:hover:text-red-500
-    hover:backdrop-blur-2xl hover:bg-white/40 dark:hover:bg-black/50
-    hover:border-white/80 dark:hover:border-white/30
-    transition-all duration-300 ease-out"
-  onClick={handleToggleFavorite}
-  aria-label="Toggle Favorite"
->
-  {isFavorite(courseId) ? (
-    <HeartSolid className="w-4 h-4" />
-  ) : (
-    <HeartOutline className="w-4 h-4" />
-  )}
-</button>
+    <div className="absolute top-2 right-2 z-10">
+        <FavoriteButton
+  isFavorite={isFavorite(courseId)}
+  onToggle={() => toggleFavorite(courseId)}
+  className="absolute top-2 right-2"
+/>
+
+      </div>
+
 
       <Link
         href={href}
@@ -97,7 +85,11 @@ export default function Card({
           </div>
 
           <div>
-            <Button className="w-full mb-4 pointer-events-none">Entrar</Button>
+<Button
+  className="w-full mb-4 transition-transform duration-200 ease-out active:scale-95"
+>
+  Entrar
+</Button>
 
             {completed && (
               <div className="flex justify-between items-center mt-6">

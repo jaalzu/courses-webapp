@@ -63,9 +63,8 @@ export default function CoursePage() {
       <div className="border-t border-gray-200 dark:border-gray-700 pt-8 mt-8">
         <ForumSection
           courseId={String(courseId)}
-          // lessonId={currentLesson?.id ? String(currentLesson.id) : undefined}
-          currentUserId="user_123" // 👈 Reemplaza con tu sistema de auth
-          currentUserName="Usuario Demo" // 👈 Reemplaza con el nombre del usuario actual
+          currentUserId="user_123" 
+          currentUserName="Usuario Demo"  
         />
       </div>
     </main>
