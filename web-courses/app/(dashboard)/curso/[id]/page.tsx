@@ -28,9 +28,9 @@ export default function CoursePage() {
   if (!course) return <CourseNotFound />
 
   return (
-    <main className="w-full p-4 md:p-8 space-y-6">
+    <main className="w-full p-4 md:p-8 space-y-5">
       {/* 🔹 Navegación entre cursos (arriba) */}
-      <div className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-4">
+      <div className="flex justify-between items-center pb-1">
         <CourseSwitcher currentCourseId={courseId} />
       </div>
 

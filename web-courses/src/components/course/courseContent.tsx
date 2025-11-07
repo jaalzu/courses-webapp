@@ -54,7 +54,7 @@ export default function CourseContent({ course, onPlayerReady }: CourseContentPr
       {/* Video */}
       {course.video && (
         <div className="w-full rounded-lg overflow-hidden shadow-sm">
-          <div className="relative w-full pb-[56.25%]">
+<div className="relative w-full pb-[88%] sm:pb-[60%] md:pb-[68.25%]">
             <YouTube
               videoId={extractVideoId(course.video)}
               onReady={handleReady}

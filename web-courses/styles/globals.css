@@ -14,7 +14,10 @@
 }
 body {
   font-family: var(--font-sans);
+
+
 }
+
 
  html.dark {
     --sidebar: #111827; /* color exacto de bg-gray-900 */
