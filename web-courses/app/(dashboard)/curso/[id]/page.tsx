@@ -1,7 +1,7 @@
 'use client'
 
 import { useParams } from "next/navigation"
-import { ForumSection } from '@/components/ui/ForumSection';
+import { ForumSection } from '@/features/forum/components/ForumSection';
 import { useState } from "react"
 import { useCourseNavigation } from "@/hooks/useCourseNavigation"
 import CourseContent from "@/components/course/courseContent"
