@@ -25,21 +25,24 @@ export default function DashboardPage() {
       <h1 className="text-2xl font-bold">Cursos</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-3 xl:gap-x-8 gap-y-9 justify-items-center">
-        {courses.map(({ id, image, title, description, lessons = [], level }) => {
-          const { progress, completed } = calculateCourseProgress(lessons)
+        {courses.map((course) => {
+          const { progress, completed } = calculateCourseProgress(course.lessons || [])
 
           return (
             <Card
-              key={id}
-              courseId={id}
-              image={image}
-              title={title}
-              description={description}
+              key={course.id}
+              courseId={course.id}
+              image={course.image}
+              title={course.title}
+              description={course.description}
               progress={progress}
               completed={completed}
-              href={`/curso/${id}`}
+              href={`/curso/${course.id}`}
               className="w-[100%] sm:w-[90%] md:w-[100%] lg:w-[95%] xl:w-[97%]"
-              level={level}
+              level={course.level}
+              // 🆕 Props para habilitar edición
+              enableEdit={true}  // 👈 En false para usuarios normales
+              courseData={course}  // 👈 Datos completos del curso
             />
           )
         })}
