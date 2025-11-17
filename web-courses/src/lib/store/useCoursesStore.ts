@@ -1,15 +1,18 @@
 // src/lib/data/store/useCourseStore.ts
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { Course } from '@/types'
+import type { Course, CourseInput } from "@/types/course"
+
 import { courses as initialCourses } from '@/lib/data/curso'
 
 interface CourseStore {
   courses: Course[]
   toggleLessonComplete: (courseId: number, lessonId: number) => void
   getCourse: (courseId: number) => Course | undefined
-  
-  // 🆕 Nuevas funciones para CRUD
+
+  // CRUD
+  addCourse: (course: CourseInput) => void
+
   updateCourse: (courseId: number, updates: Partial<Pick<Course, 'title' | 'description' | 'image' | 'video' | 'instructor' | 'level'>>) => void
   deleteCourse: (courseId: number) => void
   resetCourses: () => void
@@ -40,7 +43,29 @@ export const useCourseStore = create<CourseStore>()(
         return get().courses.find(c => c.id === courseId)
       },
 
-      // 🆕 Actualizar curso (título, descripción, imagen, video, instructor, nivel)
+      // 🆕 Crear nuevo curso
+     addCourse: (newCourse) =>
+  set((state) => {
+    const nextId =
+      state.courses.length > 0
+        ? Math.max(...state.courses.map((c) => c.id)) + 1
+        : 1
+
+    return {
+      courses: [
+        ...state.courses,
+        {
+          id: nextId,
+          createdAt: Date.now(),
+          lessons: [],
+          ...newCourse,
+        },
+      ],
+    }
+  }),
+
+
+      // Actualizar curso
       updateCourse: (courseId, updates) =>
         set((state) => ({
           courses: state.courses.map(course =>
@@ -50,13 +75,12 @@ export const useCourseStore = create<CourseStore>()(
           )
         })),
 
-      // 🆕 Eliminar curso
+      // Eliminar curso
       deleteCourse: (courseId) =>
         set((state) => ({
           courses: state.courses.filter(course => course.id !== courseId)
         })),
 
-      // 🆕 Resetear a cursos iniciales
       resetCourses: () =>
         set({ courses: initialCourses })
     }),
@@ -65,4 +89,3 @@ export const useCourseStore = create<CourseStore>()(
     }
   )
 )
-// localStorage.clear()

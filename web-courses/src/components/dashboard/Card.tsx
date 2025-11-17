@@ -79,7 +79,7 @@ export default function Card({
             <div className="flex flex-col flex-1">
               <h3 className="text-lg font-semibold mb-2 mt-2">{courseData.title}</h3>
               {levelConfig && <Badge variant={levelConfig.variant}>{levelConfig.label}</Badge>}
-              <p className="text-gray-500 dark:text-gray-300 text-sm mb-4 flex-1">{courseData.description}</p>
+              <p className="text-gray-500 dark:text-gray-300 text-sm mt-3 mb-4 flex-1">{courseData.description}</p>
             </div>
 
             <Button className="w-full mb-4">Entrar</Button>

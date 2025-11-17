@@ -29,6 +29,10 @@ export interface Course {
   quote?: string
 }
 
+export type CourseInput = Omit<Course, "id">
+
+
+
 export interface CourseProgress {
   done: number
   total: number

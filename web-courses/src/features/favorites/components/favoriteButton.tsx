@@ -2,6 +2,7 @@
 
 import { HeartIcon as HeartOutline } from "@heroicons/react/24/outline"
 import { HeartIcon as HeartSolid } from "@heroicons/react/24/solid"
+import { IconButton } from "@/components/ui/iconButton"
 
 interface FavoriteButtonProps {
   isFavorite: boolean
@@ -17,29 +18,20 @@ export function FavoriteButton({
   noBorder = false,
 }: FavoriteButtonProps) {
   return (
-    <button
-      onClick={(e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        onToggle()
-      }}
-      aria-label="Toggle Favorite"
-      className={`relative z-10 
-        backdrop-blur-xl 
-        ${noBorder ? "bg-transparent border-none" : "bg-white/30 dark:bg-black/30 border border-white/40 dark:border-white/40"} 
-        rounded-full p-1.5
+    <IconButton
+      onClick={() => onToggle()}
+      noBorder={noBorder}
+      className={`
         text-red-500 hover:text-red-600 
-        dark:text-red-500 dark:hover:text-red-500
-        hover:backdrop-blur-2xl 
-        ${!noBorder && "hover:bg-white/40 dark:hover:bg-black/50 hover:border-white/80 dark:hover:border-white/30"} 
-        transition-all duration-300 ease-out 
-        ${className}`}
+        dark:text-red-500 dark:hover:text-red-400
+        ${className}
+      `}
     >
       {isFavorite ? (
         <HeartSolid className="w-5 h-5" />
       ) : (
         <HeartOutline className="w-5 h-5" />
       )}
-    </button>
+    </IconButton>
   )
 }

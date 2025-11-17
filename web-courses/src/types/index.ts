@@ -4,5 +4,6 @@ export type {
   Timestamp,
   CourseProgress,
   InstructorCardProps,
-  CourseLevel
+  CourseLevel,
+  CourseInput
 } from './course'
