@@ -1,9 +1,4 @@
-export type {
-  Course,
-  Lesson,
-  Timestamp,
-  CourseProgress,
-  InstructorCardProps,
-  CourseLevel,
-  CourseInput
-} from './course'
+export * from "./lesson"
+export * from "./course"
+export * from "./instructor"
+export * from "./progress"

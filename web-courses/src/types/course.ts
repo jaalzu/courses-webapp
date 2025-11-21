@@ -1,18 +1,5 @@
 // types/course.ts
-
-export interface Timestamp {
-  time: string     
-  seconds: number  
-  label: string   
-}
-
-export interface Lesson {
-  id: number
-  title: string
-  duration: string
-  completed: boolean
-  timestamps?: Timestamp[]
-}
+import type { Lesson } from "./lesson"
 
 export interface Course {
   id: number
@@ -33,16 +20,5 @@ export type CourseInput = Omit<Course, "id">
 
 
 
-export interface CourseProgress {
-  done: number
-  total: number
-}
-
-export interface InstructorCardProps {
-  name: string
-  profession: string
-  image: string
-  description: string
-}
 
 export type CourseLevel = 'beginner' | 'intermediate' | 'advanced'
