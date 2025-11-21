@@ -1,21 +1,28 @@
 // src/lib/data/store/useCourseStore.ts
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { Course, CourseInput } from "@/types/course"
-
+import type { Course, CourseInput, CourseLevel } from '@/types/course'
 import { courses as initialCourses } from '@/lib/data/curso'
+import { generateCourseId, toggleLesson } from '@/lib/utils/courseUtils'
+import { calculateCourseProgress, getLevelConfig } from '@/lib/utils/courseUtils'
 
 interface CourseStore {
   courses: Course[]
-  toggleLessonComplete: (courseId: number, lessonId: number) => void
-  getCourse: (courseId: number) => Course | undefined
 
-  // CRUD
+  // Acciones básicas
   addCourse: (course: CourseInput) => void
-
-  updateCourse: (courseId: number, updates: Partial<Pick<Course, 'title' | 'description' | 'image' | 'video' | 'instructor' | 'level'>>) => void
+  updateCourse: (
+    courseId: number,
+    updates: Partial<Pick<Course, 'title' | 'description' | 'image' | 'video' | 'instructor' | 'level'>>
+  ) => void
   deleteCourse: (courseId: number) => void
   resetCourses: () => void
+
+  // Funciones derivadas
+  toggleLessonComplete: (courseId: number, lessonId: number) => void
+  getCourse: (courseId: number) => Course | undefined
+  getCourseProgress: (courseId: number) => ReturnType<typeof calculateCourseProgress>
+  getCourseLevelConfig: (level: CourseLevel) => ReturnType<typeof getLevelConfig>
 }
 
 export const useCourseStore = create<CourseStore>()(
@@ -23,69 +30,51 @@ export const useCourseStore = create<CourseStore>()(
     (set, get) => ({
       courses: initialCourses,
 
+      // Toggle de lección
       toggleLessonComplete: (courseId, lessonId) =>
+        set({ courses: toggleLesson(get().courses, courseId, lessonId) }),
+
+      // Obtener curso
+      getCourse: (courseId) => get().courses.find(c => c.id === courseId),
+
+      // CRUD
+      addCourse: (newCourse) =>
         set((state) => ({
-          courses: state.courses.map(course =>
-            course.id === courseId
-              ? {
-                  ...course,
-                  lessons: course.lessons.map(lesson =>
-                    lesson.id === lessonId
-                      ? { ...lesson, completed: !lesson.completed }
-                      : lesson
-                  )
-                }
-              : course
-          )
+          courses: [
+            ...state.courses,
+            {
+              id: generateCourseId(state.courses),
+              createdAt: Date.now(),
+              lessons: [],
+              ...newCourse,
+            },
+          ],
         })),
 
-      getCourse: (courseId) => {
-        return get().courses.find(c => c.id === courseId)
-      },
-
-      // 🆕 Crear nuevo curso
-     addCourse: (newCourse) =>
-  set((state) => {
-    const nextId =
-      state.courses.length > 0
-        ? Math.max(...state.courses.map((c) => c.id)) + 1
-        : 1
-
-    return {
-      courses: [
-        ...state.courses,
-        {
-          id: nextId,
-          createdAt: Date.now(),
-          lessons: [],
-          ...newCourse,
-        },
-      ],
-    }
-  }),
-
-
-      // Actualizar curso
       updateCourse: (courseId, updates) =>
         set((state) => ({
           courses: state.courses.map(course =>
-            course.id === courseId
-              ? { ...course, ...updates }
-              : course
-          )
+            course.id === courseId ? { ...course, ...updates } : course
+          ),
         })),
 
-      // Eliminar curso
       deleteCourse: (courseId) =>
         set((state) => ({
-          courses: state.courses.filter(course => course.id !== courseId)
+          courses: state.courses.filter(course => course.id !== courseId),
         })),
 
-      resetCourses: () =>
-        set({ courses: initialCourses })
+      resetCourses: () => set({ courses: initialCourses }),
+
+      // Derivados usando utils
+      getCourseProgress: (courseId) => {
+        const course = get().courses.find(c => c.id === courseId)
+        return course ? calculateCourseProgress(course.lessons) : { progress: 0, completed: { done: 0, total: 0 } }
+      },
+
+      getCourseLevelConfig: (level: CourseLevel) => getLevelConfig(level),
     }),
     {
-      name: 'course-storage',
+      name: 'course-storage', // persistencia en localStorage
     }
   )
 )
