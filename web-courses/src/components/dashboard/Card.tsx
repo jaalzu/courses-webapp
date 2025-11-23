@@ -1,7 +1,5 @@
 'use client'
 
-import { useState } from "react"
-import EditCourseModal from "@/features/admin/components/EditCourseModal"
 import { DeleteButton } from "@/features/admin/components/DeleteButton"
 import { EditButton } from "@/features/admin/components/EditButton"
 import { FavoriteButton } from "@/features/favorites/components/favoriteButton"
@@ -13,7 +11,8 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
 import Link from "next/link"
-import type { Course, CourseProgress, CourseLevel } from "@/types/course"
+import type { Course, CourseLevel } from "@/types/course"
+import type { CourseProgress } from "@/types/progress"
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import { useCourseStore } from "@/lib/store/useCoursesStore"
 
@@ -26,6 +25,7 @@ interface CardProps {
   className?: string
   completed?: CourseProgress
   level?: CourseLevel
+  onEdit?: () => void // 👈 Nueva prop para abrir el flujo de edición
 }
 
 export default function Card({
@@ -37,13 +37,17 @@ export default function Card({
   className = "",
   completed,
   level,
+  onEdit, // 👈 Recibimos la función
 }: CardProps) {
   const { isFavorite, toggleFavorite } = useFavorites(localStorageFavorites)
   const levelConfig = level ? getLevelConfig(level) : null
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const deleteCourse = useCourseStore(state => state.deleteCourse)
 
-  const handleEditClick = () => setIsEditModalOpen(true)
+  const handleEditClick = () => {
+    if (onEdit) {
+      onEdit() // 👈 Llamamos a la función del dashboard
+    }
+  }
 
   const handleDeleteClick = () => {
     if (!confirm("¿Seguro que querés eliminar este curso? Esta acción no se puede deshacer.")) return
@@ -51,68 +55,57 @@ export default function Card({
   }
 
   return (
-    <>
-      <div className={`relative ${className} flex flex-col h-full`}>
-        {/* Botones superiores */}
-        <div className="absolute top-2 right-2 z-10 flex gap-2">
-          {enableEdit && courseData && <EditButton onEdit={handleEditClick} />}
-          {enableEdit && courseData && <DeleteButton onDelete={handleDeleteClick} />}
-          <FavoriteButton
-            isFavorite={isFavorite(courseId)}
-            onToggle={() => toggleFavorite(courseId)}
-          />
-        </div>
-
-        <Link
-          href={href}
-          className="bg-white dark:bg-gray-900 text-black dark:text-gray-100 rounded-md overflow-hidden flex flex-col h-full transition-shadow shadow-sm hover:shadow-md duration-300 border border-gray-200 dark:border-gray-600"
-        >
-          <Image
-            src={courseData.image.startsWith("/") ? courseData.image : `/${courseData.image}`}
-            alt={courseData.title}
-            width={400}
-            height={200}
-            className="w-full h-40 object-cover"
-          />
-
-          <div className="p-4 flex flex-col flex-1 justify-between">
-            <div className="flex flex-col flex-1">
-              <h3 className="text-lg font-semibold mb-2 mt-2">{courseData.title}</h3>
-              {levelConfig && <Badge variant={levelConfig.variant}>{levelConfig.label}</Badge>}
-              <p className="text-gray-500 dark:text-gray-300 text-sm mt-3 mb-4 flex-1">{courseData.description}</p>
-            </div>
-
-            <Button className="w-full mb-4">Entrar</Button>
-
-            {completed && (
-              <div className="flex justify-between items-center mt-6">
-                <span className="text-sm text-gray-600 dark:text-gray-200 font-medium">Lecciones</span>
-                {completed.done === completed.total ? (
-                  <div className="flex items-center gap-1.5 text-green-600 dark:text-green-400">
-                    <CheckCircleIcon className="w-5 h-5" />
-                    <span className="text-sm font-semibold">¡Completado!</span>
-                  </div>
-                ) : (
-                  <span className="text-sm text-gray-600 dark:text-gray-200 font-medium">
-                    {completed.done}/{completed.total}
-                  </span>
-                )}
-              </div>
-            )}
-          </div>
-
-          <Progress value={progress} className="h-1.5 w-full" />
-        </Link>
+    <div className={`relative ${className} flex flex-col h-full`}>
+      {/* Botones superiores */}
+      <div className="absolute top-2 right-2 z-10 flex gap-2">
+        {enableEdit && courseData && onEdit && <EditButton onEdit={handleEditClick} />}
+        {enableEdit && courseData && <DeleteButton onDelete={handleDeleteClick} />}
+        <FavoriteButton
+          isFavorite={isFavorite(courseId)}
+          onToggle={() => toggleFavorite(courseId)}
+        />
       </div>
 
-      {/* Modal de edición */}
-      {enableEdit && courseData && (
-        <EditCourseModal
-          course={courseData}
-          isOpen={isEditModalOpen}
-          onClose={() => setIsEditModalOpen(false)}
+      <Link
+        href={href}
+        className="bg-white dark:bg-gray-900 text-black dark:text-gray-100 rounded-md overflow-hidden flex flex-col h-full transition-shadow shadow-sm hover:shadow-md duration-300 border border-gray-200 dark:border-gray-600"
+      >
+        <Image
+          src={courseData.image.startsWith("/") ? courseData.image : `/${courseData.image}`}
+          alt={courseData.title}
+          width={400}
+          height={200}
+          className="w-full h-40 object-cover"
         />
-      )}
-    </>
+
+        <div className="p-4 flex flex-col flex-1 justify-between">
+          <div className="flex flex-col flex-1">
+            <h3 className="text-lg font-semibold mb-2 mt-2">{courseData.title}</h3>
+            {levelConfig && <Badge variant={levelConfig.variant}>{levelConfig.label}</Badge>}
+            <p className="text-gray-500 dark:text-gray-300 text-sm mt-3 mb-4 flex-1">{courseData.description}</p>
+          </div>
+
+          <Button className="w-full mb-4">Entrar</Button>
+
+          {completed && (
+            <div className="flex justify-between items-center mt-6">
+              <span className="text-sm text-gray-600 dark:text-gray-200 font-medium">Lecciones</span>
+              {completed.done === completed.total ? (
+                <div className="flex items-center gap-1.5 text-green-600 dark:text-green-400">
+                  <CheckCircleIcon className="w-5 h-5" />
+                  <span className="text-sm font-semibold">¡Completado!</span>
+                </div>
+              ) : (
+                <span className="text-sm text-gray-600 dark:text-gray-200 font-medium">
+                  {completed.done}/{completed.total}
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+
+        <Progress value={progress} className="h-1.5 w-full" />
+      </Link>
+    </div>
   )
 }
