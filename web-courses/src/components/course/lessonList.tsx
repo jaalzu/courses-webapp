@@ -2,9 +2,7 @@
 
 import styles from "./lessonList.module.css"
 import type { Lesson } from "@/types"
-
 import { PlayIcon, ClockIcon, CheckCircleIcon} from '@heroicons/react/24/outline'
-
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/components/ui/accordion"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -14,7 +12,6 @@ interface LessonListProps {
   lessons: Lesson[]
   currentLessonId: number
   onLessonSelect: (lesson: Lesson) => void
-  onTimestampClick: (lesson: Lesson, seconds: number) => void
   onToggleComplete: (lessonId: number) => void
 }
 
@@ -22,7 +19,6 @@ export function LessonList({
   lessons, 
   currentLessonId, 
   onLessonSelect, 
-  onTimestampClick,
   onToggleComplete
 }: LessonListProps) {
   const completedCount = lessons.filter(l => l.completed).length
@@ -118,29 +114,6 @@ export function LessonList({
                         Reproducir lección completa
                       </button>
 
-                      {lesson.timestamps?.length > 0 && (
-                        <div className="space-y-2">
-                          <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            Momentos clave
-                          </p>
-                          <div className="space-y-1">
-                            {lesson.timestamps.map((timestamp, index) => (
-                              <button
-                                key={index}
-                                onClick={() => onTimestampClick(lesson, timestamp.seconds)}
-                                className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-left group"
-                              >
-                                <Badge variant="outline" className="font-mono text-xs flex-shrink-0">
-                                  {timestamp.time}
-                                </Badge>
-                                <span className="text-sm text-gray-700 dark:text-gray-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                                  {timestamp.label}
-                                </span>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
 
                       {!lesson.completed && (
                         <button

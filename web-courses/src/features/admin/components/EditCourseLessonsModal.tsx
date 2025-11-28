@@ -68,7 +68,7 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
       duration: lessonForm.duration,
       videoUrl: lessonForm.videoUrl,
       completed: false,
-      timestamps: []
+      // timestamps: []
     }
 
     setLessons([...lessons, newLesson])

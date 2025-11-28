@@ -11,22 +11,25 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
 import Link from "next/link"
-import type { Course, CourseLevel } from "@/types/course"
-import type { CourseProgress } from "@/types/progress"
+import type { Course } from "@/types/course"
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import { useCourseStore } from "@/lib/store/useCoursesStore"
 
 interface CardProps {
-  courseData: Course
-  enableEdit?: boolean
-  progress: number
   courseId: number
+  title: string
+  description: string
+  image?: string // 
+  progress: number
+  completed: { done: number; total: number }
   href: string
   className?: string
-  completed?: CourseProgress
-  level?: CourseLevel
-  onEdit?: () => void // 👈 Nueva prop para abrir el flujo de edición
+  level: "beginner" | "intermediate" | "advanced"
+  enableEdit?: boolean
+  courseData: Course
+  onEdit?: () => void
 }
+
 
 export default function Card({
   courseData,
@@ -37,7 +40,7 @@ export default function Card({
   className = "",
   completed,
   level,
-  onEdit, // 👈 Recibimos la función
+  onEdit,  
 }: CardProps) {
   const { isFavorite, toggleFavorite } = useFavorites(localStorageFavorites)
   const levelConfig = level ? getLevelConfig(level) : null
@@ -45,7 +48,7 @@ export default function Card({
 
   const handleEditClick = () => {
     if (onEdit) {
-      onEdit() // 👈 Llamamos a la función del dashboard
+      onEdit()  
     }
   }
 
