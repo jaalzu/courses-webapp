@@ -92,14 +92,6 @@ export default function EditCourseBasicModal({ course, isOpen, onClose, onNext }
           />
 
           <CourseFormField
-            label="Video (URL)"
-            name="video"
-            value={formData.video}
-            onChange={handleChange}
-            placeholder="https://www.youtube.com/watch?v=..."
-          />
-
-          <CourseFormField
             label="Duración total"
             name="duration"
             value={formData.duration}

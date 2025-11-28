@@ -1,4 +1,4 @@
-// src/lib/data/store/useCourseStore.ts
+// src/lib/store/useCourseStore.ts
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { Course, CourseInput, CourseLevel } from '@/types/course'
@@ -13,7 +13,7 @@ interface CourseStore {
   addCourse: (course: CourseInput) => void
   updateCourse: (
     courseId: number,
-    updates: Partial<Pick<Course, 'title' | 'description' | 'image' | 'video' | 'instructor' | 'level'>>
+    updates: Partial<Course> // 👈 Ahora permite actualizar cualquier campo del curso
   ) => void
   deleteCourse: (courseId: number) => void
   resetCourses: () => void

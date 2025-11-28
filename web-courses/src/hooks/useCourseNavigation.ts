@@ -13,7 +13,14 @@ export function useCourseNavigation(courseId: number) {
   
   const toggleLessonComplete = useCourseStore(state => state.toggleLessonComplete)
   
-  const [currentLesson, setCurrentLesson] = useState<Lesson | undefined>(course?.lessons[0])
+  const [currentLesson, setCurrentLesson] = useState<Lesson | undefined>(undefined)
+
+  // 👇 Inicializar currentLesson cuando el curso esté disponible
+  useEffect(() => {
+    if (course?.lessons && course.lessons.length > 0 && !currentLesson) {
+      setCurrentLesson(course.lessons[0])
+    }
+  }, [course?.lessons, currentLesson])
 
   // Sincronizar currentLesson cuando cambian las lecciones
   useEffect(() => {
@@ -23,7 +30,7 @@ export function useCourseNavigation(courseId: number) {
         setCurrentLesson(updatedLesson)
       }
     }
-  }, [course?.lessons]) // ✅ Dependencia específica en lessons
+  }, [course?.lessons])
 
   // Resetear currentLesson si cambia el curso
   useEffect(() => {

@@ -9,12 +9,20 @@ import { localStorageFavorites } from "@/features/favorites/lib/favoriteStorage"
 
 interface CourseContentProps {
   course: Course;
+  currentVideoUrl?: string; // 👈 Nueva prop para video dinámico
   onPlayerReady?: (seekFn: (seconds: number) => void) => void;
 }
 
-export default function CourseContent({ course, onPlayerReady }: CourseContentProps) {
+export default function CourseContent({ 
+  course, 
+  currentVideoUrl,
+  onPlayerReady 
+}: CourseContentProps) {
   const playerRef = useRef<any>(null);
   const { isFavorite, toggleFavorite } = useFavorites(localStorageFavorites);
+
+  // Usa el video de la lección actual, o el de la primera lección si existe
+  const videoToPlay = currentVideoUrl || course.lessons?.[0]?.videoUrl || course.video;
 
   const handleReady = (event: any) => {
     playerRef.current = event.target;
@@ -41,22 +49,20 @@ export default function CourseContent({ course, onPlayerReady }: CourseContentPr
           </p>
         </div>
 
-        
-       <FavoriteButton
-  isFavorite={isFavorite(course.id)}
-  onToggle={() => toggleFavorite(course.id)}
-  noBorder
-  className="ml-4"
-/>
-
+        <FavoriteButton
+          isFavorite={isFavorite(course.id)}
+          onToggle={() => toggleFavorite(course.id)}
+          noBorder
+          className="ml-4"
+        />
       </div>
 
       {/* Video */}
-      {course.video && (
+      {videoToPlay && (
         <div className="w-full rounded-lg overflow-hidden shadow-sm">
-<div className="relative w-full pb-[88%] sm:pb-[60%] md:pb-[68.25%]">
+          <div className="relative w-full pb-[88%] sm:pb-[60%] md:pb-[68.25%]">
             <YouTube
-              videoId={extractVideoId(course.video)}
+              videoId={extractVideoId(videoToPlay)}
               onReady={handleReady}
               className="absolute top-0 left-0 w-full h-full"
               opts={{
@@ -64,6 +70,7 @@ export default function CourseContent({ course, onPlayerReady }: CourseContentPr
                 height: "100%",
                 playerVars: { autoplay: 0 },
               }}
+              key={videoToPlay} // 👈 Fuerza re-render cuando cambia el video
             />
           </div>
         </div>

@@ -6,6 +6,7 @@ import { XMarkIcon, ArrowLeftIcon, PlusIcon, TrashIcon, PencilIcon } from "@hero
 import type { Course } from "@/types/course"
 import type {  Lesson } from "@/types/lesson"
 
+
 interface Props {
   course: Course
   isOpen: boolean
@@ -37,6 +38,7 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
   const [lessonForm, setLessonForm] = useState({
     title: '',
     duration: '',
+    videoUrl: '',
   })
 
   // ===== FUNCIONES PARA KEY POINTS =====
@@ -64,12 +66,13 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
       id: Date.now(),
       title: lessonForm.title,
       duration: lessonForm.duration,
+      videoUrl: lessonForm.videoUrl,
       completed: false,
       timestamps: []
     }
 
     setLessons([...lessons, newLesson])
-    setLessonForm({ title: '', duration: '' })
+    setLessonForm({ title: '', duration: '', videoUrl: '' })
   }
 
   const handleEditLesson = (lesson: Lesson) => {
@@ -77,6 +80,7 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
     setLessonForm({
       title: lesson.title,
       duration: lesson.duration,
+      videoUrl: lesson.videoUrl || '',
     })
   }
 
@@ -85,11 +89,11 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
 
     setLessons(lessons.map(l => 
       l.id === editingLesson 
-        ? { ...l, title: lessonForm.title, duration: lessonForm.duration }
+        ? { ...l, title: lessonForm.title, duration: lessonForm.duration, videoUrl: lessonForm.videoUrl }
         : l
     ))
     setEditingLesson(null)
-    setLessonForm({ title: '', duration: '' })
+    setLessonForm({ title: '', duration: '', videoUrl: '' })
   }
 
   const handleDeleteLesson = (id: number) => {
@@ -225,7 +229,7 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
                 {editingLesson ? 'Editar lección' : 'Nueva lección'}
               </h3>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3">
                 <input
                   type="text"
                   placeholder="Título de la lección"
@@ -234,13 +238,23 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
                   className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100"
                 />
                 
-                <input
-                  type="text"
-                  placeholder="Duración (ej: 15:30)"
-                  value={lessonForm.duration}
-                  onChange={(e) => setLessonForm({ ...lessonForm, duration: e.target.value })}
-                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                />
+                <div className="grid grid-cols-2 gap-3">
+                  <input
+                    type="text"
+                    placeholder="Duración (ej: 15:30)"
+                    value={lessonForm.duration}
+                    onChange={(e) => setLessonForm({ ...lessonForm, duration: e.target.value })}
+                    className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100"
+                  />
+                  
+                  <input
+                    type="text"
+                    placeholder="URL del video"
+                    value={lessonForm.videoUrl}
+                    onChange={(e) => setLessonForm({ ...lessonForm, videoUrl: e.target.value })}
+                    className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100"
+                  />
+                </div>
               </div>
 
               <div className="flex gap-2 mt-3">
@@ -256,7 +270,7 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
                     <Button
                       onClick={() => {
                         setEditingLesson(null)
-                        setLessonForm({ title: '', duration: '' })
+                        setLessonForm({ title: '', duration: '', videoUrl: '' })
                       }}
                       className="bg-gray-200 dark:bg-gray-600"
                     >
@@ -292,13 +306,20 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
                         <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
                           {index + 1}
                         </span>
-                        <div>
+                        <div className="flex-1">
                           <p className="font-medium text-gray-900 dark:text-gray-100">
                             {lesson.title}
                           </p>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">
-                            {lesson.duration}
-                          </p>
+                          <div className="flex items-center gap-2 mt-1">
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              {lesson.duration}
+                            </p>
+                            {lesson.videoUrl && (
+                              <span className="text-xs text-green-600 dark:text-green-400">
+                                • Video configurado
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
 

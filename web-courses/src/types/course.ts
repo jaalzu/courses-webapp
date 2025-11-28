@@ -18,7 +18,4 @@ export interface Course {
 
 export type CourseInput = Omit<Course, "id">
 
-
-
-
 export type CourseLevel = 'beginner' | 'intermediate' | 'advanced'

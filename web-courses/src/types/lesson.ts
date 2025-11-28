@@ -9,5 +9,6 @@ export interface Lesson {
   title: string
   duration: string
   completed: boolean
+  videoUrl?: string 
   timestamps?: Timestamp[]
 }

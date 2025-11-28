@@ -3,10 +3,10 @@ import { Course, CourseLevel } from "@/types/course"
 
 export function useEditCourseForm(course: Course, isOpen: boolean) {
   const [formData, setFormData] = useState({
-    title: course.title,
-    description: course.description,
-    image: course.image,
-    video: course.video,
+    title: course.title || "",
+    description: course.description || "",
+    image: course.image || "",
+    duration: course.duration || "",
     instructor: course.instructor || "",
     level: course.level || "beginner" as CourseLevel,
   })
@@ -16,10 +16,10 @@ export function useEditCourseForm(course: Course, isOpen: boolean) {
   useEffect(() => {
     if (isOpen) {
       setFormData({
-        title: course.title,
-        description: course.description,
-        image: course.image,
-        video: course.video,
+        title: course.title || "",
+        description: course.description || "",
+        image: course.image || "",
+        duration: course.duration || "",
         instructor: course.instructor || "",
         level: course.level || "beginner",
       })
