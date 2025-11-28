@@ -41,7 +41,8 @@ export default function FavoritosPage() {
               progress={progress}
               level={course.level}
               className="w-[100%] sm:w-[90%] md:w-[100%] lg:w-[95%] xl:w-[97%]"
-            />
+                courseData={course}   // 👈 ACÁ, SOLUCIONADO
+              />
           )
         })}
       </div>
