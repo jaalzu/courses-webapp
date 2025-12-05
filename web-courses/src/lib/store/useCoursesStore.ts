@@ -74,7 +74,7 @@ export const useCourseStore = create<CourseStore>()(
       getCourseLevelConfig: (level: CourseLevel) => getLevelConfig(level),
     }),
     {
-      name: 'course-storage', // persistencia en localStorage
+      name: 'course-storage', 
     }
   )
 )
