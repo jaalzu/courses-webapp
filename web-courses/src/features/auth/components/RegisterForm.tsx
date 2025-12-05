@@ -1,8 +1,8 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { UserIcon, LockIcon, EyeIcon, EnvelopeIcon } from "./icons/icons"
+import { Button } from "@/shared/ui/index"
+import { Input } from "@/shared/ui/index"
+import { UserIcon, LockIcon, EnvelopeIcon } from "./icons/icons"
 
 export function RegisterForm() {
   return (

@@ -1,5 +1,5 @@
 'use client'
-import { CustomImage } from "@/components/ui/customImage"
+import { CustomImage } from "@/shared/ui/customImage"
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (

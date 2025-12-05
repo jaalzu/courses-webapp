@@ -1,7 +1,7 @@
 'use client'
 import { useState } from "react"
 import { useCourseStore } from "@/lib/store/useCoursesStore"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/shared/ui/index"
 import { XMarkIcon, ArrowLeftIcon, PlusIcon, TrashIcon, PencilIcon } from "@heroicons/react/24/outline"
 import type { Course } from "@/types/course"
 import type {  Lesson } from "@/types/lesson"

@@ -2,7 +2,7 @@
 
 import { HeartIcon as HeartOutline } from "@heroicons/react/24/outline"
 import { HeartIcon as HeartSolid } from "@heroicons/react/24/solid"
-import { IconButton } from "@/components/ui/iconButton"
+import { IconButton } from "@/shared/ui/index"
 
 interface FavoriteButtonProps {
   isFavorite: boolean

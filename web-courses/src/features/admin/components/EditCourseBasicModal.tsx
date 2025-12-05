@@ -1,6 +1,6 @@
 'use client'
 import { useCourseStore } from "@/lib/store/useCoursesStore"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/shared/ui/index"
 import { XMarkIcon, ArrowRightIcon } from "@heroicons/react/24/outline"
 import { useEditCourseForm } from "../hooks/useEditCourseForm"
 import { CourseFormField } from "./CourseFormField"

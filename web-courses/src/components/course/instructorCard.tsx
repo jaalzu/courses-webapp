@@ -1,7 +1,7 @@
 'use client'
 
 import type { InstructorCardProps } from "@/types"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar" // o desde shadcn
+import { Avatar, AvatarImage, AvatarFallback } from "@/shared/ui/index" // o desde shadcn
 
 export default function InstructorCard({ name, profession, image, description }: InstructorCardProps) {
   return (

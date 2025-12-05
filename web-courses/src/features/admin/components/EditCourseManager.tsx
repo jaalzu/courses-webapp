@@ -3,15 +3,6 @@ import { useEditCourseFlow } from "../hooks/useEditCourseFlow"
 import EditCourseBasicModal from "./EditCourseBasicModal"
 import EditCourseLessonsModal from "./EditCourseLessonsModal"
 
-/**
- * Componente que maneja el flujo completo de edición de curso
- * Uso:
- * 
- * const editFlow = useEditCourseFlow()
- * 
- * <button onClick={() => editFlow.open(courseId)}>Editar</button>
- * <EditCourseManager flow={editFlow} />
- */
 
 interface Props {
   flow: ReturnType<typeof useEditCourseFlow>

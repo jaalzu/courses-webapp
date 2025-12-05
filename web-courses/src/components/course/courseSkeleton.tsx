@@ -1,4 +1,4 @@
-import { Skeleton } from "@/components/ui/skeleton"
+import { Skeleton } from "@/shared/ui/index"
 
 export default function CourseSkeleton() {
 return (

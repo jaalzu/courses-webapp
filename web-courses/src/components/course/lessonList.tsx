@@ -3,9 +3,9 @@
 import styles from "./lessonList.module.css"
 import type { Lesson } from "@/types"
 import { PlayIcon, ClockIcon, CheckCircleIcon} from '@heroicons/react/24/outline'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/components/ui/accordion"
-import { Badge } from "@/components/ui/badge"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/shared/ui/index"
+import { Badge } from "@/shared/ui/index"
+import { ScrollArea } from "@/shared/ui/index"
 import { cn } from "@/lib/utils"
 
 interface LessonListProps {

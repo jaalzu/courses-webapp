@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { PlusIcon } from "@heroicons/react/24/outline"
-import { IconButton } from "@/components/ui/iconButton"
+import { IconButton } from "@/shared/ui/index"
 import { CreateCourseModal } from "@/features/admin/components/CreateCourseModal"
 
 export function NewCourseButton({ className = "" }) {

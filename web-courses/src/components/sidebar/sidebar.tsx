@@ -8,8 +8,8 @@ import { Bars3BottomLeftIcon } from "@heroicons/react/24/outline"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/shared/ui/button"
+import { Input } from "@/shared/ui/input"
 import { Separator } from "@/components/sidebar/separator"
 import {
   Sheet,

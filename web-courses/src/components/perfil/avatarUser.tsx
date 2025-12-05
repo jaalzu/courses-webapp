@@ -1,6 +1,6 @@
 'use client'
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback } from "@/shared/ui/index"
+import { Button } from "@/shared/ui/index"
 import { PencilIcon } from "@heroicons/react/24/outline"
 import { useState } from "react"
 

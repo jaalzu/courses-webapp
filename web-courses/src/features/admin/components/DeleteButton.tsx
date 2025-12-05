@@ -1,7 +1,7 @@
 "use client"
 
 import { TrashIcon } from "@heroicons/react/24/outline"
-import { IconButton } from "@/components/ui/iconButton"
+import { IconButton } from "@/shared/ui/index"
 
 export function DeleteButton({ onDelete, className = "", noBorder = false }) {
   return (

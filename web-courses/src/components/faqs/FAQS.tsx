@@ -1,7 +1,7 @@
 // 📁 components/FAQ.tsx
 'use client'
 
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/shared/ui/index"
 
 const faqs = [
   { question: "¿Qué tecnologías usas en tus proyectos?", answer: "Principalmente React, Next.js, TypeScript, Tailwind CSS, y Shadcn UI. También manejo Node.js y Express para backend cuando es necesario." },
