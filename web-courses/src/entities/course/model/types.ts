@@ -1,5 +1,5 @@
 // types/course.ts
-import type { Lesson } from "@/types/lesson"
+import type { Lesson } from "@/entities/lesson/model/types"
 
 export interface Course {
   id: number

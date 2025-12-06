@@ -1,7 +1,7 @@
 'use client'
 
 import Card from "@/widgets/dashboard/Card"
-import { useCourseStore } from "@/entities/course/model/useCoursesStore"
+import { useCourseStore } from "@/entities/course/model/useCourseStore"
 import CoursesSkeleton from "@/widgets/dashboard/coursesSkeleton"
 import { calculateCourseProgress } from "@/shared/lib/utils/index"
 import { NewCourseButton } from "@/features/admin/components/NewCourseButton"

@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import EditCourseContentModal from "@/features/admin/components/EditCourseLessonsModal"
-import { useCourseStore } from "@/entities/course/model/useCoursesStore"
+import { useCourseStore } from "@/entities/course/model/useCourseStore"
 import { CourseFormField } from "@/features/admin/components/CourseFormField"
 import { XMarkIcon, ArrowRightIcon } from "@heroicons/react/24/outline"
 

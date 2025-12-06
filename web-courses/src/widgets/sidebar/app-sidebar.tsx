@@ -22,7 +22,7 @@ import {
   SidebarHeader,
   SidebarFooter,
   SidebarTrigger,
-} from "@/components/sidebar/sidebar"
+} from "@/widgets/sidebar/sidebar"
 
 const items = [
   { title: "Inicio", url: "/dashboard", icon: HomeIcon },

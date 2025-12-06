@@ -1,13 +1,13 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { ForumSection } from '@/features/forum/components/ForumSection'
-import { useCourseNavigation } from "@/hooks/useCourseNavigation"
+import { ForumSection } from '@/features/forum/ui/ForumSection'
+import { useCourseNavigation } from "@/features/course-navigation/model/useCourseNavigation"
 import CourseContent from "@/entities/course/ui/courseContent"
 import { LessonList } from "@/entities/course/ui/lessonList"
 import InstructorCard from "@/entities/course/ui/instructorCard"
 import { CourseSwitcher } from "@/entities/course/ui/courseSwitcher"
-import type { Lesson } from "@/types"
+import type { Lesson } from "@/entities/lesson/model/types"
 
 interface CoursePageContentProps {
   courseId: number

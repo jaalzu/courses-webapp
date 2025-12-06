@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useForum } from '../hooks/useForum';
+import { useForum } from '../model/useForum';
 import { ChatBubbleOvalLeftIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
 import { PostCard } from './PostCard';
 

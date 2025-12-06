@@ -1,5 +1,5 @@
 'use client'
-import { useCourseStore } from "@/entities/course/model/useCoursesStore"
+import { useCourseStore } from "@/entities/course/model/useCourseStore"
 import { Button } from "@/shared/ui/index"
 import { XMarkIcon, ArrowRightIcon } from "@heroicons/react/24/outline"
 import { useEditCourseForm } from "../hooks/useEditCourseForm"

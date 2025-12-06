@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/shared/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/index"
-import { SidebarTrigger } from "@/components/sidebar/sidebar"
+import { SidebarTrigger } from "@/widgets/sidebar/sidebar"
 import {
   DropdownMenu,
   DropdownMenuContent,

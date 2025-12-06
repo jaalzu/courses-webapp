@@ -1,8 +1,8 @@
 'use client'
-import { useCourseStore } from "@/entities/course/model/useCoursesStore"
-import AvatarUser from "@/components/perfil/avatarUser"
-import UserStats from "@/components/perfil/userStats"
-import RecentActivity from "@/components/perfil/recentActivity"
+import { useCourseStore } from "@/entities/course/model/useCourseStore"
+import AvatarUser from "@/widgets/perfil/avatarUser"
+import UserStats from "@/widgets/perfil/userStats"
+import RecentActivity from "@/widgets/perfil/recentActivity"
 
 export default function PerfilPage() {
   const courses = useCourseStore(state => state.courses)

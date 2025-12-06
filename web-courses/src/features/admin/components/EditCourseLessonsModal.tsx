@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react"
-import { useCourseStore } from "@/entities/course/model/useCoursesStore"
+import { useCourseStore } from "@/entities/course/model/useCourseStore"
 import { Button } from "@/shared/ui/index"
 import { XMarkIcon, ArrowLeftIcon, PlusIcon, TrashIcon, PencilIcon } from "@heroicons/react/24/outline"
 import type { Course } from "@/entities/course/model/types"

@@ -13,7 +13,7 @@ import Image from "next/image"
 import Link from "next/link"
 import type { Course } from "@/entities/course/model/types"
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
-import { useCourseStore } from "@/entities/course/model/useCoursesStore"
+import { useCourseStore } from "@/entities/course/model/useCourseStore"
 
 interface CardProps {
   courseId: number

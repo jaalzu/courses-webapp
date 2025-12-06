@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { ChatBubbleOvalLeftIcon, ArrowRightIcon, ShareIcon } from '@heroicons/react/24/outline';
-import { formatDate, handleSharePost, handleShareComment } from '../utils/forumHelpers';
+import { formatDate, handleSharePost, handleShareComment } from '../model/forumHelpers';
 
 interface Comment {
   id: string;

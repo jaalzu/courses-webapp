@@ -1,4 +1,4 @@
-import { ForumPost, ForumComment } from '@/types/forum';
+import { ForumPost, ForumComment } from '@/entities/forum-post/index';
 
 const STORAGE_KEY = 'course_forum_posts';
 

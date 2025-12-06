@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { ForumPost, ForumComment } from '@/types/forum';
-import { forumStorage } from '../lib/forumStorage';
+import { ForumPost, ForumComment } from '@/entities/forum-post/index';
+import { forumStorage } from '../api/forumStorage';
 
 export const useForum = (courseId: string) => {
   const [posts, setPosts] = useState<ForumPost[]>([]);

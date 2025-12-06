@@ -6,25 +6,25 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { Bars3BottomLeftIcon } from "@heroicons/react/24/outline"
 
-import { useIsMobile } from "@/hooks/use-mobile"
+import { useIsMobile } from "@/shared/lib/utils/use-mobile"
 import { cn } from "@/shared/lib/utils"
 import { Button } from "@/shared/ui/button"
 import { Input } from "@/shared/ui/input"
-import { Separator } from "@/components/sidebar/separator"
+import { Separator } from "@/widgets/sidebar/separator"
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@/components/sidebar/sheet"
-import { Skeleton } from "@/components/sidebar/skeleton"
+} from "@/widgets/sidebar/sheet"
+import { Skeleton } from "@/widgets/sidebar/skeleton"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/sidebar/tooltip"
+} from "@/widgets/sidebar/tooltip"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7

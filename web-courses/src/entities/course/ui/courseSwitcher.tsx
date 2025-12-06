@@ -1,7 +1,7 @@
 'use client'
 
 import Link from "next/link"
-import { useCourseStore } from "@/entities/course/model/useCoursesStore"
+import { useCourseStore } from "@/entities/course/model/useCourseStore"
 import styles from "./courseSwitcher.module.css"
 
 interface Props {
