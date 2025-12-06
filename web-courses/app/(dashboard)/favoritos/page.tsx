@@ -4,7 +4,7 @@ import { useFavorites } from '@/features/favorites/model/hooks/useFavorites'
 import { localStorageFavorites } from '@/features/favorites/lib/favoriteStorage'
 import { useCourseStore } from '@/entities/course/model/useCourseStore'
 import Card from '@/widgets/dashboard/Card'
-import { calculateCourseProgress } from '@/shared/lib/utils'
+// import { calculateCourseProgress } from '@/entities/progress/model/useCourseProgress'
 
 export default function FavoritosPage() {
   const { favorites } = useFavorites(localStorageFavorites)
@@ -27,7 +27,7 @@ export default function FavoritosPage() {
       
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-3 xl:gap-x-8 gap-y-9 justify-items-center">
         {favoriteCourses.map(course => {
-          const { progress, completed } = calculateCourseProgress(course.lessons || [])
+          // const { progress, completed } = calculateCourseProgress(course.lessons || [])
 
           return (
             <Card
@@ -37,8 +37,8 @@ export default function FavoritosPage() {
               title={course.title}
               description={course.description}
               href={`/curso/${course.id}`}
-              completed={completed}
-              progress={progress}
+              // completed={completed}
+              // progress={progress}
               level={course.level}
               className="w-[100%] sm:w-[90%] md:w-[100%] lg:w-[95%] xl:w-[97%]"
                 courseData={course}   

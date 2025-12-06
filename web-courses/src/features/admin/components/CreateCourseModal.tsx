@@ -13,7 +13,7 @@ interface CreateCourseModalProps {
 
 export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
   const addCourse = useCourseStore(state => state.addCourse)
-  const getCourse = useCourseStore(state => state.getCourse)
+  const getCourse = useCourseStore(state => state.getCourseById)
   const [step, setStep] = useState<'basic' | 'content'>('basic')
   const [tempCourseId, setTempCourseId] = useState<number | null>(null)
 

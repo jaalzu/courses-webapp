@@ -49,8 +49,8 @@ export default function DashboardPage() {
               image={course.image}
               title={course.title}
               description={course.description}
-              progress={progress}
-              completed={completed}
+              // progress={progress}
+              // completed={completed}
               href={`/curso/${course.id}`}
               className="w-[100%] sm:w-[90%] md:w-[100%] lg:w-[95%] xl:w-[97%]"
               level={course.level}

@@ -1,11 +1,11 @@
 import { useState } from "react"
 import { useCourseStore } from "@/entities/course/model/useCourseStore"
-import type { Course } from "@/types/course"
+import type { Course } from "@/entities/course/model/types"
 
 type EditStep = 'basic' | 'lessons' | 'closed'
 
 export function useEditCourseFlow() {
-  const getCourse = useCourseStore(state => state.getCourse)
+  const getCourse = useCourseStore(state => state.getCourseById)
 
   const [step, setStep] = useState<EditStep>('closed')
   const [courseId, setCourseId] = useState<number | null>(null)
