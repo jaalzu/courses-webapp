@@ -2,18 +2,18 @@
 
 import { DeleteButton } from "@/features/admin/components/DeleteButton"
 import { EditButton } from "@/features/admin/components/EditButton"
-import { FavoriteButton } from "@/features/favorites/components/favoriteButton"
-import { useFavorites } from "@/features/favorites/hooks/useFavorites"
+import { FavoriteButton } from "@/features/favorites/ui/favoriteButton"
+import { useFavorites } from "@/features/favorites/model/hooks/useFavorites"
 import { localStorageFavorites } from "@/features/favorites/lib/favoriteStorage"
-import { getLevelConfig } from "@/lib/utils"
+import { getLevelConfig } from "@/shared/lib/utils"
 import { Button } from "@/shared/ui/button"
 import { Progress } from "@/shared/ui/index"
 import { Badge } from "@/shared/ui/index"
 import Image from "next/image"
 import Link from "next/link"
-import type { Course } from "@/types/course"
+import type { Course } from "@/entities/course/model/types"
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
-import { useCourseStore } from "@/lib/store/useCoursesStore"
+import { useCourseStore } from "@/entities/course/model/useCoursesStore"
 
 interface CardProps {
   courseId: number

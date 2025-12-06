@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { Course, CourseLevel } from "@/types/course"
+import type { Course ,CourseLevel} from "@/entities/course/model/types"
 
 export function useEditCourseForm(course: Course, isOpen: boolean) {
   const [formData, setFormData] = useState({

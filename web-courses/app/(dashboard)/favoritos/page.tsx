@@ -1,10 +1,10 @@
 'use client'
 
-import { useFavorites } from '@/features/favorites/hooks/useFavorites'
+import { useFavorites } from '@/features/favorites/model/hooks/useFavorites'
 import { localStorageFavorites } from '@/features/favorites/lib/favoriteStorage'
-import { useCourseStore } from '@/lib/store/useCoursesStore'
-import Card from '@/components/dashboard/Card'
-import { calculateCourseProgress } from '@/lib/utils'
+import { useCourseStore } from '@/entities/course/model/useCoursesStore'
+import Card from '@/widgets/dashboard/Card'
+import { calculateCourseProgress } from '@/shared/lib/utils'
 
 export default function FavoritosPage() {
   const { favorites } = useFavorites(localStorageFavorites)

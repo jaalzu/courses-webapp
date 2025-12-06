@@ -1,10 +1,10 @@
 // src/lib/store/useCourseStore.ts
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { Course, CourseInput, CourseLevel } from '@/types/course'
-import { courses as initialCourses } from '@/lib/data/curso'
-import { generateCourseId, toggleLesson } from '@/lib/utils/courseUtils'
-import { calculateCourseProgress, getLevelConfig } from '@/lib/utils/courseUtils'
+import type { Course, CourseInput, CourseLevel } from "@/entities/course/model/types"
+import { courses as initialCourses } from '@/entities/course/data/curso'
+import { generateCourseId, toggleLesson } from '@/shared/lib/utils/courseUtils'
+import { calculateCourseProgress, getLevelConfig } from '@/shared/lib/utils/courseUtils'
 
 interface CourseStore {
   courses: Course[]

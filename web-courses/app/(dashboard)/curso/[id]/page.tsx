@@ -1,9 +1,9 @@
 'use client'
 
 import { useParams } from "next/navigation"
-import CourseNotFound from "@/components/course/courseNotFound"
-import CoursePageContent from "@/components/course/coursePageContent"
-import { useCourseStore } from "@/lib/store/useCoursesStore"
+import CourseNotFound from "@/entities/course/ui/courseNotFound"
+import CoursePageContent from "@/entities/course/ui/coursePageContent"
+import { useCourseStore } from "@/entities/course/model/useCoursesStore"
 
 export default function CoursePage() {
   const { id } = useParams()

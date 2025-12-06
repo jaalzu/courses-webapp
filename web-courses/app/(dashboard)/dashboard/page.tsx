@@ -1,9 +1,9 @@
 'use client'
 
-import Card from "@/components/dashboard/Card"
-import { useCourseStore } from "@/lib/store/useCoursesStore"
-import CoursesSkeleton from "@/components/dashboard/coursesSkeleton"
-import { calculateCourseProgress } from "@/lib/utils/index"
+import Card from "@/widgets/dashboard/Card"
+import { useCourseStore } from "@/entities/course/model/useCoursesStore"
+import CoursesSkeleton from "@/widgets/dashboard/coursesSkeleton"
+import { calculateCourseProgress } from "@/shared/lib/utils/index"
 import { NewCourseButton } from "@/features/admin/components/NewCourseButton"
 import { useEditCourseFlow } from "@/features/admin/hooks/useEditCourseFlow"
 import EditCourseManager from "@/features/admin/components/EditCourseManager"

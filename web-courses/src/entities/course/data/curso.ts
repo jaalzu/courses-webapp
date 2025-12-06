@@ -1,4 +1,5 @@
-import type { Course } from '@/types/course'
+import type { Course } from "@/entities/course/model/types"
+
 
 
 export const courses: Course[] = [

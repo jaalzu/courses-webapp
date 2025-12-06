@@ -1,5 +1,5 @@
 'use client'
-import { useCourseStore } from "@/lib/store/useCoursesStore"
+import { useCourseStore } from "@/entities/course/model/useCoursesStore"
 import AvatarUser from "@/components/perfil/avatarUser"
 import UserStats from "@/components/perfil/userStats"
 import RecentActivity from "@/components/perfil/recentActivity"

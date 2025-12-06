@@ -6,7 +6,7 @@ import { PlayIcon, ClockIcon, CheckCircleIcon} from '@heroicons/react/24/outline
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/shared/ui/index"
 import { Badge } from "@/shared/ui/index"
 import { ScrollArea } from "@/shared/ui/index"
-import { cn } from "@/lib/utils"
+import { cn } from "@/shared/lib/utils"
 
 interface LessonListProps {
   lessons: Lesson[]

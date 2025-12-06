@@ -3,10 +3,10 @@
 import { useState, useEffect } from "react"
 import { ForumSection } from '@/features/forum/components/ForumSection'
 import { useCourseNavigation } from "@/hooks/useCourseNavigation"
-import CourseContent from "@/components/course/courseContent"
-import { LessonList } from "@/components/course/lessonList"
-import InstructorCard from "@/components/course/instructorCard"
-import { CourseSwitcher } from "@/components/course/courseSwitcher"
+import CourseContent from "@/entities/course/ui/courseContent"
+import { LessonList } from "@/entities/course/ui/lessonList"
+import InstructorCard from "@/entities/course/ui/instructorCard"
+import { CourseSwitcher } from "@/entities/course/ui/courseSwitcher"
 import type { Lesson } from "@/types"
 
 interface CoursePageContentProps {
