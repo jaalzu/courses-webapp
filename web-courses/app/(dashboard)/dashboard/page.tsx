@@ -3,7 +3,7 @@
 import Card from "@/widgets/dashboard/Card"
 import { useCourseStore } from "@/entities/course/model/useCourseStore"
 import CoursesSkeleton from "@/widgets/dashboard/coursesSkeleton"
-import { calculateCourseProgress } from "@/shared/lib/utils/index"
+import { calculateCourseProgress } from "@/features/course-progress/lib/helpers"
 import { NewCourseButton } from "@/features/admin/components/NewCourseButton"
 import { useEditCourseFlow } from "@/features/admin/hooks/useEditCourseFlow"
 import EditCourseManager from "@/features/admin/components/EditCourseManager"

@@ -1,12 +1,6 @@
-// src/lib/utils/courseUtils.ts
-import type { Course, CourseLevel } from '@/types/course'
+import type { Course } from '@/entities/course/model/types'
 
-// ——— Generar nuevo ID de curso ———
-export function generateCourseId(courses: Course[]): number {
-  return courses.length > 0 ? Math.max(...courses.map(c => c.id)) + 1 : 1
-}
-
-// ——— Toggle de lección completa ———
+// ✅ Toggle de lecciones es parte de la feature de progreso
 export function toggleLesson(courses: Course[], courseId: number, lessonId: number): Course[] {
   return courses.map(course =>
     course.id === courseId
@@ -22,18 +16,7 @@ export function toggleLesson(courses: Course[], courseId: number, lessonId: numb
   )
 }
 
-// ——— Configuración de niveles de curso ———
-export function getLevelConfig(level: CourseLevel) {
-  const configs = {
-    beginner: { variant: 'success' as const, label: 'Básico' },
-    intermediate: { variant: 'warning' as const, label: 'Intermedio' },
-    advanced: { variant: 'danger' as const, label: 'Avanzado' },
-  }
-
-  return configs[level]
-}
-
-// ——— Calcular progreso de curso ———
+// ✅ Calcular progreso es parte de la feature de progreso
 export function calculateCourseProgress(lessons: { completed: boolean }[]) {
   const totalLessons = lessons.length
   const completedCount = totalLessons > 0

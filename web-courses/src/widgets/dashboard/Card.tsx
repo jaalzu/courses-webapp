@@ -5,7 +5,7 @@ import { EditButton } from "@/features/admin/components/EditButton"
 import { FavoriteButton } from "@/features/favorites/ui/favoriteButton"
 import { useFavorites } from "@/features/favorites/model/hooks/useFavorites"
 import { localStorageFavorites } from "@/features/favorites/lib/favoriteStorage"
-import { getLevelConfig } from "@/shared/lib/utils"
+import { getLevelConfig } from "@/entities/course/lib/helpers"
 import { Button } from "@/shared/ui/button"
 import { Progress } from "@/shared/ui/index"
 import { Badge } from "@/shared/ui/index"
@@ -14,14 +14,13 @@ import Link from "next/link"
 import type { Course } from "@/entities/course/model/types"
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import { useCourseStore } from "@/entities/course/model/useCourseStore"
+import { useCourseProgress } from "@/features/course-progress/model/useCourseProgress" // ← AGREGAR
 
 interface CardProps {
   courseId: number
   title: string
   description: string
-  image?: string // 
-  progress: number
-  completed: { done: number; total: number }
+  image?: string
   href: string
   className?: string
   level: "beginner" | "intermediate" | "advanced"
@@ -30,21 +29,29 @@ interface CardProps {
   onEdit?: () => void
 }
 
-
 export default function Card({
   courseData,
   enableEdit = false,
-  progress,
   courseId,
   href,
   className = "",
-  completed,
   level,
   onEdit,  
 }: CardProps) {
   const { isFavorite, toggleFavorite } = useFavorites(localStorageFavorites)
   const levelConfig = level ? getLevelConfig(level) : null
   const deleteCourse = useCourseStore(state => state.deleteCourse)
+  
+  // ✅ OBTENER PROGRESO DEL STORE EN TIEMPO REAL
+  const isLessonCompleted = useCourseProgress(state => state.isLessonCompleted)
+  
+  // ✅ CALCULAR PROGRESO DINÁMICAMENTE
+  const completedCount = courseData.lessons.filter(
+    lesson => isLessonCompleted(courseId, lesson.id)
+  ).length
+  const totalLessons = courseData.lessons.length
+  const progress = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0
+  const completed = { done: completedCount, total: totalLessons }
 
   const handleEditClick = () => {
     if (onEdit) {
@@ -90,21 +97,19 @@ export default function Card({
 
           <Button className="w-full mb-4">Entrar</Button>
 
-          {completed && (
-            <div className="flex justify-between items-center mt-6">
-              <span className="text-sm text-gray-600 dark:text-gray-200 font-medium">Lecciones</span>
-              {completed.done === completed.total ? (
-                <div className="flex items-center gap-1.5 text-green-600 dark:text-green-400">
-                  <CheckCircleIcon className="w-5 h-5" />
-                  <span className="text-sm font-semibold">¡Completado!</span>
-                </div>
-              ) : (
-                <span className="text-sm text-gray-600 dark:text-gray-200 font-medium">
-                  {completed.done}/{completed.total}
-                </span>
-              )}
-            </div>
-          )}
+          <div className="flex justify-between items-center mt-6">
+            <span className="text-sm text-gray-600 dark:text-gray-200 font-medium">Lecciones</span>
+            {completed.done === completed.total ? (
+              <div className="flex items-center gap-1.5 text-green-600 dark:text-green-400">
+                <CheckCircleIcon className="w-5 h-5" />
+                <span className="text-sm font-semibold">¡Completado!</span>
+              </div>
+            ) : (
+              <span className="text-sm text-gray-600 dark:text-gray-200 font-medium">
+                {completed.done}/{completed.total}
+              </span>
+            )}
+          </div>
         </div>
 
         <Progress value={progress} className="h-1.5 w-full" />

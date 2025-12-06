@@ -1,27 +1,34 @@
 'use client'
 
 import styles from "./lessonList.module.css"
-import type { Lesson } from "@/types"
+import type { Lesson } from "@/entities/lesson/model/types"
 import { PlayIcon, ClockIcon, CheckCircleIcon} from '@heroicons/react/24/outline'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/shared/ui/index"
 import { Badge } from "@/shared/ui/index"
 import { ScrollArea } from "@/shared/ui/index"
 import { cn } from "@/shared/lib/utils"
+import { useCourseProgress } from "@/features/course-progress/model/useCourseProgress" // ← AGREGAR
 
 interface LessonListProps {
   lessons: Lesson[]
   currentLessonId: number
   onLessonSelect: (lesson: Lesson) => void
   onToggleComplete: (lessonId: number) => void
+  courseId: number // ← AGREGAR
 }
 
 export function LessonList({ 
   lessons, 
   currentLessonId, 
   onLessonSelect, 
-  onToggleComplete
+  onToggleComplete,
+  courseId // ← AGREGAR
 }: LessonListProps) {
-  const completedCount = lessons.filter(l => l.completed).length
+  // ✅ Obtener función del store
+  const isLessonCompleted = useCourseProgress(state => state.isLessonCompleted)
+  
+  // ✅ Calcular progreso usando el store en lugar de lesson.completed
+  const completedCount = lessons.filter(l => isLessonCompleted(courseId, l.id)).length
   const totalLessons = lessons.length
   const progress = Math.round((completedCount / totalLessons) * 100)
 
@@ -55,6 +62,7 @@ export function LessonList({
           <Accordion type="single" collapsible className="w-full">
             {lessons.map((lesson) => {
               const isActive = currentLessonId === lesson.id
+              const isCompleted = isLessonCompleted(courseId, lesson.id) // ✅ AGREGAR
 
               return (
                 <AccordionItem 
@@ -69,16 +77,16 @@ export function LessonList({
                     )}
                   >
                     <div className="flex items-center gap-3 flex-1 text-left">
-        {lesson.completed ? (
-  <CheckCircleIcon className="w-5 h-5 text-green-500 flex-shrink-0" />
-) : isActive ? (
-  <ClockIcon
-    className={`w-5 h-5 text-yellow-400 dark:text-yellow-300 flex-shrink-0 ${styles.softPulse}`}
-  />
-) : (
-  <ClockIcon className="w-5 h-5 text-gray-400 dark:text-gray-500 flex-shrink-0" />
-)}
-
+                      {/* ✅ Cambiar lesson.completed por isCompleted */}
+                      {isCompleted ? (
+                        <CheckCircleIcon className="w-5 h-5 text-green-500 flex-shrink-0" />
+                      ) : isActive ? (
+                        <ClockIcon
+                          className={`w-5 h-5 text-yellow-400 dark:text-yellow-300 flex-shrink-0 ${styles.softPulse}`}
+                        />
+                      ) : (
+                        <ClockIcon className="w-5 h-5 text-gray-400 dark:text-gray-500 flex-shrink-0" />
+                      )}
 
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
@@ -114,17 +122,20 @@ export function LessonList({
                         Reproducir lección completa
                       </button>
 
-
-                      {!lesson.completed && (
+                      {/* ✅ Cambiar lesson.completed por isCompleted */}
+                      {!isCompleted && (
                         <button
-                          onClick={() => onToggleComplete(lesson.id)}
+                          onClick={() => {
+                            console.log('🔥 CLICK:', courseId, lesson.id) // Debug
+                            onToggleComplete(lesson.id)
+                          }}
                           className="mt-3 w-full bg-green-500 hover:bg-green-400 text-white font-medium py-2 rounded-lg transition-colors"
                         >
                           Marcar como finalizado
                         </button>
                       )}
 
-                      {lesson.completed && (
+                      {isCompleted && (
                         <div className="mt-3 w-full bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300 font-medium py-2 rounded-lg text-center">
                           Lección completada ✅
                         </div>

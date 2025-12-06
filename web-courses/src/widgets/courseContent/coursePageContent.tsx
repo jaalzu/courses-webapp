@@ -3,10 +3,10 @@
 import { useState, useEffect } from "react"
 import { ForumSection } from '@/features/forum/ui/ForumSection'
 import { useCourseNavigation } from "@/features/course-navigation/model/useCourseNavigation"
-import CourseContent from "@/entities/course/ui/courseContent"
-import { LessonList } from "@/entities/course/ui/lessonList"
-import InstructorCard from "@/entities/course/ui/instructorCard"
-import { CourseSwitcher } from "@/entities/course/ui/courseSwitcher"
+import CourseContent from "@/widgets/courseContent/courseContent"
+import { LessonList } from "@/widgets/lesson-list/lessonList" // ← Mejor importar del index
+import InstructorCard from "@/widgets/courseContent/instructorCard"
+import { CourseSwitcher } from "@/widgets/courseContent/courseSwitcher"
 import type { Lesson } from "@/entities/lesson/model/types"
 
 interface CoursePageContentProps {
@@ -18,7 +18,6 @@ export default function CoursePageContent({ courseId }: CoursePageContentProps) 
 
   const { course, currentLesson, handleToggleComplete, handleLessonSelect } =
     useCourseNavigation(courseId)
-
 
   useEffect(() => {
     if (currentLesson?.videoUrl) {
@@ -37,10 +36,8 @@ export default function CoursePageContent({ courseId }: CoursePageContentProps) 
 
   if (!course) return null
 
-
   return (
     <main className="w-full p-4 md:p-8 space-y-5">
-
       <div className="flex justify-between items-center pb-1">
         <CourseSwitcher currentCourseId={courseId} />
       </div>
@@ -57,6 +54,7 @@ export default function CoursePageContent({ courseId }: CoursePageContentProps) 
             currentLessonId={currentLesson?.id || course.lessons[0]?.id}
             onLessonSelect={handleLessonClick} 
             onToggleComplete={handleToggleComplete}
+            courseId={courseId}  // ← ESTO ES LO QUE FALTABA
           />
 
           <InstructorCard

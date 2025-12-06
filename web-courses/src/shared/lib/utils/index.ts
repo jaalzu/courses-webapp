@@ -1,2 +1,2 @@
 export * from './cn'
-export * from './courseUtils'
+export * from './use-mobile'

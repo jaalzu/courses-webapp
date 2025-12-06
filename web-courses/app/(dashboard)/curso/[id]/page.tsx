@@ -1,8 +1,8 @@
 'use client'
 
 import { useParams } from "next/navigation"
-import CourseNotFound from "@/entities/course/ui/courseNotFound"
-import CoursePageContent from "@/entities/course/ui/coursePageContent"
+import CourseNotFound from "@/widgets/courseContent/courseNotFound"
+import CoursePageContent from "@/widgets/courseContent/coursePageContent"
 import { useCourseStore } from "@/entities/course/model/useCourseStore"
 
 export default function CoursePage() {

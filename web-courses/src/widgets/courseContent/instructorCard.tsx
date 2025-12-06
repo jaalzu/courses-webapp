@@ -1,6 +1,6 @@
 'use client'
 
-import type { InstructorCardProps } from "@/types"
+import type { InstructorCardProps } from "@/entities/instructor/model/instructor"
 import { Avatar, AvatarImage, AvatarFallback } from "@/shared/ui/index" // o desde shadcn
 
 export default function InstructorCard({ name, profession, image, description }: InstructorCardProps) {
