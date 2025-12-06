@@ -4,7 +4,7 @@ import { useCourseStore } from "@/entities/course/model/useCourseStore"
 import { Button } from "@/shared/ui/index"
 import { XMarkIcon, ArrowLeftIcon, PlusIcon, TrashIcon, PencilIcon } from "@heroicons/react/24/outline"
 import type { Course } from "@/entities/course/model/types"
-import type {  Lesson } from "@/types/lesson"
+import type {  Lesson } from "@/entities/lesson/model/types"
 
 
 interface Props {

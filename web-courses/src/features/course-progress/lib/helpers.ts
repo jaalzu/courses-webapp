@@ -1,6 +1,5 @@
 import type { Course } from '@/entities/course/model/types'
 
-// ✅ Toggle de lecciones es parte de la feature de progreso
 export function toggleLesson(courses: Course[], courseId: number, lessonId: number): Course[] {
   return courses.map(course =>
     course.id === courseId
@@ -16,7 +15,6 @@ export function toggleLesson(courses: Course[], courseId: number, lessonId: numb
   )
 }
 
-// ✅ Calcular progreso es parte de la feature de progreso
 export function calculateCourseProgress(lessons: { completed: boolean }[]) {
   const totalLessons = lessons.length
   const completedCount = totalLessons > 0
