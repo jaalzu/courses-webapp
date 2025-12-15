@@ -11,23 +11,20 @@ import { Progress } from "@/shared/ui/index"
 import { Badge } from "@/shared/ui/index"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import type { Course } from "@/entities/course/model/types"
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import { useCourseStore } from "@/entities/course/model/useCourseStore"
-import { useCourseProgress } from "@/entities/course-progress/model/index" 
-
+import { useCourseProgress } from "@/entities/course-progress/model/index"
 import { isLessonCompleted } from '@/entities/course-progress/model/selectors'
 
 interface CardProps {
   courseId: number
-  title: string
-  description: string
-  image?: string
   href: string
   className?: string
   level: "beginner" | "intermediate" | "advanced"
-  enableEdit?: boolean
   courseData: Course
+  enableEdit?: boolean
   onEdit?: () => void
 }
 
@@ -38,12 +35,12 @@ export default function Card({
   href,
   className = "",
   level,
-  onEdit,  
+  onEdit,
 }: CardProps) {
+  const router = useRouter()
+
   // Favoritos
   const { isFavorite, toggleFavorite } = useFavorites(localStorageFavorites)
-
-  
 
   // Configuración de nivel
   const levelConfig = level ? getLevelConfig(level) : null
@@ -53,6 +50,7 @@ export default function Card({
 
   // Progreso del curso desde Zustand
   const courseProgress = useCourseProgress(state => state.progress)
+  const toggleLessonComplete = useCourseProgress(state => state.toggleLessonComplete)
 
   // Número de lecciones completadas
   const completedCount = courseData.lessons.filter(
@@ -65,13 +63,21 @@ export default function Card({
     ? Math.round((completedCount / totalLessons) * 100)
     : 0
 
-  const completed = { done: completedCount, total: totalLessons }
-
   // Handlers
-  const handleEditClick = () => { onEdit?.() }
+  const handleEditClick = () => onEdit?.()
   const handleDeleteClick = () => {
     if (!confirm("¿Seguro que querés eliminar este curso? Esta acción no se puede deshacer.")) return
     deleteCourse(courseId)
+  }
+
+  // Prefetch/autofetch lecciones al entrar
+  const handleEnterCourse = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    // Pre-cargar página Next.js
+    await router.prefetch(href)
+    // Opcional: fetch lecciones desde tu API antes de navegar
+    await fetch(`/api/courses/${courseId}/lessons`)
+    router.push(href)
   }
 
   return (
@@ -88,16 +94,17 @@ export default function Card({
 
       <Link
         href={href}
+        onClick={handleEnterCourse}
         className="bg-white dark:bg-gray-900 text-black dark:text-gray-100 rounded-md overflow-hidden flex flex-col h-full transition-shadow shadow-sm hover:shadow-md duration-300 border border-gray-200 dark:border-gray-600"
       >
         <Image
           src={
-    courseData.image
-      ? courseData.image.startsWith('/')
-        ? courseData.image
-        : `/${courseData.image}`
-      : '/curso1.jpg'
-  }
+            courseData.image
+              ? courseData.image.startsWith('/')
+                ? courseData.image
+                : `/${courseData.image}`
+              : '/curso1.jpg'
+          }
           alt={courseData.title}
           width={400}
           height={200}
@@ -115,14 +122,14 @@ export default function Card({
 
           <div className="flex justify-between items-center mt-6">
             <span className="text-sm text-gray-600 dark:text-gray-200 font-medium">Lecciones</span>
-            {completed.done === completed.total ? (
+            {completedCount === totalLessons && totalLessons > 0 ? (
               <div className="flex items-center gap-1.5 text-green-600 dark:text-green-400">
                 <CheckCircleIcon className="w-5 h-5" />
                 <span className="text-sm font-semibold">¡Completado!</span>
               </div>
             ) : (
               <span className="text-sm text-gray-600 dark:text-gray-200 font-medium">
-                {completed.done}/{completed.total}
+                {completedCount}/{totalLessons}
               </span>
             )}
           </div>

@@ -43,9 +43,6 @@ export default function DashboardPage() {
     <Card
       key={id}
       courseId={id}
-      image={image}
-      title={title}
-      description={description}
       href={`/curso/${id}`}
       className="w-[100%] sm:w-[90%] md:w-[100%] lg:w-[95%] xl:w-[97%]"
       level={level}

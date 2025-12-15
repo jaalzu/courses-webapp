@@ -23,7 +23,6 @@ export default function RootLayout({ children }) {
       <body
         className={`${montserrat.variable} antialiased bg-gray-50 dark:bg-neutral-900`}
       >
-        {/* 👇 ESTO ES LA CLAVE */}
         <DebugClient />
 
         {children}

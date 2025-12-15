@@ -1,69 +1,50 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useCourseStore } from "@/entities/course/model/useCourseStore"
 import { useCourseProgress } from "@/entities/course-progress/model/index"
-import type { Lesson } from "@/entities/lesson/model/types" 
+import { isLessonCompleted as isLessonCompletedSelector } from '@/entities/course-progress/model/selectors'
+import type { Lesson } from "@/entities/lesson/model/types"
 
 export function useCourseNavigation(courseId: number) {
-  // ✅ Obtener curso del store de entidad
-  const course = useCourseStore((state) => state.getCourseById(courseId))
+  // Curso
+  const course = useCourseStore(state => state.getCourseById(courseId))
   
-  // ✅ Obtener funciones de progreso del feature store
+  // Funciones de progreso
   const toggleLessonComplete = useCourseProgress(state => state.toggleLessonComplete)
-  const isLessonCompleted = useCourseProgress(state => state.isLessonCompleted)
-  
-  const [currentLesson, setCurrentLesson] = useState<Lesson | undefined>(undefined)
+  const courseProgress = useCourseProgress(state => state.progress)
 
-  useEffect(() => {
-    if (course?.lessons && course.lessons.length > 0 && !currentLesson) {
-      setCurrentLesson(course.lessons[0])
-    }
-  }, [course?.lessons, currentLesson])
+  // Estado de la lección actual
+  const [currentLesson, setCurrentLesson] = useState<Lesson | undefined>(
+    course?.lessons[0]
+  )
 
-  useEffect(() => {
-    if (course && currentLesson) {
-      const updatedLesson = course.lessons.find(l => l.id === currentLesson.id)
-      if (updatedLesson) {
-        setCurrentLesson(updatedLesson)
-      }
-    }
-  }, [course?.lessons, currentLesson])
+  // Función para saber si una lección está completada
+  const lessonIsCompleted = (lessonId: number) =>
+    isLessonCompletedSelector(courseProgress, courseId, lessonId)
 
-  useEffect(() => {
-    if (course?.lessons[0]) {
-      setCurrentLesson(course.lessons[0])
-    }
-  }, [courseId])
+  // Calcular progreso total
+  const completedCount = course?.lessons.filter(lesson =>
+    lessonIsCompleted(lesson.id)
+  ).length ?? 0
+  const totalLessons = course?.lessons.length ?? 0
+  const progressPercentage = totalLessons > 0
+    ? Math.round((completedCount / totalLessons) * 100)
+    : 0
 
-  const handleToggleComplete = (lessonId: number) => {
-    if (!course) return
-    
-    toggleLessonComplete(course.id, lessonId)
-    
-    const currentIndex = course.lessons.findIndex(l => l.id === lessonId)
-    const nextLesson = course.lessons[currentIndex + 1]
-    
-    if (nextLesson) {
-      setCurrentLesson(nextLesson)
-    }
-  }
-
+  // Seleccionar lección
   const handleLessonSelect = (lesson: Lesson) => {
     setCurrentLesson(lesson)
-  }
-
-  const handleTimestampClick = (lesson: Lesson, seconds: number) => {
-    setCurrentLesson(lesson)
-    console.log(`Saltar a ${seconds}s en "${lesson.title}"`)
   }
 
   return {
     course,
     currentLesson,
-    isLessonCompleted: (lessonId: number) => isLessonCompleted(courseId, lessonId),
-    handleToggleComplete,
+    handleToggleComplete: toggleLessonComplete,
     handleLessonSelect,
-    handleTimestampClick
+    lessonIsCompleted,
+    completedCount,
+    totalLessons,
+    progressPercentage,
   }
 }

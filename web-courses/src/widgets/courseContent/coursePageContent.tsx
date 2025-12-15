@@ -50,12 +50,13 @@ export default function CoursePageContent({ courseId }: CoursePageContentProps) 
 
         <div className="flex flex-col gap-6">
           <LessonList
-            lessons={course.lessons}
-            currentLessonId={currentLesson?.id || course.lessons[0]?.id}
-            onLessonSelect={handleLessonClick} 
-            onToggleComplete={handleToggleComplete}
-            courseId={courseId}  // ← ESTO ES LO QUE FALTABA
-          />
+  lessons={course.lessons}
+  currentLessonId={currentLesson?.id || course.lessons[0]?.id}
+  onLessonSelect={handleLessonClick}
+  onToggleComplete={(lessonId: number) => handleToggleComplete(courseId, lessonId)}
+  courseId={courseId}
+/>
+
 
           <InstructorCard
             name="Juan Pepe"
