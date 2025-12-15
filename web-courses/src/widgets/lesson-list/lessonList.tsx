@@ -2,19 +2,20 @@
 
 import styles from "./lessonList.module.css"
 import type { Lesson } from "@/entities/lesson/model/types"
-import { PlayIcon, ClockIcon, CheckCircleIcon} from '@heroicons/react/24/outline'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/shared/ui/index"
+import { PlayIcon, ClockIcon, CheckCircleIcon } from '@heroicons/react/24/outline'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/shared/ui/index"
 import { Badge } from "@/shared/ui/index"
 import { ScrollArea } from "@/shared/ui/index"
 import { cn } from "@/shared/lib/utils"
-import { useCourseProgress } from "@/features/course-progress/model/useCourseProgress" // ← AGREGAR
+import { useCourseProgress } from "@/features/course-progress/model/index" 
+import { isLessonCompleted } from '@/features/course-progress/model/selectors'
 
 interface LessonListProps {
   lessons: Lesson[]
   currentLessonId: number
   onLessonSelect: (lesson: Lesson) => void
   onToggleComplete: (lessonId: number) => void
-  courseId: number // ← AGREGAR
+  courseId: number
 }
 
 export function LessonList({ 
@@ -22,15 +23,17 @@ export function LessonList({
   currentLessonId, 
   onLessonSelect, 
   onToggleComplete,
-  courseId // ← AGREGAR
+  courseId
 }: LessonListProps) {
-  // ✅ Obtener función del store
-  const isLessonCompleted = useCourseProgress(state => state.isLessonCompleted)
-  
-  // ✅ Calcular progreso usando el store en lugar de lesson.completed
-  const completedCount = lessons.filter(l => isLessonCompleted(courseId, l.id)).length
+  // 🔹 Obtener array de progreso del store
+  const courseProgress = useCourseProgress(state => state.progress)
+
+  // 🔹 Calcular progreso y lecciones completadas usando selector
+  const completedCount = lessons.filter(
+    l => isLessonCompleted(courseProgress, courseId, l.id)
+  ).length
   const totalLessons = lessons.length
-  const progress = Math.round((completedCount / totalLessons) * 100)
+  const progress = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0
 
   return (
     <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm overflow-hidden overflow-x-hidden">
@@ -62,7 +65,7 @@ export function LessonList({
           <Accordion type="single" collapsible className="w-full">
             {lessons.map((lesson) => {
               const isActive = currentLessonId === lesson.id
-              const isCompleted = isLessonCompleted(courseId, lesson.id) // ✅ AGREGAR
+              const isCompleted = isLessonCompleted(courseProgress, courseId, lesson.id)
 
               return (
                 <AccordionItem 
@@ -77,7 +80,6 @@ export function LessonList({
                     )}
                   >
                     <div className="flex items-center gap-3 flex-1 text-left">
-                      {/* ✅ Cambiar lesson.completed por isCompleted */}
                       {isCompleted ? (
                         <CheckCircleIcon className="w-5 h-5 text-green-500 flex-shrink-0" />
                       ) : isActive ? (
@@ -122,13 +124,9 @@ export function LessonList({
                         Reproducir lección completa
                       </button>
 
-                      {/* ✅ Cambiar lesson.completed por isCompleted */}
                       {!isCompleted && (
                         <button
-                          onClick={() => {
-                            console.log('🔥 CLICK:', courseId, lesson.id) // Debug
-                            onToggleComplete(lesson.id)
-                          }}
+                          onClick={() => onToggleComplete(lesson.id)}
                           className="mt-3 w-full bg-green-500 hover:bg-green-400 text-white font-medium py-2 rounded-lg transition-colors"
                         >
                           Marcar como finalizado

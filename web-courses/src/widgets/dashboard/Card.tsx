@@ -14,7 +14,9 @@ import Link from "next/link"
 import type { Course } from "@/entities/course/model/types"
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import { useCourseStore } from "@/entities/course/model/useCourseStore"
-import { useCourseProgress } from "@/features/course-progress/model/useCourseProgress" // ← AGREGAR
+import { useCourseProgress } from "@/features/course-progress/model/index" 
+
+import { isLessonCompleted } from '@/features/course-progress/model/selectors'
 
 interface CardProps {
   courseId: number
@@ -38,27 +40,35 @@ export default function Card({
   level,
   onEdit,  
 }: CardProps) {
+  // Favoritos
   const { isFavorite, toggleFavorite } = useFavorites(localStorageFavorites)
+
+  
+
+  // Configuración de nivel
   const levelConfig = level ? getLevelConfig(level) : null
+
+  // Acciones store cursos
   const deleteCourse = useCourseStore(state => state.deleteCourse)
-  
-  // ✅ OBTENER PROGRESO DEL STORE EN TIEMPO REAL
-  const isLessonCompleted = useCourseProgress(state => state.isLessonCompleted)
-  
-  // ✅ CALCULAR PROGRESO DINÁMICAMENTE
+
+  // Progreso del curso desde Zustand
+  const courseProgress = useCourseProgress(state => state.progress)
+
+  // Número de lecciones completadas
   const completedCount = courseData.lessons.filter(
-    lesson => isLessonCompleted(courseId, lesson.id)
+    lesson => isLessonCompleted(courseProgress, courseId, lesson.id)
   ).length
   const totalLessons = courseData.lessons.length
-  const progress = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0
+
+  // Porcentaje de progreso
+  const progressPercentage = totalLessons > 0
+    ? Math.round((completedCount / totalLessons) * 100)
+    : 0
+
   const completed = { done: completedCount, total: totalLessons }
 
-  const handleEditClick = () => {
-    if (onEdit) {
-      onEdit()  
-    }
-  }
-
+  // Handlers
+  const handleEditClick = () => { onEdit?.() }
   const handleDeleteClick = () => {
     if (!confirm("¿Seguro que querés eliminar este curso? Esta acción no se puede deshacer.")) return
     deleteCourse(courseId)
@@ -81,7 +91,13 @@ export default function Card({
         className="bg-white dark:bg-gray-900 text-black dark:text-gray-100 rounded-md overflow-hidden flex flex-col h-full transition-shadow shadow-sm hover:shadow-md duration-300 border border-gray-200 dark:border-gray-600"
       >
         <Image
-          src={courseData.image.startsWith("/") ? courseData.image : `/${courseData.image}`}
+          src={
+    courseData.image
+      ? courseData.image.startsWith('/')
+        ? courseData.image
+        : `/${courseData.image}`
+      : '/curso1.jpg'
+  }
           alt={courseData.title}
           width={400}
           height={200}
@@ -112,7 +128,7 @@ export default function Card({
           </div>
         </div>
 
-        <Progress value={progress} className="h-1.5 w-full" />
+        <Progress value={progressPercentage} className="h-1.5 w-full" />
       </Link>
     </div>
   )
