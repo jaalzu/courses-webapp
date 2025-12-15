@@ -1,16 +1,10 @@
 'use client'
 
-import { useFavorites } from '@/features/favorites/model/hooks/useFavorites'
-import { localStorageFavorites } from '@/features/favorites/lib/favoriteStorage'
-import { useCourseStore } from '@/entities/course/model/useCourseStore'
 import Card from '@/widgets/dashboard/Card'
-// import { calculateCourseProgress } from '@/entities/progress/model/useCourseProgress'
+import { useFavoriteCourses } from '@/features/favorites/model/hooks/useFavoritesCourses'
 
 export default function FavoritosPage() {
-  const { favorites } = useFavorites(localStorageFavorites)
-  const courses = useCourseStore(state => state.courses)
-
-  const favoriteCourses = courses.filter(c => favorites.includes(c.id))
+  const { favoriteCourses } = useFavoriteCourses()
 
   if (favoriteCourses.length === 0) {
     return (
@@ -24,27 +18,21 @@ export default function FavoritosPage() {
   return (
     <main className="p-6 lg:p-10 space-y-6">
       <h1 className="text-2xl font-bold">Tus Favoritos</h1>
-      
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-3 xl:gap-x-8 gap-y-9 justify-items-center">
-        {favoriteCourses.map(course => {
-          // const { progress, completed } = calculateCourseProgress(course.lessons || [])
+        {favoriteCourses.map(({ id, image, title, description, level, ...courseData }) => (
+  <Card
+    key={id}
+    courseId={id}
+    image={image}
+    title={title}
+    description={description}
+    href={`/curso/${id}`}
+    level={level}
+    className="w-[100%] sm:w-[90%] md:w-[100%] lg:w-[95%] xl:w-[97%]"
+    courseData={{ id, image, title, description, level, ...courseData }}
+  />
+))}
 
-          return (
-            <Card
-              key={course.id}
-              courseId={course.id}
-              image={course.image}
-              title={course.title}
-              description={course.description}
-              href={`/curso/${course.id}`}
-              // completed={completed}
-              // progress={progress}
-              level={course.level}
-              className="w-[100%] sm:w-[90%] md:w-[100%] lg:w-[95%] xl:w-[97%]"
-                courseData={course}   
-              />
-          )
-        })}
       </div>
     </main>
   )

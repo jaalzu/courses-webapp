@@ -7,8 +7,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/shared/ui/index"
 import { ScrollArea } from "@/shared/ui/index"
 import { cn } from "@/shared/lib/utils"
-import { useCourseProgress } from "@/features/course-progress/model/index" 
-import { isLessonCompleted } from '@/features/course-progress/model/selectors'
+import { useCourseProgress } from "@/entities/course-progress/model/index" 
+import { isLessonCompleted } from '@/entities/course-progress/model/selectors'
 
 interface LessonListProps {
   lessons: Lesson[]

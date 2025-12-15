@@ -3,14 +3,13 @@
 import Card from "@/widgets/dashboard/Card"
 import { useCourseStore } from "@/entities/course/model/useCourseStore"
 import CoursesSkeleton from "@/widgets/dashboard/coursesSkeleton"
-import { calculateCourseProgress } from "@/features/course-progress/lib/helpers"
 import { NewCourseButton } from "@/features/admin/components/NewCourseButton"
 import { useEditCourseFlow } from "@/features/admin/hooks/useEditCourseFlow"
 import EditCourseManager from "@/features/admin/components/EditCourseManager"
 
 export default function DashboardPage() {
   const courses = useCourseStore(state => state.courses)
-  const editFlow = useEditCourseFlow() // 👈 Hook para el flujo de edición
+  const editFlow = useEditCourseFlow() 
 
   if (!courses || courses.length === 0) {
     return (
@@ -39,31 +38,26 @@ export default function DashboardPage() {
 
       {/* Grid de cursos */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-3 xl:gap-x-8 gap-y-9 justify-items-center">
-        {courses.map((course) => {
-          const { progress, completed } = calculateCourseProgress(course.lessons || [])
-
-          return (
-            <Card
-              key={course.id}
-              courseId={course.id}
-              image={course.image}
-              title={course.title}
-              description={course.description}
-              // progress={progress}
-              // completed={completed}
-              href={`/curso/${course.id}`}
-              className="w-[100%] sm:w-[90%] md:w-[100%] lg:w-[95%] xl:w-[97%]"
-              level={course.level}
-              enableEdit={true}
-              courseData={course}
-              onEdit={() => editFlow.open(course.id)} // 👈 Pasa la función de edición
-            />
-          )
-        })}
+        {courses.map(({ id, image, title, description, level, lessons, ...rest }) => {
+  return (
+    <Card
+      key={id}
+      courseId={id}
+      image={image}
+      title={title}
+      description={description}
+      href={`/curso/${id}`}
+      className="w-[100%] sm:w-[90%] md:w-[100%] lg:w-[95%] xl:w-[97%]"
+      level={level}
+      enableEdit={true}
+      courseData={{ id, image, title, description, level, lessons, ...rest }}
+      onEdit={() => editFlow.open(id)}
+    />
+  )
+})}
       </div>
-
       {/* Manager de modales de edición */}
-      <EditCourseManager flow={editFlow} /> {/* 👈 Maneja los 2 modales automáticamente */}
+      <EditCourseManager flow={editFlow} /> 
     </div>
   )
 }

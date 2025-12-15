@@ -14,9 +14,9 @@ import Link from "next/link"
 import type { Course } from "@/entities/course/model/types"
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import { useCourseStore } from "@/entities/course/model/useCourseStore"
-import { useCourseProgress } from "@/features/course-progress/model/index" 
+import { useCourseProgress } from "@/entities/course-progress/model/index" 
 
-import { isLessonCompleted } from '@/features/course-progress/model/selectors'
+import { isLessonCompleted } from '@/entities/course-progress/model/selectors'
 
 interface CardProps {
   courseId: number

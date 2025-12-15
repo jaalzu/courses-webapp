@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useCourseStore } from "@/entities/course/model/useCourseStore"
-import { useCourseProgress } from "@/features/course-progress/model/index"
+import { useCourseProgress } from "@/entities/course-progress/model/index"
 import type { Lesson } from "@/entities/lesson/model/types" 
 
 export function useCourseNavigation(courseId: number) {

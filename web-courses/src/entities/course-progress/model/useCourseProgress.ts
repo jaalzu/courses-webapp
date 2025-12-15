@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import type { LessonProgress, CourseId, LessonId } from '@/features/course-progress/model/types'
+import type { LessonProgress, CourseId, LessonId } from '@/entities/course-progress/model/types'
 
 interface CourseProgressStore {
   progress: LessonProgress[]
