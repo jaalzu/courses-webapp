@@ -1,4 +1,4 @@
-import type { LessonProgress, CourseId, LessonId } from '../../../features/course-progress/model/types'
+import type { LessonProgress, CourseId, LessonId } from './types'
 
 export const getCourseProgress = (
   progress: LessonProgress[],
