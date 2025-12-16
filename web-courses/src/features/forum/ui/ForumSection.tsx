@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useForum } from '../model/useForum';
-import { ChatBubbleOvalLeftIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
+import { ChatBubbleOvalLeftIcon } from '@heroicons/react/24/outline';
 import { ForumPost, ForumComment } from '@/entities/forum-post'
 
 import { PostCard } from './PostCard';
@@ -16,10 +16,16 @@ interface Props {
   courseId: string;
   currentUserId: string;
   currentUserName: string;
+  isCurrentUserAdmin?: boolean; // 👈 Nueva prop
 }
 
-export const ForumSection = ({ courseId, currentUserId, currentUserName }: Props) => {
-  const { posts, loading, createPost, addComment } = useForum(courseId);
+export const ForumSection = ({ 
+  courseId, 
+  currentUserId, 
+  currentUserName,
+  isCurrentUserAdmin = false // 👈 Destructurar
+}: Props) => {
+  const { posts, loading, createPost, addComment, deleteComment, deletePost } = useForum(courseId);
   const [newPostContent, setNewPostContent] = useState('');
 
   const handleCreatePost = (e: React.FormEvent) => {
@@ -34,13 +40,22 @@ export const ForumSection = ({ courseId, currentUserId, currentUserName }: Props
     addComment(postId, content, currentUserId, currentUserName);
   };
 
-const sharePost = (post: ForumPost) => {
-  sharePostService(post)
-}
+  // 👇 Nueva función handler
+  const handleDeleteComment = (postId: string, commentId: string) => {
+    deleteComment(postId, commentId);
+  };
 
-const shareComment = (comment: ForumComment, post: ForumPost) => {
-  shareCommentService(comment, post)
-}
+  const handleDeletePost = (postId: string) => {
+  deletePost(postId);
+};
+
+  const sharePost = (post: ForumPost) => {
+    sharePostService(post)
+  }
+
+  const shareComment = (comment: ForumComment, post: ForumPost) => {
+    shareCommentService(comment, post)
+  }
 
   if (loading) {
     return (
@@ -126,14 +141,17 @@ const shareComment = (comment: ForumComment, post: ForumPost) => {
           </div>
         ) : (
           posts.map((post) => (
-            <PostCard
-              key={post.id}
-              post={post}
-              currentUserName={currentUserName}
-              onAddComment={handleAddComment}
-              onSharePost={sharePost}
-              onShareComment={shareComment}
-            />
+           <PostCard
+  key={post.id}
+  post={post}
+  currentUserName={currentUserName}
+  isCurrentUserAdmin={isCurrentUserAdmin}
+  onAddComment={handleAddComment}
+  onDeleteComment={handleDeleteComment}
+  onDeletePost={handleDeletePost} // 👈 Agregar esta línea
+  onSharePost={sharePost}
+  onShareComment={shareComment}
+/>
           ))
         )}
       </div>

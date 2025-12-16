@@ -53,8 +53,7 @@ export const useForum = (courseId: string) => {
       postId,
       userId,
       userName,
-          userAvatar: '/avatar.png', // 👈 ACÁ
-
+      userAvatar: '/avatar.png',
       content,
       createdAt: new Date()
     }
@@ -73,10 +72,35 @@ export const useForum = (courseId: string) => {
     )
   }
 
+  // DELETE COMMENT
+  const deleteComment = (postId: string, commentId: string) => {
+    forumStorage.deleteComment(postId, commentId)
+
+    setPosts(prev =>
+      prev.map(post =>
+        post.id === postId
+          ? {
+              ...post,
+              comments: post.comments.filter(c => c.id !== commentId)
+            }
+          : post
+      )
+    )
+  }
+
+  // DELETE POST 👈 Nueva función
+  const deletePost = (postId: string) => {
+    forumStorage.deletePost(postId)
+
+    setPosts(prev => prev.filter(post => post.id !== postId))
+  }
+
   return {
     posts,
     loading,
     createPost,
-    addComment
+    addComment,
+    deleteComment,
+    deletePost // 👈 Exportar
   }
 }

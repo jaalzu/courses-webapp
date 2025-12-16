@@ -10,7 +10,10 @@ import { CommentsSection } from './CommentsSection'
 interface Props {
   post: ForumPost
   currentUserName: string
+  isCurrentUserAdmin?: boolean 
   onAddComment: (postId: string, content: string) => void
+  onDeleteComment: (postId: string, commentId: string) => void
+  onDeletePost: (postId: string) => void // 👈 Nueva prop
   onSharePost: (post: ForumPost) => void
   onShareComment: (comment: ForumComment, post: ForumPost) => void
 }
@@ -18,7 +21,10 @@ interface Props {
 export const PostCard = ({
   post,
   currentUserName,
+  isCurrentUserAdmin = false, 
   onAddComment,
+  onDeleteComment,
+  onDeletePost, // 👈 Destructurar
   onSharePost,
   onShareComment
 }: Props) => {
@@ -27,7 +33,12 @@ export const PostCard = ({
   return (
     <div className="p-8 group relative">
       {/* Header */}
-      <PostHeader post={post} />
+      <PostHeader 
+        post={post} 
+        currentUserName={currentUserName}
+        isCurrentUserAdmin={isCurrentUserAdmin}
+        onDeletePost={onDeletePost} // 👈 Pasar props
+      />
 
       {/* Acciones */}
       <PostActions
@@ -41,7 +52,9 @@ export const PostCard = ({
         post={post}
         open={showComments}
         currentUserName={currentUserName}
+        isCurrentUserAdmin={isCurrentUserAdmin} 
         onAddComment={onAddComment}
+        onDeleteComment={onDeleteComment} 
         onShareComment={onShareComment}
       />
     </div>
