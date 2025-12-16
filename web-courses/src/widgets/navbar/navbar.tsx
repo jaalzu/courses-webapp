@@ -14,6 +14,14 @@ import {
 } from "@/shared/ui/dropdown-menu"
 
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/shared/ui/tooltip"
+
+
+import {
   MoonIcon,
   SunIcon,
   UserIcon,
@@ -58,18 +66,27 @@ export function Navbar({
           {/* Botón tema + Avatar */}
           <div className="flex items-center gap-2 md:gap-3">
             {/* Modo oscuro / claro */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onToggleTheme}
-              className="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            >
-              {isDark ? (
-                <SunIcon className="!w-5.5 !h-5.5 text-gray-600 dark:text-gray-100" />
-              ) : (
-                <MoonIcon className="!w-5.5 !h-5.5 text-gray-600 dark:text-gray-100" />
-              )}
-            </Button>
+            <TooltipProvider>
+  <Tooltip>
+    <TooltipTrigger asChild>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={onToggleTheme}
+        className="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+      >
+        {isDark ? (
+          <SunIcon className="!w-5.5 !h-5.5 text-gray-600 dark:text-gray-100" />
+        ) : (
+          <MoonIcon className="!w-5.5 !h-5.5 text-gray-600 dark:text-gray-100" />
+        )}
+      </Button>
+    </TooltipTrigger>
+    <TooltipContent>
+      <p>{isDark ? "Modo claro" : "Modo oscuro"}</p>
+    </TooltipContent>
+  </Tooltip>
+</TooltipProvider>
 
             {/* Avatar con menú */}
             <DropdownMenu>
