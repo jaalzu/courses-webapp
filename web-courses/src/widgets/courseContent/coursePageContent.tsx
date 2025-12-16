@@ -71,7 +71,7 @@ export default function CoursePageContent({ courseId }: CoursePageContentProps) 
         <ForumSection
           courseId={String(courseId)}
           currentUserId="user_123" 
-          currentUserName="Usuario Demo"  
+          currentUserName="Usuario"  
         />
       </div>
     </main>

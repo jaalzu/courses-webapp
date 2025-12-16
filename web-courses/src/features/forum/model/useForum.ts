@@ -1,55 +1,80 @@
-import { useState, useEffect } from 'react';
-import { ForumPost, ForumComment } from '@/entities/forum-post/index';
-import { forumStorage } from '../api/forumStorage';
+'use client'
+
+import { useEffect, useState } from 'react'
+import { ForumPost, ForumComment } from '@/entities/forum-post'
+import { forumStorage } from '../api/forumStorage'
 
 export const useForum = (courseId: string) => {
-  const [posts, setPosts] = useState<ForumPost[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  const loadPosts = () => {
-    setLoading(true);
-    const data = forumStorage.getPosts(courseId);
-    setPosts(data);
-    setLoading(false);
-  };
+  const [posts, setPosts] = useState<ForumPost[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    loadPosts();
-  }, [courseId]);
+    setLoading(true)
 
-  const createPost = (content: string, userId: string, userName: string) => {
+    const data = forumStorage.getPosts(courseId)
+
+    const safeData = structuredClone(data)
+
+    setPosts(safeData)
+    setLoading(false)
+  }, [courseId])
+
+
+  // CREATE POST
+  const createPost = (
+    content: string,
+    userId: string,
+    userName: string
+  ) => {
     const newPost: ForumPost = {
-      id: `post_${Date.now()}`,
+      id: crypto.randomUUID(),
       courseId,
       userId,
       userName,
       content,
       createdAt: new Date(),
       comments: []
-    };
+    }
 
-    forumStorage.savePost(newPost);
-    loadPosts();
-  };
+    forumStorage.savePost(newPost)
 
-  const addComment = (postId: string, content: string, userId: string, userName: string) => {
+    setPosts(prev => [newPost, ...prev])
+  }
+
+  // ADD COMMENT
+  const addComment = (
+    postId: string,
+    content: string,
+    userId: string,
+    userName: string
+  ) => {
     const newComment: ForumComment = {
-      id: `comment_${Date.now()}`,
+      id: crypto.randomUUID(),
       postId,
       userId,
       userName,
       content,
       createdAt: new Date()
-    };
+    }
 
-    forumStorage.addComment(postId, newComment);
-    loadPosts();
-  };
+    forumStorage.addComment(postId, newComment)
+
+    setPosts(prev =>
+      prev.map(post =>
+        post.id === postId
+          ? {
+              ...post,
+              comments: [...post.comments, newComment] 
+            }
+          : post
+      )
+    )
+  }
 
   return {
     posts,
     loading,
     createPost,
     addComment
-  };
-};
+  }
+}

@@ -3,7 +3,14 @@
 import { useState } from 'react';
 import { useForum } from '../model/useForum';
 import { ChatBubbleOvalLeftIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
+import { ForumPost, ForumComment } from '@/entities/forum-post'
+
 import { PostCard } from './PostCard';
+import {
+  handleSharePost as sharePostService,
+  handleShareComment as shareCommentService
+} from '../services/forumShare'
+
 
 interface Props {
   courseId: string;
@@ -27,6 +34,14 @@ export const ForumSection = ({ courseId, currentUserId, currentUserName }: Props
     addComment(postId, content, currentUserId, currentUserName);
   };
 
+const sharePost = (post: ForumPost) => {
+  sharePostService(post)
+}
+
+const shareComment = (comment: ForumComment, post: ForumPost) => {
+  shareCommentService(comment, post)
+}
+
   if (loading) {
     return (
       <div className="flex justify-center items-center py-8">
@@ -38,8 +53,6 @@ export const ForumSection = ({ courseId, currentUserId, currentUserName }: Props
   return (
     <div className="bg-gradient-to-br from-blue-50/80 via-white to-blue-100/40 dark:from-gray-900 dark:via-blue-950/10 dark:to-blue-900/0 rounded-2xl shadow-xl shadow-blue-500/10 dark:shadow-black/20 border border-blue-200/50 dark:border-blue-900/30 overflow-hidden max-w-4xl mx-auto backdrop-blur-sm">
       
-      {/* Efecto liquid glass overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50/40 via-transparent to-blue-100/20 dark:from-blue-900/0 dark:via-transparent dark:to-blue-700/20 pointer-events-none" />
       
       {/* Header */}
       <div className="p-8 border-b border-blue-200/30 dark:border-blue-700/30 bg-gradient-to-r from-blue-800/10 to-blue-800/10 relative z-10">
@@ -96,7 +109,9 @@ export const ForumSection = ({ courseId, currentUserId, currentUserName }: Props
       </div>
 
       {/* Posts */}
-      <div className="divide-y divide-blue-300/20 dark:divide-blue-700/20 relative z-10">
+      <div className="divide-y divide-blue-300/20 dark:divide-blue-700/20
+  relative z-10
+  text-gray-800 dark:text-gray-100">
         {posts.length === 0 ? (
           <div className="text-center py-8 px-8">
             <div className="max-w-md mx-auto">
@@ -113,9 +128,10 @@ export const ForumSection = ({ courseId, currentUserId, currentUserName }: Props
             <PostCard
               key={post.id}
               post={post}
-              currentUserId={currentUserId}
               currentUserName={currentUserName}
               onAddComment={handleAddComment}
+              onSharePost={sharePost}
+              onShareComment={shareComment}
             />
           ))
         )}
