@@ -1,8 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ForumPost, ForumComment } from '@/entities/forum-post'
+import { ForumPost } from '@/entities/forum-post'
 import { forumStorage } from '../api/forumStorage'
+import { createNewPost, createNewComment } from './forumFactories'
 
 export const useForum = (courseId: string) => {
   const [posts, setPosts] = useState<ForumPost[]>([])
@@ -10,88 +11,54 @@ export const useForum = (courseId: string) => {
 
   useEffect(() => {
     setLoading(true)
-
     const data = forumStorage.getPosts(courseId)
-
     const safeData = structuredClone(data)
-
     setPosts(safeData)
     setLoading(false)
   }, [courseId])
 
-
-  // CREATE POST
   const createPost = (
     content: string,
     userId: string,
     userName: string
   ) => {
-    const newPost: ForumPost = {
-      id: crypto.randomUUID(),
-      courseId,
-      userId,
-      userName,
-      content,
-      createdAt: new Date(),
-      comments: []
-    }
-
+    const newPost = createNewPost(courseId, content, userId, userName)
     forumStorage.savePost(newPost)
-
     setPosts(prev => [newPost, ...prev])
   }
 
-  // ADD COMMENT
   const addComment = (
     postId: string,
     content: string,
     userId: string,
     userName: string
   ) => {
-    const newComment: ForumComment = {
-      id: crypto.randomUUID(),
-      postId,
-      userId,
-      userName,
-      userAvatar: '/avatar.png',
-      content,
-      createdAt: new Date()
-    }
-
+    const newComment = createNewComment(postId, content, userId, userName)
     forumStorage.addComment(postId, newComment)
 
     setPosts(prev =>
       prev.map(post =>
         post.id === postId
-          ? {
-              ...post,
-              comments: [...post.comments, newComment] 
-            }
+          ? { ...post, comments: [...post.comments, newComment] }
           : post
       )
     )
   }
 
-  // DELETE COMMENT
   const deleteComment = (postId: string, commentId: string) => {
     forumStorage.deleteComment(postId, commentId)
 
     setPosts(prev =>
       prev.map(post =>
         post.id === postId
-          ? {
-              ...post,
-              comments: post.comments.filter(c => c.id !== commentId)
-            }
+          ? { ...post, comments: post.comments.filter(c => c.id !== commentId) }
           : post
       )
     )
   }
 
-  // DELETE POST 👈 Nueva función
   const deletePost = (postId: string) => {
     forumStorage.deletePost(postId)
-
     setPosts(prev => prev.filter(post => post.id !== postId))
   }
 
@@ -101,6 +68,6 @@ export const useForum = (courseId: string) => {
     createPost,
     addComment,
     deleteComment,
-    deletePost // 👈 Exportar
+    deletePost
   }
 }
