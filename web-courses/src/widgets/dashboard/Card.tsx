@@ -3,7 +3,7 @@
 import { DeleteButton } from "@/features/admin/components/DeleteButton"
 import { EditButton } from "@/features/admin/components/EditButton"
 import { FavoriteButton } from "@/features/favorites/ui/favoriteButton"
-import { useFavorites } from "@/features/favorites/model/hooks/useFavorites"
+import { useFavoriteIds } from "@/features/favorites/model/hooks/useFavoritesIds"
 import { localStorageFavorites } from "@/features/favorites/lib/favoriteStorage"
 import { getLevelConfig } from "@/entities/course/lib/helpers"
 import { Button } from "@/shared/ui/button"
@@ -40,7 +40,7 @@ export default function Card({
   const router = useRouter()
 
   // Favoritos
-  const { isFavorite, toggleFavorite } = useFavorites(localStorageFavorites)
+  const { isFavorite, toggleFavorite } = useFavoriteIds(localStorageFavorites)
 
   // Configuración de nivel
   const levelConfig = level ? getLevelConfig(level) : null

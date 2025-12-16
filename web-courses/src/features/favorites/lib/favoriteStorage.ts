@@ -9,41 +9,45 @@ export interface FavoritesStorage {
   subscribe: (callback: () => void) => () => void;
 }
 
+//  Helper privado
+const isServer = () => typeof window === 'undefined';
+
+const getFromStorage = (): number[] => {
+  if (isServer()) return [];
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+};
+
+const saveToStorage = (favs: number[]): void => {
+  if (isServer()) return;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(favs));
+  window.dispatchEvent(new Event(FAVORITES_EVENT));
+};
+
+//  API pública limpia
 export const localStorageFavorites: FavoritesStorage = {
-  get: () => {
-    if (typeof window === 'undefined') return [];
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      return stored ? JSON.parse(stored) : [];
-    } catch {
-      return [];
-    }
-  },
+  get: getFromStorage,
 
   add: (id: number) => {
-    if (typeof window === 'undefined') return;
-    const favs = localStorageFavorites.get();
+    const favs = getFromStorage();
     if (!favs.includes(id)) {
-      const newFavs = [...favs, id];
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newFavs));
-      window.dispatchEvent(new Event(FAVORITES_EVENT));
+      saveToStorage([...favs, id]);
     }
   },
 
   remove: (id: number) => {
-    if (typeof window === 'undefined') return;
-    const favs = localStorageFavorites.get();
-    const newFavs = favs.filter(fav => fav !== id);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newFavs));
-    window.dispatchEvent(new Event(FAVORITES_EVENT));
+    const favs = getFromStorage();
+    saveToStorage(favs.filter(fav => fav !== id));
   },
 
   subscribe: (callback: () => void) => {
-    if (typeof window === 'undefined') return () => {};
+    if (isServer()) return () => {};
     
     window.addEventListener(FAVORITES_EVENT, callback);
-    return () => {
-      window.removeEventListener(FAVORITES_EVENT, callback);
-    };
+    return () => window.removeEventListener(FAVORITES_EVENT, callback);
   },
 };

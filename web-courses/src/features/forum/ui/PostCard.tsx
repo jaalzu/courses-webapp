@@ -13,7 +13,7 @@ interface Props {
   isCurrentUserAdmin?: boolean 
   onAddComment: (postId: string, content: string) => void
   onDeleteComment: (postId: string, commentId: string) => void
-  onDeletePost: (postId: string) => void // 👈 Nueva prop
+  onDeletePost: (postId: string) => void 
   onSharePost: (post: ForumPost) => void
   onShareComment: (comment: ForumComment, post: ForumPost) => void
 }
@@ -24,7 +24,7 @@ export const PostCard = ({
   isCurrentUserAdmin = false, 
   onAddComment,
   onDeleteComment,
-  onDeletePost, // 👈 Destructurar
+  onDeletePost,
   onSharePost,
   onShareComment
 }: Props) => {

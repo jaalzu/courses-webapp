@@ -5,12 +5,12 @@ import { useRef } from "react";
 import type { Course } from "@/entities/course/model/types"
 
 import { FavoriteButton } from "@/features/favorites/ui/favoriteButton";
-import { useFavorites } from "@/features/favorites/model/hooks/useFavorites";
+import { useFavoriteIds } from "@/features/favorites/model/hooks/useFavoritesIds";
 import { localStorageFavorites } from "@/features/favorites/lib/favoriteStorage";
 
 interface CourseContentProps {
   course: Course;
-  currentVideoUrl?: string; // 👈 Nueva prop para video dinámico
+  currentVideoUrl?: string; 
   onPlayerReady?: (seekFn: (seconds: number) => void) => void;
 }
 
@@ -20,7 +20,7 @@ export default function CourseContent({
   onPlayerReady 
 }: CourseContentProps) {
   const playerRef = useRef<any>(null);
-  const { isFavorite, toggleFavorite } = useFavorites(localStorageFavorites);
+  const { isFavorite, toggleFavorite } = useFavoriteIds(localStorageFavorites);
 
   // Usa el video de la lección actual, o el de la primera lección si existe
   const videoToPlay = currentVideoUrl || course.lessons?.[0]?.videoUrl || course.video;
