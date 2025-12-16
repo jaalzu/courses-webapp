@@ -71,7 +71,7 @@ export default function CourseContent({
                 height: "100%",
                 playerVars: { autoplay: 0 },
               }}
-              key={videoToPlay} // 👈 Fuerza re-render cuando cambia el video
+              key={videoToPlay}  
             />
           </div>
         </div>

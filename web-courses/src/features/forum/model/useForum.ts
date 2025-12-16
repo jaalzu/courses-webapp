@@ -53,6 +53,8 @@ export const useForum = (courseId: string) => {
       postId,
       userId,
       userName,
+          userAvatar: '/avatar.png', // 👈 ACÁ
+
       content,
       createdAt: new Date()
     }

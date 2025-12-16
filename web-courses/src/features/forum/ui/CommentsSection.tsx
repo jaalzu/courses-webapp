@@ -31,23 +31,25 @@ export const CommentsSection = ({
   if (!open) return null
 
   return (
-    <div className="mt-6 space-y-4 relative z-10">
+    <div className="mt-5 space-y-6 relative z-10 ">
       {post.comments.map((comment) => (
-        <div key={comment.id} className="flex gap-4">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg text-white flex items-center justify-center text-xs font-semibold">
-            {comment.userName[0].toUpperCase()}
-          </div>
+        <div key={comment.id} className="flex gap-4  px-3">
+          <div className="w-8 h-8 rounded-full overflow-hidden shrink-0">
+            <img
+              src={comment.userAvatar || '/avatar.png'}
+              alt={comment.userName}
+              className="w-full h-full object-cover"
+            />
+           </div>
 
           <div
-  className="
-     flex-1
-    bg-white dark:bg-gray-800
-    text-gray-800 dark:text-gray-100
-    border border-blue-200/30 dark:border-blue-700/30
-    rounded-xl p-4
-    shadow-sm
-  "
->
+          className="
+            flex-1
+             dark:bg-gray-900/30
+            text-gray-800 dark:text-gray-100
+              p-1
+          " 
+            >
             <div className="flex justify-between mb-2">
               <div className="flex gap-2 items-center">
                 <span className="font-semibold text-sm">
@@ -72,39 +74,44 @@ export const CommentsSection = ({
       ))}
 
       {/* Input */}
-      <div className="flex gap-3 border-t pt-4">
-        <div className="w-8 h-8 bg-blue-600 rounded-lg text-white flex items-center justify-center text-xs font-semibold">
-          {currentUserName[0].toUpperCase()}
-        </div>
+     {/* Input */}
+<div className="flex gap-3 border-t pt-4">
+  <div className="w-8 h-8 rounded-full overflow-hidden shrink-0">
+    <img
+      src="/avatar.png" 
+      alt={currentUserName}
+      className="w-full h-full object-cover"
+    />
+  </div>
 
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Agrega tu respuesta..."
-          className="
-  flex-1
-  bg-white dark:bg-gray-900
-  text-gray-800 dark:text-white
-  border border-blue-200/40
-  rounded-xl px-4 py-3 text-sm
-  focus:outline-none focus:ring-2 focus:ring-blue-500/40
-"
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault()
-              submit()
-            }
-          }}
-        />
+  <input
+    value={input}
+    onChange={(e) => setInput(e.target.value)}
+    placeholder="Agrega tu respuesta..."
+    className="
+      flex-1
+      bg-white dark:bg-gray-900
+      text-gray-800 dark:text-white
+      border border-blue-200/40
+      rounded-xl px-4 py-3 text-sm
+      focus:outline-none focus:ring-1 
+    "
+    onKeyDown={(e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault()
+        submit()
+      }
+    }}
+  />
 
-        <button
-          onClick={submit}
-          disabled={!input.trim()}
-          className="bg-blue-700 text-white p-3 rounded-xl disabled:opacity-40"
-        >
-          <ArrowRightIcon className="w-4 h-4" />
-        </button>
-      </div>
+  <button
+    onClick={submit}
+    disabled={!input.trim()}
+    className="bg-blue-800 text-white p-3 rounded-lg disabled:opacity-40"
+     >
+    <ArrowRightIcon className="w-4 h-4" />
+  </button>
+    </div>
     </div>
   )
 }

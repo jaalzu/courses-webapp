@@ -51,47 +51,51 @@ const shareComment = (comment: ForumComment, post: ForumPost) => {
   }
 
   return (
-    <div className="bg-gradient-to-br from-blue-50/80 via-white to-blue-100/40 dark:from-gray-900 dark:via-blue-950/10 dark:to-blue-900/0 rounded-2xl shadow-xl shadow-blue-500/10 dark:shadow-black/20 border border-blue-200/50 dark:border-blue-900/30 overflow-hidden max-w-4xl mx-auto backdrop-blur-sm">
+    <div className=" dark:bg-gray-900 rounded-2xl border border-blue-200/40 dark:border-blue-900/30 overflow-hidden max-w-5xl mx-auto ">
       
       
       {/* Header */}
-      <div className="p-8 border-b border-blue-200/30 dark:border-blue-700/30 bg-gradient-to-r from-blue-800/10 to-blue-800/10 relative z-10">
+      <div className="p-8 border-b border-blue-200/30 dark:border-white-100/10 bg-gradient-to-r from-blue-800/10 to-blue-800/10 relative z-10">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-800/20">
-            <ChatBubbleOvalLeftIcon className="w-5 h-5" />
+          <div className="w-10 h-10 b  flex items-center justify-center text-black dark:text-white  ">
+            <ChatBubbleOvalLeftIcon className="w-7 h-7" />
           </div>
           <div>
             <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
-              Espacio de Consultas
+              Deposita tus dudas o consultas!
             </h2>
-            <p className="text-gray-600 dark:text-gray-300 text-sm mt-1">
-              Comparte tus dudas y conversemos juntos
-            </p>
           </div>
         </div>
       </div>
 
       {/* Nueva publicación */}
-      <div className="p-8 border-b border-blue-200/30 dark:border-blue-900/30 bg-white/70 dark:bg-gray-900 backdrop-blur-md relative z-10">
+      <div className="p-6 border-b border-blue-200/30 dark:border-white-300/10 bg-white/70 dark:bg-gray-900  relative z-10">
+
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center text-white font-semibold shadow-lg shadow-blue-800/20">
-            {currentUserName[0].toUpperCase()}
-          </div>
-          <div>
-            <div className="font-semibold text-gray-800 dark:text-white">
-              {currentUserName}
-            </div>
-          </div>
+        <div className="w-10 h-10 rounded-full overflow-hidden shrink-0">
+          <img
+            src="/avatar.png" 
+            alt={currentUserName}
+            className="w-full h-full object-cover"
+          />
         </div>
+
+  <div>
+    <div className="font-semibold text-gray-800 dark:text-white">
+      {currentUserName}
+    </div>
+  </div>
+</div>
+
 
         <form onSubmit={handleCreatePost}>
           <div className="mb-6">
-            <div className="bg-white/70 dark:bg-gray-800/20 rounded-3xl border-1 border-blue-300/50 dark:border-blue-700/30 transition-all duration-300 hover:border-blue-400/70 dark:hover:border-blue-700/50 focus-within:border-blue-700 dark:focus-within:border-blue-400 focus-within:shadow-lg">
+            <div className="bg-white/70 dark:bg-gray-900 rounded-2xl border-1 border-dark-300 dark:border-white-200 transition-all duration-300  dark:hover:dark-300 focus-within:border-blue-200 dark:focus-within:border-gray-700">
               <textarea
                 value={newPostContent}
                 onChange={(e) => setNewPostContent(e.target.value)}
                 placeholder="Comparte tu duda o consulta con la comunidad..."
-                className="w-full bg-transparent border-0 rounded-3xl p-6 resize-none min-h-[140px] text-sm focus:outline-none focus:ring-0 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 leading-relaxed"
+                className="w-full bg-transparent  rounded-3xl p-5 resize-none min-h-[120px] text-sm focus:outline-none  text-gray-800 dark:text-white placeholder-gray-400  leading-relaxed"
               />
             </div>
           </div>
@@ -99,25 +103,22 @@ const shareComment = (comment: ForumComment, post: ForumPost) => {
             <button
               type="submit"
               disabled={!newPostContent.trim()}
-              className="bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-800 hover:to-blue-900 text-white px-4 py-1.5 rounded-xl font-medium disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-300 shadow-sm shadow-blue-600/30 hover:shadow-blue-700/40 flex items-center gap-1.5 border border-blue-500/20"
+              className="bg-blue-700 hover:from-blue-800 hover:to-blue-900 
+               text-white px-4 py-1.5 rounded-xl font-medium disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-300 shadow-sm  flex items-center gap-1.5 border border-blue-500/20"
             >
-              Publicar 
-              <PaperAirplaneIcon className="w-4 h-4" />
+              Comentar 
             </button>
           </div>
         </form>
       </div>
 
       {/* Posts */}
-      <div className="divide-y divide-blue-300/20 dark:divide-blue-700/20
-  relative z-10
-  text-gray-800 dark:text-gray-100">
+      <div className="divide-y divide-blue-300/20     dark:divide-blue-700/20
+         relative z-10
+        text-gray-800 dark:text-gray-100">
         {posts.length === 0 ? (
           <div className="text-center py-8 px-8">
             <div className="max-w-md mx-auto">
-              <div className="w-18 h-18 bg-gradient-to-br from-blue-800 to-blue-700 rounded-3xl flex items-center justify-center text-white mx-auto mb-4">
-                <ChatBubbleOvalLeftIcon className="w-8 h-8" />
-              </div>
               <p className="font-bold text-gray-800 dark:text-gray-300 text-sm leading-relaxed">
                 Sé el primero en iniciar una conversación. Tus preguntas pueden ayudar a otros.
               </p>

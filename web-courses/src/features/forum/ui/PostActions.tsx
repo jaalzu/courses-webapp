@@ -14,20 +14,19 @@ export const PostActions = ({
   onToggleComments,
   onShare
 }: Props) => (
-  <div className="flex items-center gap-4 relative z-10">
+  <div className="flex items-center gap-2 relative z-10">
     <button
       onClick={onToggleComments}
       className="
-        flex items-center gap-3
-        bg-blue-100/60 dark:bg-blue-900/30
-        text-blue-700 dark:text-blue-300
-        hover:bg-blue-200/70 dark:hover:bg-blue-800/40
-        px-4 py-2 rounded-xl
+        flex items-center gap-2
+        text-blue-800 dark:text-blue-200
+        hover:bg-blue-100/70 dark:hover:bg-blue-800/40
+        px-3 py-2 rounded-xl
         transition-colors
       "
     >
-      <ChatBubbleOvalLeftIcon className="w-5 h-5" />
-      <span className="font-medium">
+      <ChatBubbleOvalLeftIcon className="w-4 h-4" />
+      <span className="text-sm font-medium">
         {commentsCount === 0
           ? 'Iniciar conversación'
           : `${commentsCount} respuesta${commentsCount !== 1 ? 's' : ''}`}
@@ -37,10 +36,9 @@ export const PostActions = ({
     <button
       onClick={onShare}
       className="
-        flex items-center gap-2
-        bg-blue-100/60 dark:bg-blue-900/30
-        text-blue-700 dark:text-blue-300
-        hover:bg-blue-200/70 dark:hover:bg-blue-800/40
+       flex items-center gap-2
+        text-blue-800 dark:text-blue-200
+        hover:bg-blue-100/70 dark:hover:bg-blue-800/40
         px-3 py-2 rounded-xl
         transition-colors
       "
