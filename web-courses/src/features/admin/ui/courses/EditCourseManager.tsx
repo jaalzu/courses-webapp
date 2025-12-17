@@ -1,5 +1,5 @@
 'use client'
-import { useEditCourseFlow } from "../hooks/useEditCourseFlow"
+import { useEditCourseFlow } from "../../hooks/useEditCourseFlow"
 import EditCourseBasicModal from "./EditCourseBasicModal"
 import EditCourseLessonsModal from "./EditCourseLessonsModal"
 

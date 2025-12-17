@@ -4,11 +4,11 @@ import { persist } from 'zustand/middleware'
 import type { Course } from './types'
 import { courses as initialCourses } from '../data/curso'
 
-// 🔹 Helper: evitar referencias compartidasigua
+//  Helper: evitar referencias compartidasigua
 const cloneInitialCourses = (): Course[] =>
   structuredClone(initialCourses)
 
-// 🔹 Helper: ID seguro
+//  Helper: ID seguro
 const getNextId = (courses: Course[]) =>
   Math.max(0, ...courses.map(c => c.id)) + 1
 

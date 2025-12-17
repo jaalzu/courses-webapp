@@ -20,7 +20,7 @@ export function EditButton({
     <IconButton
       onClick={() => onEdit()}
       noBorder={noBorder}
-      tooltip={tooltip} // 👈 Pasar al IconButton
+      tooltip={tooltip}
       className={`text-blue-600 hover:text-blue-700
                   dark:text-blue-400 dark:hover:text-blue-300
                   ${className}`}

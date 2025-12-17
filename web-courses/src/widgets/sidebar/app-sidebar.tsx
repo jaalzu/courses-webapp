@@ -7,7 +7,9 @@ import {
   UserIcon,
   MagnifyingGlassIcon,
   Cog6ToothIcon,
-  QuestionMarkCircleIcon
+  QuestionMarkCircleIcon,
+  HeartIcon,
+  PresentationChartBarIcon 
 } from "@heroicons/react/24/outline"
 
 import {
@@ -28,8 +30,9 @@ const items = [
   { title: "Inicio", url: "/dashboard", icon: HomeIcon },
   { title: "Buscar curso", url: "/search", icon: MagnifyingGlassIcon },
   { title: "Perfil", url: "/perfil", icon: UserIcon },
-  { title: "Favoritos", url: "/favoritos", icon: UserIcon },
+  { title: "Favoritos", url: "/favoritos", icon: HeartIcon },
   { title: "FAQS", url: "/faqs", icon: QuestionMarkCircleIcon },
+  { title: "Metricas", url: "/metricas", icon: PresentationChartBarIcon },
 ]
 
 export function AppSidebar() {
@@ -43,10 +46,10 @@ export function AppSidebar() {
            <div className="flex aspect-square size-8 items-center justify-center rounded-lg 
                 bg-black text-white 
                 dark:bg-white dark:text-black transition-colors duration-300">
-  <HomeIcon className="size-4" />
+  <HomeIcon className="size-5" />
 </div>
 
-            <div className="flex flex-col gap-0.5 leading-none">
+            <div className="flex flex-col gap-0.8 leading-none">
               <span className="font-semibold">Menu</span>
               <span className="text-xs"></span>
             </div>
@@ -72,10 +75,10 @@ export function AppSidebar() {
           className={`flex items-center gap-2 w-full px-2 py-1 rounded-md transition-colors duration-200
             ${isActive
               ? "bg-black text-white dark:bg-white dark:text-black"
-              : "hover:bg-gray-200 dark:hover:bg-gray-800"
+              : "hover:bg-gray-300 dark:hover:bg-gray-800"
             }`}
         >
-          <item.icon className="w-5 h-5" />
+          <item.icon className="!w-5 !h-5 " />
           <span>{item.title}</span>
         </Link>
       </SidebarMenuButton>

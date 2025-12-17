@@ -19,7 +19,7 @@ export function CourseFormField({
   options, 
   placeholder 
 }: CourseFormFieldProps) {
-  // Aseguramos que value siempre sea string (nunca undefined)
+  // Aseguramos que value siempre sea string 
   const safeValue = value ?? ''
 
   return (

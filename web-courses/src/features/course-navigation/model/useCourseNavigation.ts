@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import { useCourseStore } from "@/entities/course/model/useCourseStore"
-import { useCourseProgress } from "@/entities/course-progress/model/index"
-import { isLessonCompleted as isLessonCompletedSelector } from '@/entities/course-progress/model/selectors'
+import { useProgressStore } from "@/entities/progress/model/index"
+import { isLessonCompleted as isLessonCompletedSelector } from '@/entities/progress/model/selectors'
 import type { Lesson } from "@/entities/lesson/model/types"
 
 export function useCourseNavigation(courseId: number) {
@@ -11,8 +11,8 @@ export function useCourseNavigation(courseId: number) {
   const course = useCourseStore(state => state.getCourseById(courseId))
   
   // Funciones de progreso
-  const toggleLessonComplete = useCourseProgress(state => state.toggleLessonComplete)
-  const courseProgress = useCourseProgress(state => state.progress)
+  const toggleLessonComplete = useProgressStore(state => state.toggleLessonComplete)
+  const courseProgress = useProgressStore(state => state.progress)
 
   // Estado de la lección actual
   const [currentLesson, setCurrentLesson] = useState<Lesson | undefined>(

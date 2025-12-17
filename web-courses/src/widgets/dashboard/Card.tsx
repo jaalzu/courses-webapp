@@ -1,24 +1,34 @@
 'use client'
 
-import { DeleteButton } from "@/features/admin/components/DeleteButton"
-import { EditButton } from "@/features/admin/components/EditButton"
+// features
+import { DeleteButton } from "@/features/admin/ui/shared/DeleteButton"
+import { EditButton } from "@/features/admin/ui/shared/EditButton"
 import { FavoriteButton } from "@/features/favorites/ui/favoriteButton"
 import { useFavoriteIds } from "@/features/favorites/model/hooks/useFavoritesIds"
 import { localStorageFavorites } from "@/features/favorites/lib/favoriteStorage"
-import { getLevelConfig } from "@/entities/course/lib/helpers"
+
+// ui
 import { Button } from "@/shared/ui/button"
-import { Progress } from "@/shared/ui/index"
-import { Badge } from "@/shared/ui/index"
+import { Progress } from "@/shared/ui"
+import { Badge } from "@/shared/ui"
+
+// next
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+
+// icons
+import { CheckCircleIcon } from "@heroicons/react/24/solid"
+
+// entities
+import { getLevelConfig } from "@/entities/course/lib/helpers"
 import type { Course } from "@/entities/course/model/types"
-import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import { useCourseStore } from "@/entities/course/model/useCourseStore"
-import { useCourseProgress } from "@/entities/course-progress/model/index"
-import { isLessonCompleted } from '@/entities/course-progress/model/selectors'
+import { useProgressStore } from "@/entities/progress/model"
+import { isLessonCompleted } from "@/entities/progress/model"
 
 interface CardProps {
+  userId: string
   courseId: number
   href: string
   className?: string
@@ -29,6 +39,7 @@ interface CardProps {
 }
 
 export default function Card({
+  userId,
   courseData,
   enableEdit = false,
   courseId,
@@ -42,50 +53,52 @@ export default function Card({
   // Favoritos
   const { isFavorite, toggleFavorite } = useFavoriteIds(localStorageFavorites)
 
-  // Configuración de nivel
+  // Nivel
   const levelConfig = level ? getLevelConfig(level) : null
 
-  // Acciones store cursos
+  // Cursos
   const deleteCourse = useCourseStore(state => state.deleteCourse)
 
-  // Progreso del curso desde Zustand
-  const courseProgress = useCourseProgress(state => state.progress)
-  const toggleLessonComplete = useCourseProgress(state => state.toggleLessonComplete)
+  // Progreso (estado global)
+  const progress = useProgressStore(state => state.progress)
 
-  // Número de lecciones completadas
-  const completedCount = courseData.lessons.filter(
-    lesson => isLessonCompleted(courseProgress, courseId, lesson.id)
+  // 🔢 Lecciones completadas (CORREGIDO)
+  const completedCount = courseData.lessons.filter(lesson =>
+    isLessonCompleted(
+      progress,
+      userId,
+      courseId,
+      lesson.id
+    )
   ).length
+
   const totalLessons = courseData.lessons.length
 
-  // Porcentaje de progreso
-  const progressPercentage = totalLessons > 0
-    ? Math.round((completedCount / totalLessons) * 100)
-    : 0
+  const progressPercentage =
+    totalLessons > 0
+      ? Math.round((completedCount / totalLessons) * 100)
+      : 0
 
   // Handlers
   const handleEditClick = () => onEdit?.()
+
   const handleDeleteClick = () => {
     if (!confirm("¿Seguro que querés eliminar este curso? Esta acción no se puede deshacer.")) return
     deleteCourse(courseId)
   }
 
-  // Prefetch/autofetch lecciones al entrar
   const handleEnterCourse = async (e: React.MouseEvent) => {
     e.preventDefault()
-    // Pre-cargar página Next.js
     await router.prefetch(href)
-    // Opcional: fetch lecciones desde tu API antes de navegar
-    await fetch(`/api/courses/${courseId}/lessons`)
     router.push(href)
   }
 
   return (
     <div className={`relative ${className} flex flex-col h-full`}>
-      {/* Botones superiores */}
+      {/* Botones */}
       <div className="absolute top-2 right-2 z-10 flex gap-2">
-        {enableEdit && courseData && onEdit && <EditButton onEdit={handleEditClick} />}
-        {enableEdit && courseData && <DeleteButton onDelete={handleDeleteClick} />}
+        {enableEdit && onEdit && <EditButton onEdit={handleEditClick} />}
+        {enableEdit && <DeleteButton onDelete={handleDeleteClick} />}
         <FavoriteButton
           isFavorite={isFavorite(courseId)}
           onToggle={() => toggleFavorite(courseId)}
@@ -95,15 +108,15 @@ export default function Card({
       <Link
         href={href}
         onClick={handleEnterCourse}
-        className="bg-white dark:bg-gray-900 text-black dark:text-gray-100 rounded-md overflow-hidden flex flex-col h-full transition-shadow shadow-sm hover:shadow-md duration-300 border border-gray-200 dark:border-gray-600"
+        className="bg-white dark:bg-gray-900 rounded-md overflow-hidden flex flex-col h-full transition-shadow shadow-sm hover:shadow-md border"
       >
         <Image
           src={
             courseData.image
-              ? courseData.image.startsWith('/')
+              ? courseData.image.startsWith("/")
                 ? courseData.image
                 : `/${courseData.image}`
-              : '/curso1.jpg'
+              : "/curso1.jpg"
           }
           alt={courseData.title}
           width={400}
@@ -112,23 +125,30 @@ export default function Card({
         />
 
         <div className="p-4 flex flex-col flex-1 justify-between">
-          <div className="flex flex-col flex-1">
-            <h3 className="text-lg font-semibold mb-2 mt-2">{courseData.title}</h3>
-            {levelConfig && <Badge variant={levelConfig.variant}>{levelConfig.label}</Badge>}
-            <p className="text-gray-500 dark:text-gray-300 text-sm mt-3 mb-4 flex-1">{courseData.description}</p>
+          <div>
+            <h3 className="text-lg font-semibold mb-2">{courseData.title}</h3>
+            {levelConfig && (
+              <Badge variant={levelConfig.variant}>
+                {levelConfig.label}
+              </Badge>
+            )}
+            <p className="text-sm text-gray-500 mt-3">
+              {courseData.description}
+            </p>
           </div>
 
-          <Button className="w-full mb-4">Entrar</Button>
+          <Button className="w-full mt-4">Entrar</Button>
 
           <div className="flex justify-between items-center mt-6">
-            <span className="text-sm text-gray-600 dark:text-gray-200 font-medium">Lecciones</span>
+            <span className="text-sm font-medium">Lecciones</span>
+
             {completedCount === totalLessons && totalLessons > 0 ? (
-              <div className="flex items-center gap-1.5 text-green-600 dark:text-green-400">
+              <div className="flex items-center gap-1 text-green-600">
                 <CheckCircleIcon className="w-5 h-5" />
                 <span className="text-sm font-semibold">¡Completado!</span>
               </div>
             ) : (
-              <span className="text-sm text-gray-600 dark:text-gray-200 font-medium">
+              <span className="text-sm font-medium">
                 {completedCount}/{totalLessons}
               </span>
             )}

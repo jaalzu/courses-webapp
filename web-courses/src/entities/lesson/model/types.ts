@@ -5,3 +5,5 @@ export interface Lesson {
   completed: boolean
   videoUrl?: string 
 }
+
+

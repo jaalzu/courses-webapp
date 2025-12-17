@@ -2,11 +2,12 @@
 export type CourseId = number
 export type LessonId = number
 
-// Progreso de una lección
 export interface LessonProgress {
+  userId: string  
   courseId: CourseId
   lessonId: LessonId
   completed: boolean
+  completedAt?: Date
 }
 
 // Estado completo del progreso

@@ -3,9 +3,9 @@
 import Card from "@/widgets/dashboard/Card"
 import { useCourseStore } from "@/entities/course/model/useCourseStore"
 import CoursesSkeleton from "@/widgets/dashboard/coursesSkeleton"
-import { NewCourseButton } from "@/features/admin/components/NewCourseButton"
+import { NewCourseButton } from "@/features/admin/ui/shared/NewCourseButton"
 import { useEditCourseFlow } from "@/features/admin/hooks/useEditCourseFlow"
-import EditCourseManager from "@/features/admin/components/EditCourseManager"
+import EditCourseManager from "@/features/admin/ui/courses/EditCourseManager"
 
 export default function DashboardPage() {
   const courses = useCourseStore(state => state.courses)

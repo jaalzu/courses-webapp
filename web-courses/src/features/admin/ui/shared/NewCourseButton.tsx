@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { PlusIcon } from "@heroicons/react/24/outline"
 import { IconButton } from "@/shared/ui/index"
-import { CreateCourseModal } from "@/features/admin/components/CreateCourseModal"
+import { CreateCourseModal } from "@/features/admin/ui/courses/CreateCourseModal"
 
 export function NewCourseButton({ className = "" }) {
   const [open, setOpen] = useState(false)
