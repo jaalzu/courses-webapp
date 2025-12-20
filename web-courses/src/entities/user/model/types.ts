@@ -9,7 +9,7 @@ export interface User {
   role: UserRole
   avatar?: string
   createdAt: Date
-  assignedCourses: number[] 
+  assignedCourses?: number[] 
 }
 
 // Para crear nuevos usuarios (sin id ni createdAt)

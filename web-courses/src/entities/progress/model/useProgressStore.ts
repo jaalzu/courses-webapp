@@ -1,17 +1,13 @@
+// @/entities/progress/model/useProgressStore.ts
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { LessonProgress, CourseId, LessonId } from '@/entities/progress/model/types'
+import type { LessonProgress } from './types'
 
 interface ProgressStore {
   progress: LessonProgress[]
-
-  toggleLessonComplete: (
-    userId: string,
-    courseId: CourseId,
-    lessonId: LessonId
-  ) => void
-
-  resetProgress: (userId?: string, courseId?: CourseId) => void
+  markComplete: (userId: string, courseId: number, lessonId: number) => void
+  markIncomplete: (userId: string, courseId: number, lessonId: number) => void
+  resetProgress: (userId?: string, courseId?: number) => void
 }
 
 export const useProgressStore = create<ProgressStore>()(
@@ -19,7 +15,16 @@ export const useProgressStore = create<ProgressStore>()(
     (set) => ({
       progress: [],
 
-      toggleLessonComplete: (userId, courseId, lessonId) =>
+      markComplete: (userId, courseId, lessonId) => {
+        // ⚠️ VALIDACIÓN: No guardar si userId es undefined
+        if (!userId) {
+          console.error('❌ markComplete: userId es undefined!')
+          console.trace() // Ver de dónde viene el error
+          return
+        }
+
+        console.log('✅ markComplete llamado:', { userId, courseId, lessonId })
+
         set((state) => {
           const existing = state.progress.find(
             p =>
@@ -34,11 +39,7 @@ export const useProgressStore = create<ProgressStore>()(
                 p.userId === userId &&
                 p.courseId === courseId &&
                 p.lessonId === lessonId
-                  ? {
-                      ...p,
-                      completed: !p.completed,
-                      completedAt: !p.completed ? new Date() : undefined,
-                    }
+                  ? { ...p, completed: true, completedAt: new Date() }
                   : p
               ),
             }
@@ -56,16 +57,32 @@ export const useProgressStore = create<ProgressStore>()(
               },
             ],
           }
-        }),
+        })
+      },
 
-      resetProgress: (userId, courseId) =>
+      markIncomplete: (userId, courseId, lessonId) => {
+        set((state) => ({
+          progress: state.progress.map(p =>
+            p.userId === userId &&
+            p.courseId === courseId &&
+            p.lessonId === lessonId
+              ? { ...p, completed: false, completedAt: undefined }
+              : p
+          ),
+        }))
+      },
+
+      resetProgress: (userId, courseId) => {
         set((state) => ({
           progress: state.progress.filter(p => {
-            if (userId && p.userId !== userId) return true
-            if (courseId && p.courseId !== courseId) return true
-            return false
+            if (userId && p.userId === userId) {
+              if (courseId && p.courseId === courseId) return false
+              if (!courseId) return false
+            }
+            return true
           }),
-        })),
+        }))
+      },
     }),
     {
       name: 'progress-storage',

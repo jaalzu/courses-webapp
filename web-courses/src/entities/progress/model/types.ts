@@ -1,16 +1,12 @@
-// Identificadores (semánticos, no solo number)
-export type CourseId = number
-export type LessonId = number
+// @/entities/progress/model/types.ts
 
 export interface LessonProgress {
-  userId: string  
-  courseId: CourseId
-  lessonId: LessonId
+  userId: string
+  courseId: number
+  lessonId: number
   completed: boolean
   completedAt?: Date
 }
 
-// Estado completo del progreso
-export interface CourseProgressState {
-  progress: LessonProgress[]
-}
+export type CourseId = number
+export type LessonId = number

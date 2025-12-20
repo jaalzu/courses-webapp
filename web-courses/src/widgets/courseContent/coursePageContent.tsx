@@ -4,10 +4,11 @@ import { useState, useEffect } from "react"
 import { ForumSection } from '@/features/forum/ui/ForumSection'
 import { useCourseNavigation } from "@/features/course-navigation/model/useCourseNavigation"
 import CourseContent from "@/widgets/courseContent/courseContent"
-import { LessonList } from "@/widgets/lesson-list/lessonList" // ← Mejor importar del index
+import { LessonList } from "@/widgets/lesson-list/lessonList"
 import InstructorCard from "@/widgets/courseContent/instructorCard"
 import { CourseSwitcher } from "@/widgets/courseContent/courseSwitcher"
 import type { Lesson } from "@/entities/lesson/model/types"
+import { useCurrentUser } from "@/shared/mocks/useCurrentUser" // ✅ IMPORTAR MOCK
 
 interface CoursePageContentProps {
   courseId: number
@@ -15,6 +16,9 @@ interface CoursePageContentProps {
 
 export default function CoursePageContent({ courseId }: CoursePageContentProps) {
   const [currentVideoUrl, setCurrentVideoUrl] = useState<string | undefined>()
+
+  // ✅ OBTENER USUARIO (usa el mock si useAuthStore no funciona)
+  const currentUser = useCurrentUser()
 
   const { course, currentLesson, handleToggleComplete, handleLessonSelect } =
     useCourseNavigation(courseId)
@@ -36,6 +40,9 @@ export default function CoursePageContent({ courseId }: CoursePageContentProps) 
 
   if (!course) return null
 
+  // ✅ Si no hay usuario, usar un ID por defecto (temporal)
+  const userId = currentUser?.id || "user-default"
+
   return (
     <main className="w-full p-4 md:p-8 space-y-5">
       <div className="flex justify-between items-center pb-1">
@@ -50,13 +57,12 @@ export default function CoursePageContent({ courseId }: CoursePageContentProps) 
 
         <div className="flex flex-col gap-6">
           <LessonList
-  lessons={course.lessons}
-  currentLessonId={currentLesson?.id || course.lessons[0]?.id}
-  onLessonSelect={handleLessonClick}
-  onToggleComplete={(lessonId: number) => handleToggleComplete(courseId, lessonId)}
-  courseId={courseId}
-/>
-
+            userId={userId} // ✅ USAR userId (con fallback)
+            courseId={courseId}
+            lessons={course.lessons}
+            currentLessonId={currentLesson?.id || course.lessons[0]?.id}
+            onLessonSelect={handleLessonClick}
+          />
 
           <InstructorCard
             name="Juan Pepe"
@@ -70,8 +76,8 @@ export default function CoursePageContent({ courseId }: CoursePageContentProps) 
       <div className="border-t border-gray-200 dark:border-gray-700 pt-8 mt-8">
         <ForumSection
           courseId={String(courseId)}
-          currentUserId="user_123" 
-          currentUserName="Usuario"  
+          currentUserId={userId} // ✅ USAR userId
+          currentUserName={currentUser?.name || "Usuario"} // ✅ CON FALLBACK
         />
       </div>
     </main>

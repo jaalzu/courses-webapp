@@ -5,7 +5,7 @@ import type { User } from './types'
 export const mockUsers: User[] = [
   {
     id: '1',
-    name: 'Juan Pérez',
+    name: 'Juan Péeeerez',
     email: 'juan@example.com',
     role: 'user',
     avatar: '/avatar.png',

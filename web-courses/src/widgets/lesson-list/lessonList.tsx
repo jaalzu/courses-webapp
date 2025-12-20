@@ -19,9 +19,7 @@ import {
 } from "@/shared/ui"
 
 import { cn } from "@/shared/lib/utils"
-
-import { useProgressStore } from "@/entities/progress/model"
-import { isLessonCompleted } from "@/entities/progress/model/selectors"
+import { useProgressStore, isLessonCompleted } from "@/entities/progress/model"
 
 interface LessonListProps {
   lessons: Lesson[]
@@ -38,13 +36,11 @@ export function LessonList({
   userId,
   onLessonSelect,
 }: LessonListProps) {
-  // 🔹 estado global de progreso
+  // ✅ Estado y acciones del store
   const progress = useProgressStore(state => state.progress)
-  const toggleLessonComplete = useProgressStore(
-    state => state.toggleLessonComplete
-  )
+  const markComplete = useProgressStore(state => state.markComplete)
 
-  // 🔹 métricas
+  // Métricas
   const completedCount = lessons.filter(lesson =>
     isLessonCompleted(progress, userId, courseId, lesson.id)
   ).length
@@ -86,7 +82,7 @@ export function LessonList({
         <Accordion type="single" collapsible className="px-2 py-2">
           {lessons.map(lesson => {
             const isActive = lesson.id === currentLessonId
-            const isCompleted = isLessonCompleted(
+            const completed = isLessonCompleted(
               progress,
               userId,
               courseId,
@@ -108,7 +104,7 @@ export function LessonList({
                   )}
                 >
                   <div className="flex items-center gap-3 flex-1 text-left">
-                    {isCompleted ? (
+                    {completed ? (
                       <CheckCircleIcon className="w-5 h-5 text-green-500" />
                     ) : isActive ? (
                       <ClockIcon
@@ -157,15 +153,9 @@ export function LessonList({
                       Reproducir lección
                     </button>
 
-                    {!isCompleted ? (
+                    {!completed ? (
                       <button
-                        onClick={() =>
-                          toggleLessonComplete(
-                            userId,
-                            courseId,
-                            lesson.id
-                          )
-                        }
+                        onClick={() => markComplete(userId, courseId, lesson.id)}
                         className="w-full bg-green-500 hover:bg-green-400 text-white font-medium py-2 rounded-lg"
                       >
                         Marcar como finalizada

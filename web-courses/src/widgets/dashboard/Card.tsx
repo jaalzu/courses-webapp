@@ -24,11 +24,11 @@ import { CheckCircleIcon } from "@heroicons/react/24/solid"
 import { getLevelConfig } from "@/entities/course/lib/helpers"
 import type { Course } from "@/entities/course/model/types"
 import { useCourseStore } from "@/entities/course/model/useCourseStore"
-import { useProgressStore } from "@/entities/progress/model"
-import { isLessonCompleted } from "@/entities/progress/model"
+import { useProgressStore, getCourseStats } from "@/entities/progress/model"
+import { useCurrentUser } from "@/shared/mocks/useCurrentUser" // ✅ IMPORTAR
 
 interface CardProps {
-  userId: string
+  userId?: string // ✅ HACER OPCIONAL
   courseId: number
   href: string
   className?: string
@@ -50,6 +50,10 @@ export default function Card({
 }: CardProps) {
   const router = useRouter()
 
+  // ✅ OBTENER USUARIO si no se pasa como prop
+  const currentUser = useCurrentUser()
+  const actualUserId = userId || currentUser.id
+
   // Favoritos
   const { isFavorite, toggleFavorite } = useFavoriteIds(localStorageFavorites)
 
@@ -59,31 +63,21 @@ export default function Card({
   // Cursos
   const deleteCourse = useCourseStore(state => state.deleteCourse)
 
-  // Progreso (estado global)
+  // ✅ Progreso: leer estado + calcular stats
   const progress = useProgressStore(state => state.progress)
-
-  // 🔢 Lecciones completadas (CORREGIDO)
-  const completedCount = courseData.lessons.filter(lesson =>
-    isLessonCompleted(
-      progress,
-      userId,
-      courseId,
-      lesson.id
-    )
-  ).length
-
-  const totalLessons = courseData.lessons.length
-
-  const progressPercentage =
-    totalLessons > 0
-      ? Math.round((completedCount / totalLessons) * 100)
-      : 0
+  const stats = getCourseStats(courseData, progress, actualUserId) // ✅ USAR actualUserId
 
   // Handlers
   const handleEditClick = () => onEdit?.()
 
   const handleDeleteClick = () => {
-    if (!confirm("¿Seguro que querés eliminar este curso? Esta acción no se puede deshacer.")) return
+    if (
+      !confirm(
+        "¿Seguro que querés eliminar este curso? Esta acción no se puede deshacer."
+      )
+    ) {
+      return
+    }
     deleteCourse(courseId)
   }
 
@@ -126,13 +120,17 @@ export default function Card({
 
         <div className="p-4 flex flex-col flex-1 justify-between">
           <div>
-            <h3 className="text-lg font-semibold mb-2">{courseData.title}</h3>
+            <h3 className="text-lg font-semibold mb-2">
+              {courseData.title}
+            </h3>
+
             {levelConfig && (
               <Badge variant={levelConfig.variant}>
                 {levelConfig.label}
               </Badge>
             )}
-            <p className="text-sm text-gray-500 mt-3">
+
+            <p className="text-sm text-dark dark:text-gray-300 mt-3">
               {courseData.description}
             </p>
           </div>
@@ -142,20 +140,22 @@ export default function Card({
           <div className="flex justify-between items-center mt-6">
             <span className="text-sm font-medium">Lecciones</span>
 
-            {completedCount === totalLessons && totalLessons > 0 ? (
+            {stats.isCompleted ? (
               <div className="flex items-center gap-1 text-green-600">
                 <CheckCircleIcon className="w-5 h-5" />
-                <span className="text-sm font-semibold">¡Completado!</span>
+                <span className="text-sm font-semibold">
+                  ¡Completado!
+                </span>
               </div>
             ) : (
               <span className="text-sm font-medium">
-                {completedCount}/{totalLessons}
+                {stats.completedLessons}/{stats.totalLessons}
               </span>
             )}
           </div>
         </div>
 
-        <Progress value={progressPercentage} className="h-1.5 w-full" />
+        <Progress value={stats.progressPercentage} className="h-1.5 w-full" />
       </Link>
     </div>
   )

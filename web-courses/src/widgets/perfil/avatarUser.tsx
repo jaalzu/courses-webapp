@@ -9,9 +9,21 @@ interface AvatarUserProps {
   email: string
 }
 
+
+
 export default function AvatarUser({ name, email }: AvatarUserProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [userName, setUserName] = useState(name)
+
+  const initials =
+  typeof userName === "string"
+    ? userName
+        .trim()
+        .split(" ")
+        .map(n => n[0])
+        .join("")
+        .toUpperCase()
+    : ""
 
   const handleSave = () => setIsEditing(false)
 
@@ -19,7 +31,7 @@ export default function AvatarUser({ name, email }: AvatarUserProps) {
     <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-6 flex flex-col md:flex-row items-center md:items-start gap-6">
       <Avatar className="h-24 w-24 md:h-28 md:w-28">
         <AvatarFallback className="text-2xl bg-blue-600 text-white">
-          {userName.split(' ').map(n => n[0]).join('').toUpperCase()}
+            {initials}
         </AvatarFallback>
       </Avatar>
 

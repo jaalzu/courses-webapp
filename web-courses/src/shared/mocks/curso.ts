@@ -2,7 +2,7 @@ import type { Course } from "@/entities/course/model/types"
 
 
 
-export const courses: Course[] = [
+export const MOCK_COURSES: Course[] = [
   {
     id: 1,
     title: "HTML y CSS: Fundamentos del desarrollo web",
@@ -30,31 +30,26 @@ export const courses: Course[] = [
         id: 1,
         title: "Introducción al desarrollo web",
         duration: "4:20",
-        completed: false,
       },
       {
         id: 2,
         title: "HTML Semántico",
         duration: "8:45",
-        completed: false,
       },
       {
         id: 3,
         title: "CSS: Estilos y selectores",
         duration: "10:15",
-        completed: false,
       },
       {
         id: 4,
         title: "Flexbox y Grid",
         duration: "12:30",
-        completed: false,
       },
       {
         id: 5,
         title: "Responsive Design",
         duration: "11:00",
-        completed: false,
       },
     ],
   },
@@ -79,27 +74,27 @@ export const courses: Course[] = [
   quote: "Con JavaScript no solo creas funciones, construyes experiencias interactivas.",
   lessons: [
     { 
-      id: 1, title: "Fundamentos de JavaScript", duration: "8:15", completed: false,
+      id: 1, title: "Fundamentos de JavaScript", duration: "8:15", 
     
     },
     { 
-      id: 2, title: "Funciones y scope", duration: "11:40", completed: false,
+      id: 2, title: "Funciones y scope", duration: "11:40", 
      
     },
     { 
-      id: 3, title: "Arrays y objetos", duration: "13:00", completed: false,
+      id: 3, title: "Arrays y objetos", duration: "13:00", 
    
     },
     { 
-      id: 4, title: "DOM y Eventos", duration: "15:20", completed: false,
+      id: 4, title: "DOM y Eventos", duration: "15:20", 
     
     },
     { 
-      id: 5, title: "Asincronía: Promises y Async/Await", duration: "14:30", completed: false,
+      id: 5, title: "Asincronía: Promises y Async/Await", duration: "14:30", 
      
     },
     { 
-      id: 6, title: "Proyecto: App de tareas", duration: "18:00", completed: false,
+      id: 6, title: "Proyecto: App de tareas", duration: "18:00", 
      
     },
   ],
@@ -125,27 +120,27 @@ export const courses: Course[] = [
   quote: "Un backend sólido es la columna vertebral de cualquier aplicación moderna.",
   lessons: [
     { 
-      id: 1, title: "Introducción a Node.js", duration: "5:15", completed: false,
+      id: 1, title: "Introducción a Node.js", duration: "5:15",
     
     },
     { 
-      id: 2, title: "Express.js fundamentals", duration: "12:30", completed: false,
+      id: 2, title: "Express.js fundamentals", duration: "12:30", 
    
     },
     { 
-      id: 3, title: "APIs RESTful", duration: "15:45", completed: false,
+      id: 3, title: "APIs RESTful", duration: "15:45", 
     
     },
     { 
-      id: 4, title: "MongoDB y Mongoose", duration: "18:20", completed: false,
+      id: 4, title: "MongoDB y Mongoose", duration: "18:20", 
      
     },
     { 
-      id: 5, title: "Autenticación JWT", duration: "14:30", completed: false,
+      id: 5, title: "Autenticación JWT", duration: "14:30", 
      
     },
     { 
-      id: 6, title: "Deploy en producción", duration: "10:00", completed: false,
+      id: 6, title: "Deploy en producción", duration: "10:00", 
     
     },
   ],
@@ -173,27 +168,27 @@ export const courses: Course[] = [
   quote: "El tipado es la brújula que evita que tu código se pierda en un mar de bugs.",
   lessons: [
     { 
-      id: 1, title: "¿Por qué TypeScript?", duration: "6:30", completed: false,
+      id: 1, title: "¿Por qué TypeScript?", duration: "6:30", 
      
     },
     { 
-      id: 2, title: "Tipos básicos", duration: "11:45", completed: false,
+      id: 2, title: "Tipos básicos", duration: "11:45", 
  
     },
     { 
-      id: 3, title: "Interfaces y tipos avanzados", duration: "13:20", completed: false,
+      id: 3, title: "Interfaces y tipos avanzados", duration: "13:20", 
      
     },
     { 
-      id: 4, title: "Generics y utilidades", duration: "15:00", completed: false,
+      id: 4, title: "Generics y utilidades", duration: "15:00", 
     
     },
     { 
-      id: 5, title: "TypeScript con React", duration: "16:30", completed: false,
+      id: 5, title: "TypeScript con React", duration: "16:30", 
     
     },
     { 
-      id: 6, title: "Proyecto: API REST tipada", duration: "20:00", completed: false,
+      id: 6, title: "Proyecto: API REST tipada", duration: "20:00", 
     
     },
   ],
@@ -220,16 +215,16 @@ export const courses: Course[] = [
   quote: "Next.js no solo hace más rápido tu desarrollo, también eleva la calidad de tus aplicaciones.",
   lessons: [
     { 
-      id: 1, title: "Introducción", duration: "5:15", completed: false,
+      id: 1, title: "Introducción", duration: "5:15", 
     },
     { 
-      id: 2, title: "Páginas y rutas dinámicas", duration: "12:40", completed: false,
+      id: 2, title: "Páginas y rutas dinámicas", duration: "12:40", 
     },
     { 
-      id: 3, title: "SSR y SSG", duration: "15:00", completed: false,
+      id: 3, title: "SSR y SSG", duration: "15:00", 
     },
     { 
-      id: 4, title: "API Routes", duration: "14:20", completed: false,
+      id: 4, title: "API Routes", duration: "14:20", 
     },
   ],
 },

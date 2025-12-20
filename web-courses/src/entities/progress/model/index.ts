@@ -1,15 +1,16 @@
-// store
+// @/entities/progress/model/index.ts
+
+// Store (estado + acciones)
 export { useProgressStore } from './useProgressStore'
 
-// types
-export type {
-  LessonProgress,
-  CourseId,
-  LessonId,
-} from './types'
+// Tipos
+export type { LessonProgress, CourseId, LessonId } from './types'
 
-// selectors / helpers
+// Helpers (funciones de lectura)
 export {
-  getCourseProgress,
   isLessonCompleted,
-} from './selectors'
+  getUserProgress,
+  getCourseProgress,
+  getCourseStats,
+  getCompletedCount,
+} from './helpers'

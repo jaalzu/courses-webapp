@@ -2,7 +2,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { Course } from './types'
-import { courses as initialCourses } from '../data/curso'
+import { MOCK_COURSES as initialCourses } from 'shared/mocks/curso'
 
 //  Helper: evitar referencias compartidasigua
 const cloneInitialCourses = (): Course[] =>
