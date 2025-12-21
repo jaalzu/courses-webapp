@@ -5,7 +5,7 @@ import { useCourses } from "@/entities/course/api/useCourses"
 import { useProgressStore, getUserProgress } from "@/entities/progress/model"
 import { getUserProfileStats } from "@/features/profile/lib/getUserProfileStats"
 
-import AvatarUser from "@/widgets/perfil/AvatarUser"  
+import AvatarUser from "./AvatarUser"
 import UserStats from "./UserStats"
 
 export function PerfilPageWrapper() {
