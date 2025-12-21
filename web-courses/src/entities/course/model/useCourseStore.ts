@@ -1,20 +1,19 @@
-
+// @/entities/course/model/useCourseStore.ts
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { Course } from './types'
-import { MOCK_COURSES as initialCourses } from 'shared/mocks/curso'
+import { MOCK_COURSES as initialCourses } from '@/shared/mocks/curso'
 
-//  Helper: evitar referencias compartidasigua
 const cloneInitialCourses = (): Course[] =>
   structuredClone(initialCourses)
 
-//  Helper: ID seguro
+// Helper: ID seguro
 const getNextId = (courses: Course[]) =>
   Math.max(0, ...courses.map(c => c.id)) + 1
 
 interface CourseStore {
   courses: Course[]
-  addCourse: (course: Omit<Course, 'id' | 'createdAt'>) => void
+  addCourse: (course: Omit<Course, 'id'>) => void
   updateCourse: (courseId: number, updates: Partial<Course>) => void
   deleteCourse: (courseId: number) => void
   getCourseById: (courseId: number) => Course | undefined
@@ -24,9 +23,8 @@ interface CourseStore {
 export const useCourseStore = create<CourseStore>()(
   persist(
     (set, get) => ({
-      //  Estado inicial limpio
+      // Estado inicial limpio
       courses: cloneInitialCourses(),
-
 
       getCourseById: (courseId) =>
         get().courses.find(c => c.id === courseId),
@@ -36,11 +34,8 @@ export const useCourseStore = create<CourseStore>()(
           courses: [
             ...state.courses,
             {
-              id: getNextId(state.courses),
-              createdAt: Date.now(),
-              lessons: [],
-              image: 'curso1.jpg', 
               ...newCourse,
+              id: getNextId(state.courses),
             },
           ],
         })),
@@ -64,23 +59,21 @@ export const useCourseStore = create<CourseStore>()(
     }),
     {
       name: 'course-storage',
-
       version: 1,
+      
+      // Migraciones futuras
+      migrate: (persistedState, version) => {
+        const state = persistedState as CourseStore
 
-      //  Migraciones futuras
-          migrate: (persistedState, version) => {
-      const state = persistedState as CourseStore
-
-      if (version === 0) {
-        return {
-          ...state,
-          courses: cloneInitialCourses(),
+        if (version === 0) {
+          return {
+            ...state,
+            courses: cloneInitialCourses(),
+          }
         }
-      }
 
-      return state
-    },
-
+        return state
+      },
     }
   )
 )

@@ -8,7 +8,7 @@ import { LessonList } from "@/widgets/lesson-list/lessonList"
 import InstructorCard from "@/widgets/courseContent/instructorCard"
 import { CourseSwitcher } from "@/widgets/courseContent/courseSwitcher"
 import type { Lesson } from "@/entities/lesson/model/types"
-import { useCurrentUser } from "@/shared/mocks/useCurrentUser" // ✅ IMPORTAR MOCK
+import { useCurrentUser } from "@/shared/mocks/useCurrentUser"
 
 interface CoursePageContentProps {
   courseId: number
@@ -17,11 +17,10 @@ interface CoursePageContentProps {
 export default function CoursePageContent({ courseId }: CoursePageContentProps) {
   const [currentVideoUrl, setCurrentVideoUrl] = useState<string | undefined>()
 
-  // ✅ OBTENER USUARIO (usa el mock si useAuthStore no funciona)
   const currentUser = useCurrentUser()
+  const userId = currentUser?.id || "user-default"
 
-  const { course, currentLesson, handleToggleComplete, handleLessonSelect } =
-    useCourseNavigation(courseId)
+  const { course, currentLesson, selectLesson } = useCourseNavigation(courseId)
 
   useEffect(() => {
     if (currentLesson?.videoUrl) {
@@ -35,13 +34,10 @@ export default function CoursePageContent({ courseId }: CoursePageContentProps) 
     } else {
       setCurrentVideoUrl(undefined)
     }
-    handleLessonSelect(lesson)
+    selectLesson(lesson) // ✅ AHORA SÍ está definido
   }
 
   if (!course) return null
-
-  // ✅ Si no hay usuario, usar un ID por defecto (temporal)
-  const userId = currentUser?.id || "user-default"
 
   return (
     <main className="w-full p-4 md:p-8 space-y-5">
@@ -57,7 +53,7 @@ export default function CoursePageContent({ courseId }: CoursePageContentProps) 
 
         <div className="flex flex-col gap-6">
           <LessonList
-            userId={userId} // ✅ USAR userId (con fallback)
+            userId={userId}
             courseId={courseId}
             lessons={course.lessons}
             currentLessonId={currentLesson?.id || course.lessons[0]?.id}
@@ -76,8 +72,8 @@ export default function CoursePageContent({ courseId }: CoursePageContentProps) 
       <div className="border-t border-gray-200 dark:border-gray-700 pt-8 mt-8">
         <ForumSection
           courseId={String(courseId)}
-          currentUserId={userId} // ✅ USAR userId
-          currentUserName={currentUser?.name || "Usuario"} // ✅ CON FALLBACK
+          currentUserId={userId}
+          currentUserName={currentUser?.name || "Usuario"}
         />
       </div>
     </main>

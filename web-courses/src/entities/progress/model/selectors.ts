@@ -1,17 +1,12 @@
 // @/entities/progress/model/selectors.ts
 import type { LessonProgress, CourseId, LessonId } from './types'
 
-/**
- * Verifica si una lección específica está completada
- * ✅ Normaliza tipos para comparación consistente
- */
 export function isLessonCompleted(
   progress: LessonProgress[],
   userId: string,
   courseId: CourseId,
   lessonId: LessonId
 ): boolean {
-  // ✅ NORMALIZAR: Convertir a number
   const normalizedCourseId = typeof courseId === 'string' 
     ? parseInt(courseId, 10) 
     : courseId
@@ -29,9 +24,6 @@ export function isLessonCompleted(
   )
 }
 
-/**
- * Obtiene el progreso completo de un curso
- */
 export function getCourseProgress(
   progress: LessonProgress[],
   userId: string,
@@ -49,9 +41,6 @@ export function getCourseProgress(
   )
 }
 
-/**
- * Cuenta lecciones completadas de un usuario
- */
 export function getCompletedLessonsCount(
   progress: LessonProgress[],
   userId: string,

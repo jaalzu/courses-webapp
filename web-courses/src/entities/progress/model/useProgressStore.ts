@@ -2,6 +2,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { LessonProgress } from './types'
+import { MOCK_PROGRESS } from '@/shared/mocks/progressMock'
 
 interface ProgressStore {
   progress: LessonProgress[]
@@ -13,17 +14,14 @@ interface ProgressStore {
 export const useProgressStore = create<ProgressStore>()(
   persist(
     (set) => ({
-      progress: [],
+      progress: MOCK_PROGRESS,
 
       markComplete: (userId, courseId, lessonId) => {
-        // ⚠️ VALIDACIÓN: No guardar si userId es undefined
         if (!userId) {
-          console.error('❌ markComplete: userId es undefined!')
-          console.trace() // Ver de dónde viene el error
+          console.error(' markComplete: userId es undefined!')
           return
         }
 
-        console.log('✅ markComplete llamado:', { userId, courseId, lessonId })
 
         set((state) => {
           const existing = state.progress.find(
