@@ -7,19 +7,11 @@ export function isLessonCompleted(
   courseId: CourseId,
   lessonId: LessonId
 ): boolean {
-  const normalizedCourseId = typeof courseId === 'string' 
-    ? parseInt(courseId, 10) 
-    : courseId
-  
-  const normalizedLessonId = typeof lessonId === 'string'
-    ? parseInt(lessonId, 10)
-    : lessonId
-
   return progress.some(
     p =>
       p.userId === userId &&
-      p.courseId === normalizedCourseId &&
-      p.lessonId === normalizedLessonId &&
+      p.courseId === courseId &&
+      p.lessonId === lessonId &&
       p.completed
   )
 }
