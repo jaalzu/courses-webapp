@@ -1,6 +1,6 @@
 // entities/user/model/types.ts
 
-export type UserRole = 'user' | 'instructor' | 'admin'
+export type UserRole = 'user'  | 'admin'
 
 export interface User {
   id: string

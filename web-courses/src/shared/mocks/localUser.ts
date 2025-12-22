@@ -4,7 +4,7 @@ export const LOCAL_USER: User = {
   id: "00000000-0000-0000-0000-000000000001",
   name: "Pepitso",
   email: "demoPepon@plataforma.dev",
-  role: "user",
+  role: "admin",
   avatar: "https://i.pravatar.cc/150?img=12",
   createdAt: new Date("2024-01-01"),
   assignedCourses: [1],

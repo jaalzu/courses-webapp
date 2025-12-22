@@ -8,7 +8,7 @@ export const mockUsers: User[] = [
     id: "00000000-0000-0000-0000-000000000002",
     name: "Juan Admiaaaan",
     email: "admin@plataforma.dev",
-    role: "admin",
+    role: "user",
     avatar: "https://i.pravatar.cc/150?img=5",
     createdAt: new Date("2024-01-15"),
     assignedCourses: [1, 2],

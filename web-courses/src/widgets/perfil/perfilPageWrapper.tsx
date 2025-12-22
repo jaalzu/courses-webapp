@@ -22,7 +22,6 @@ export function PerfilPageWrapper() {
   })
 
   return (
-    // ✅ CONTENEDOR PRINCIPAL CON PADDING (igual que CoursePageContent)
     <main className="w-full p-6 lg:p-10 space-y-6">
       {/* Título de la página */}
       <div className="mb-2">

@@ -5,8 +5,6 @@ interface UserStatsProps {
   inProgressCourses: number
   totalCourses: number
   progressPercentage: number
-  completedLessons: number
-  totalLessons: number
 }
 
 export default function UserStats({
@@ -14,8 +12,6 @@ export default function UserStats({
   inProgressCourses, 
   totalCourses,
   progressPercentage, 
-  completedLessons, 
-  totalLessons
 }: UserStatsProps) {
   return (
     <div className="space-y-4">
@@ -42,7 +38,7 @@ export default function UserStats({
           </div>
         </div>
 
-        {/* ⏰ Cursos Activos */}
+        {/*  Cursos Activos */}
         <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow">
           <div className="flex items-center gap-4">
             <div className=" p-3 rounded-lg">
@@ -60,7 +56,7 @@ export default function UserStats({
           </div>
         </div>
 
-        {/* 📊 Progreso Global */}
+        {/* Progreso Global */}
         <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow">
           <div className="flex items-center gap-4 mb-3">
             <div className=" p-3 rounded-lg">
