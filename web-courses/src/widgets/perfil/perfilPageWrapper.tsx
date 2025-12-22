@@ -8,7 +8,7 @@ import { getUserProfileStats } from "@/features/profile/lib/getUserProfileStats"
 import AvatarUser from "./AvatarUser"
 import UserStats from "./UserStats"
 
-export default function PerfilPageWrapper() {
+export function PerfilPageWrapper() {
   const user = useCurrentUser()
   const courses = useCourses()
   
