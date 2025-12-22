@@ -5,8 +5,8 @@ import { useCourses } from "@/entities/course/api/useCourses"
 import { useProgressStore, getUserProgress } from "@/entities/progress/model"
 import { getUserProfileStats } from "@/features/profile/lib/getUserProfileStats"
 
-import AvatarUser from "./AvatarUser"
-import UserStats from "./UserStats"
+// import AvatarUser from "./AvatarUser"
+// import UserStats from "./UserStats"
 
 export function PerfilPageWrapper() {
   const user = useCurrentUser()
@@ -34,10 +34,10 @@ export function PerfilPageWrapper() {
       </div>
 
       {/* Avatar y datos del usuario */}
-      <AvatarUser name={stats.userName} email={stats.email} />
+      {/* <AvatarUser name={stats.userName} email={stats.email} /> */}
 
       {/* Estadísticas */}
-      <UserStats {...stats} />
+      {/* <UserStats {...stats} /> */}
     </main>
   )
 }
