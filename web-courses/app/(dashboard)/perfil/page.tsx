@@ -1,4 +1,4 @@
-import { PerfilPageWrapper } from "@/widgets/perfil"
+import  PerfilPageWrapper  from "@/widgets/perfil/PerfilPageWrapper"
 
 
 export default function PerfilPage() {
