@@ -6,8 +6,8 @@ import { useProgressStore } from "@/entities/progress/model/useProgressStore"
 import { getUserProgress } from "@/entities/progress/getUserProgress"
 import { getUserProfileStats } from "@/features/profile/lib/getUserProfileStats"
 
-import AvatarUser from "./AvatarUser"
-import UserStats from "./UserStats"
+import { AvatarUser } from "./AvatarUser"
+import { UserStats } from "./UserStats"
 
 export function PerfilWrapper() {
   const user = useCurrentUser()

@@ -10,7 +10,7 @@ interface AvatarUserProps {
   email: string
 }
 
-export default function AvatarUser({ name, email }: AvatarUserProps) {
+export  function AvatarUser({ name, email }: AvatarUserProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [userName, setUserName] = useState(name)
 

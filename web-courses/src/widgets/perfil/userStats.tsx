@@ -7,7 +7,7 @@ interface UserStatsProps {
   progressPercentage: number
 }
 
-export default function UserStats({
+export  function UserStats({
   completedCourses, 
   inProgressCourses, 
   totalCourses,
