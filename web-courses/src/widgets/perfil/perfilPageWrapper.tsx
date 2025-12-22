@@ -29,7 +29,7 @@ export function PerfilPageWrapper() {
           Mi Perfil
         </h1>
         <p className="text-gray-600 dark:text-gray-400 mt-1">
-          Gestiona tu información y revisa tu progreso
+          Gestiona tu información y revisa tu progreso.
         </p>
       </div>
 
