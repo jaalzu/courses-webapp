@@ -13,7 +13,7 @@ export function deriveMetrics({ users, courses, progress }: DeriveMetricsInput) 
   // Stats básicas
   const totalUsers = users.length
   const admins = users.filter(u => u.role === 'admin').length
-  const students = users.filter(u => u.role === 'user').length
+const students = users.filter(u => u.role === 'student').length
   const totalCourses = courses.length
   
   // Usuarios con progreso detallado
