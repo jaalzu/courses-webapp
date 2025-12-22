@@ -63,7 +63,7 @@ export default function CoursePageContent({ courseId }: CoursePageContentProps) 
           <InstructorCard
             name="Juan Pepe"
             profession="Frontend Developer"
-            image="/avatar.png"
+            image="/avatar.webp"
             description="Juan es un apasionado del desarrollo web con más de 10 años de experiencia. Ha trabajado en proyectos de todo tipo, desde startups hasta grandes empresas. Le encanta enseñar: disfruta compartir su conocimiento de manera clara y práctica."
           />
         </div>

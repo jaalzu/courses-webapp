@@ -10,11 +10,13 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         
         {/* Logo arriba del formulario */}
         <div className="flex justify-center ">
-          <Image
-            src="/icons/svg/logo1.svg"
-            alt="Logo"
-            className="w-12 h-12 opacity-90 hover:opacity-100 transition-opacity duration-200"
-          />
+         <Image
+  src="/icons/svg/logo1.svg"
+  alt="Logo"
+  width={68}   
+  height={68}
+/>
+
         </div>
 
         {/* Contenido dinámico */}
@@ -32,15 +34,16 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       </div>
 
       {/* Columna derecha: imagen fija */}
-      <div className="hidden md:flex md:w-1/2 h-screen">
-        <CustomImage
-          src="/login-bronson.webp"
-          alt="Ilustración"
-          className="w-full h-full object-cover"
-          width={800}
-          height={600}
-        />
-      </div>
+     <div className="hidden md:flex md:w-1/2 h-screen relative"> {/* Agregado relative */}
+  <Image
+  src="/login-bronson.webp"
+  alt="Ilustración"
+  fill
+  priority 
+  sizes="(max-width: 768px) 100vw, 50vw" 
+  quality={100}
+/>
+</div>
     </div>
   )
 }

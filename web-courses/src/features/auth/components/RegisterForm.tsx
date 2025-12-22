@@ -14,9 +14,15 @@ export function RegisterForm() {
       </div>
 
       <Button variant="default" size="lg" className="w-full flex items-center justify-center gap-2">
-        <Image src="/google-icon.svg" alt="Google" className="w-5 h-5" />
-        Registrarse con Google
-      </Button>
+  <Image 
+    src="icons/svg/google-icon.svg" 
+    alt="Google" 
+    width={20}   // 5 * 4px = 20px
+    height={20} 
+  />
+  Registrarse con Google
+</Button>
+
 
       {/* Separador */}
       <div className="relative">

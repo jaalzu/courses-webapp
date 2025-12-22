@@ -15,11 +15,13 @@ export function LoginForm() {
       </div>
 
      <Button variant="default"  size="lg" className="w-full flex items-center justify-center gap-2">
-    <Image
-      src="/google-icon.svg"
-      alt="Google"
-      className="w-5 h-5"
-    />
+   <Image
+  src="/icons/svg/google-icon.svg"
+  alt="Google"
+  width={20}      
+  height={20}     
+/>
+
   Iniciar sesión con Google
 </Button>
 
