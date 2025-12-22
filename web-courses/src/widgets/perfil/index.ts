@@ -1,0 +1,1 @@
+export { PerfilPageWrapper } from "./PerfilPageWrapper"
