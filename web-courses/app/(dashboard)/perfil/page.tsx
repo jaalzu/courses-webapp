@@ -1,5 +1,5 @@
-import { PPWrapper } from "@/widgets/perfil/PerfilPageWrapper"
+import { PerfilWrapper } from "@/widgets/perfil/PerfilWrapper"
 
 export default function PerfilPage() {
-  return <PPWrapper />
+  return <PerfilWrapper />
 }

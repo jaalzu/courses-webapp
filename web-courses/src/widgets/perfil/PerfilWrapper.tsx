@@ -9,7 +9,7 @@ import { getUserProfileStats } from "@/features/profile/lib/getUserProfileStats"
 import AvatarUser from "./AvatarUser"
 import UserStats from "./UserStats"
 
-export function PPWrapper() {
+export function PerfilWrapper() {
   const user = useCurrentUser()
   const courses = useCourses()
   
