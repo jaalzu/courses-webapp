@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { ArrowRightIcon, ShareIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { ForumPost, ForumComment } from '@/entities/forum-post'
 import { formatDate } from '../model/forumHelpers'
+import Image from 'next/image'
 
 interface Props {
   post: ForumPost
@@ -42,13 +43,14 @@ export const CommentsSection = ({
 
         return (
           <div key={comment.id} className="flex gap-4  px-3">
-            <div className="w-8 h-8 rounded-full overflow-hidden shrink-0">
-              <img
-                src={comment.userAvatar || '/avatar.png'}
-                alt={comment.userName}
-                className="w-full h-full object-cover"
-              />
-            </div>
+             <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 relative">
+                <Image
+                  src={comment.userAvatar || '/avatar.webp'}
+                  alt={comment.userName}
+                  fill
+                  className="object-cover"
+                />
+      </div>
 
             <div
             className="
@@ -96,13 +98,14 @@ export const CommentsSection = ({
 
       {/* Input */}
       <div className="flex gap-3 border-t pt-4">
-        <div className="w-8 h-8 rounded-full overflow-hidden shrink-0">
-          <img
-            src="/avatar.png" 
-            alt={currentUserName}
-            className="w-full h-full object-cover"
-          />
-        </div>
+        <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 relative">
+  <Image
+    src="/avatar.webp"
+    alt={currentUserName}
+    fill
+    className="object-cover"
+  />
+</div>
 
         <input
           value={input}

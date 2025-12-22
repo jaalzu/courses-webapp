@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useForum } from '../model/useForum';
 import { ChatBubbleOvalLeftIcon } from '@heroicons/react/24/outline';
 import { ForumPost, ForumComment } from '@/entities/forum-post'
+import Image from 'next/image'
 
 import { PostCard } from './PostCard';
 import {
@@ -88,8 +89,8 @@ export const ForumSection = ({
 
         <div className="flex items-center gap-3 mb-4">
         <div className="w-10 h-10 rounded-full overflow-hidden shrink-0">
-          <img
-            src="/avatar.png" 
+          <Image
+            src="/avatar.webp" 
             alt={currentUserName}
             className="w-full h-full object-cover"
           />

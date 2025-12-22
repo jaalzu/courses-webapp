@@ -26,7 +26,7 @@ export const createNewComment = (
   postId,
   userId,
   userName,
-  userAvatar: '/avatar.png',
+  userAvatar: '/avatar.webp',
   content,
   createdAt: new Date()
 })

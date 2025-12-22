@@ -3,6 +3,7 @@
 import { Button } from "@/shared/ui/index"
 import { Input } from "@/shared/ui/index"
 import { UserIcon, LockIcon, EnvelopeIcon } from "./icons/icons"
+import Image from 'next/image'
 
 export function RegisterForm() {
   return (
@@ -13,7 +14,7 @@ export function RegisterForm() {
       </div>
 
       <Button variant="default" size="lg" className="w-full flex items-center justify-center gap-2">
-        <img src="/google-icon.svg" alt="Google" className="w-5 h-5" />
+        <Image src="/google-icon.svg" alt="Google" className="w-5 h-5" />
         Registrarse con Google
       </Button>
 

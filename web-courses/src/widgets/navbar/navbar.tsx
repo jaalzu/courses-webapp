@@ -99,7 +99,7 @@ export function Navbar({
                  focus:outline-none"
     >
       <Avatar className="h-10 w-10">
-        <AvatarImage src="/avatar.png" alt="Usuario" />
+        <AvatarImage src="/avatar.webp" alt="Usuario" />
         <AvatarFallback className="bg-primary text-white dark:text-black dark:bg-white">
           JD
         </AvatarFallback>

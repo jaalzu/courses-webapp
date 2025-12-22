@@ -1,6 +1,7 @@
 import { TrashIcon } from '@heroicons/react/24/outline'
 import { ForumPost } from '@/entities/forum-post'
 import { formatDate } from '../model/forumHelpers'
+import Image from 'next/image'
 
 interface Props {
   post: ForumPost
@@ -15,19 +16,21 @@ export const PostHeader = ({
   isCurrentUserAdmin = false,
   onDeletePost 
 }: Props) => {
-  const avatar = post.userAvatar || '/avatar.png'
+  const avatar = post.userAvatar || '/avatar.webp'
   const canDelete = post.userName === currentUserName || isCurrentUserAdmin
 
   return (
     <div className="flex items-start gap-3 mb-6 mt-1">
       {/* AVATAR */}
-      <div className="w-10 h-10 rounded-full overflow-hidden shrink-0">
-        <img
-          src={avatar}
-          alt={post.userName}
-          className="w-full h-full object-cover"
-        />
-      </div>
+      <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 relative">
+  <Image
+    src={avatar}
+    alt={post.userName}
+    fill
+    className="object-cover"
+  />
+</div>
+
 
       <div className="flex-1">
         <div className="flex items-center justify-between mb-2">

@@ -1,5 +1,6 @@
 'use client'
 import { CustomImage } from "@/shared/ui/customImage"
+import Image from 'next/image'
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,7 +10,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         
         {/* Logo arriba del formulario */}
         <div className="flex justify-center ">
-          <img
+          <Image
             src="/icons/svg/logo1.svg"
             alt="Logo"
             className="w-12 h-12 opacity-90 hover:opacity-100 transition-opacity duration-200"

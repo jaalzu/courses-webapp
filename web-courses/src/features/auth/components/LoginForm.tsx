@@ -3,6 +3,7 @@
 import { Button } from "@/shared/ui/index"
 import { Input } from "@/shared/ui/index"
 import {  LockIcon, EnvelopeIcon } from "./icons/icons"
+import Image from 'next/image'
 
 
 export function LoginForm() {
@@ -14,7 +15,7 @@ export function LoginForm() {
       </div>
 
      <Button variant="default"  size="lg" className="w-full flex items-center justify-center gap-2">
-    <img
+    <Image
       src="/google-icon.svg"
       alt="Google"
       className="w-5 h-5"
