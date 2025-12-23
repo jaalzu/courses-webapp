@@ -1,5 +1,3 @@
-// @/features/profile/lib/getUserProfileStats.ts
-
 import type { User } from "@/entities/user/model/types"
 import type { Course } from "@/entities/course/model/types"
 import type { LessonProgress } from "@/entities/progress/model/types"
