@@ -1,6 +1,16 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+body {
+  font-family: var(--font-sans);
+}
+
+
+ html.dark {
+    --sidebar: #111827; /* color exacto de bg-gray-900 */
+}
+
+
 :root {
   --font-sans: 'Montserrat', sans-serif;
   --sidebar: hsl(0 0% 98%);
@@ -11,17 +21,6 @@
   --sidebar-accent-foreground: hsl(240 5.9% 10%);
   --sidebar-border: hsl(220 13% 91%);
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
-}
-body {
-  font-family: var(--font-sans);
-
-
-}
-
-
- html.dark {
-    --sidebar: #111827; /* color exacto de bg-gray-900 */
-
 }
 
 
