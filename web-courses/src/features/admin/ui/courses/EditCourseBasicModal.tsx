@@ -4,7 +4,7 @@ import { Button } from "@/shared/ui/index"
 import { XMarkIcon, ArrowRightIcon } from "@heroicons/react/24/outline"
 import { useEditCourseForm } from "../../hooks/useEditCourseForm"
 import { CourseFormField } from "../courses/CourseFormField"
-import type { Course } from "@/entities/course/model/types"
+import type { Course } from "@/entities/course/types"
 
 interface Props {
   course: Course

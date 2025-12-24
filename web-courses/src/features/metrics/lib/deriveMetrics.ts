@@ -1,7 +1,7 @@
 // features/metrics/lib/deriveMetrics.ts
 import type { User } from '@/entities/user/model/types'
-import type { Course } from '@/entities/course/model/types'
-import type { LessonProgress } from '@/entities/progress/model/types'
+import type { Course } from '@/entities/course/types'
+import type { LessonProgress } from '@/entities/progress/types'
 
 interface DeriveMetricsInput {
   users: User[]

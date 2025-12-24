@@ -1,5 +1,5 @@
 // @/entities/progress/model/mockProgress.ts
-import type { LessonProgress } from "@/entities/progress/model/index"
+import type { LessonProgress } from "@/entities/progress/index"
 import { LOCAL_USER } from "@/shared/mocks/localUser"
 
 export const MOCK_PROGRESS: LessonProgress[] = [

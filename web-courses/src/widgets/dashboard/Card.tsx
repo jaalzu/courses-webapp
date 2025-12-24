@@ -21,10 +21,10 @@ import { useRouter } from "next/navigation"
 import { CheckCircleIcon } from "@heroicons/react/24/solid"
 
 // entities
-import { getLevelConfig } from "@/entities/course/lib/helpers"
-import type { Course } from "@/entities/course/model/types"
+import { getLevelConfig } from "@/entities/course/model/helpers"
+import type { Course } from "@/entities/course/types"
 import { useCourseStore } from "@/entities/course/model/useCourseStore"
-import { useProgressStore, getCourseStats } from "@/entities/progress/model"
+import { useProgressStore, getCourseStats } from "@/entities/progress"
 import { useCurrentUser } from "@/shared/mocks/useCurrentUser" // ✅ IMPORTAR
 
 interface CardProps {

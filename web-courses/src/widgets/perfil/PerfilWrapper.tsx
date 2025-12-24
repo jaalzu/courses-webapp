@@ -1,9 +1,9 @@
 'use client'
 
 import { useCurrentUser } from "@/shared/mocks/useCurrentUser"
-import { useCourses } from "@/entities/course/api/useCourses"
+import { useCourses } from "@/entities/course/useCourses"
 import { useProgressStore } from "@/entities/progress/model/useProgressStore"
-import { getUserProgress } from "@/entities/progress/getUserProgress"
+import { getUserProgress } from "@/entities/progress/lib/getUserProgress"
 import { getUserProfileStats } from "@/features/profile/lib/getUserProfileStats"
 import { Avatar, AvatarFallback, Button } from "@/shared/ui/index"
 import { CheckCircleIcon, ClockIcon, AcademicCapIcon, PencilIcon, CheckIcon, XMarkIcon } from "@heroicons/react/24/outline"

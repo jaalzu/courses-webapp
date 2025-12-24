@@ -1,7 +1,7 @@
 // @/entities/progress/model/index.ts
 
 // Store (estado + acciones)
-export { useProgressStore } from './useProgressStore'
+export { useProgressStore } from './model/useProgressStore'
 
 // Tipos
 export type { LessonProgress, CourseId, LessonId } from './types'

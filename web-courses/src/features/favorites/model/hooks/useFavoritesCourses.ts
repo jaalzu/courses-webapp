@@ -2,7 +2,7 @@
 import { useFavoriteIds } from './useFavoritesIds'
 import { localStorageFavorites } from '@/features/favorites/lib/favoriteStorage'
 import { useCourseStore } from '@/entities/course/model/useCourseStore'
-import type { Course } from '@/entities/course/model/types'
+import type { Course } from '@/entities/course/types'
 
 export function useFavoriteCourses(): { favoriteCourses: Course[] } {
   const { favorites } = useFavoriteIds(localStorageFavorites)

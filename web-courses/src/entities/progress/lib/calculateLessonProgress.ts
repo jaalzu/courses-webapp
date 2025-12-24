@@ -1,4 +1,4 @@
-import type { Lesson } from '@/entities/lesson/model/types'
+import type { Lesson } from '@/entities/lesson/types'
 import type { LessonProgress } from './types'
 
 export function calculateCourseProgress(

@@ -1,5 +1,5 @@
 // @/entities/progress/model/selectors.ts
-import type { LessonProgress, CourseId, LessonId } from './types'
+import type { LessonProgress, CourseId, LessonId } from '../types'
 
 export function isLessonCompleted(
   progress: LessonProgress[],

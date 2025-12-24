@@ -1,4 +1,4 @@
-import type { LessonProgress } from './types'
+import type { LessonProgress } from '../types'
 
 export function toggleLessonProgress(
   progress: LessonProgress[],

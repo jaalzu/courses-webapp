@@ -1,5 +1,5 @@
 import Card from "@/widgets/dashboard/Card"
-import type { Course } from "@/entities/course/model/types"
+import type { Course } from "@/entities/course/types"
 
 type CoursesGridProps = {
   courses: Course[]

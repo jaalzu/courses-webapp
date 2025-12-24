@@ -1,46 +1,51 @@
-// @/entities/progress/model/useProgressStore.ts
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { LessonProgress } from './types'
-import { MOCK_PROGRESS } from '@/shared/mocks/progressMock'
+import type { LessonProgress, CourseId, LessonId } from '../types'
 
-interface ProgressStore {
+interface ProgressState {
   progress: LessonProgress[]
-  markComplete: (userId: string, courseId: number, lessonId: number) => void
-  markIncomplete: (userId: string, courseId: number, lessonId: number) => void
-  resetProgress: (userId?: string, courseId?: number) => void
 }
 
-export const useProgressStore = create<ProgressStore>()(
+interface ProgressActions {
+  toggleLessonProgress: (
+    userId: string,
+    courseId: CourseId,
+    lessonId: LessonId
+  ) => void
+
+  markLessonCompleted: (
+    userId: string,
+    courseId: CourseId,
+    lessonId: LessonId
+  ) => void
+
+  resetUserProgress: (userId: string) => void
+}
+
+export const useProgressStore = create<ProgressState & ProgressActions>()(
   persist(
-    (set) => ({
-      progress: MOCK_PROGRESS,
+    (set, get) => ({
+      progress: [],
 
-      markComplete: (userId, courseId, lessonId) => {
-        if (!userId) {
-          console.error(' markComplete: userId es undefined!')
-          return
-        }
+      toggleLessonProgress: (userId, courseId, lessonId) => {
+        set(state => {
+          const normalizedCourseId =
+            typeof courseId === 'string' ? parseInt(courseId, 10) : courseId
 
-
-        set((state) => {
-          const existing = state.progress.find(
+          const index = state.progress.findIndex(
             p =>
               p.userId === userId &&
-              p.courseId === courseId &&
+              p.courseId === normalizedCourseId &&
               p.lessonId === lessonId
           )
 
-          if (existing) {
-            return {
-              progress: state.progress.map(p =>
-                p.userId === userId &&
-                p.courseId === courseId &&
-                p.lessonId === lessonId
-                  ? { ...p, completed: true, completedAt: new Date() }
-                  : p
-              ),
+          if (index !== -1) {
+            const updated = [...state.progress]
+            updated[index] = {
+              ...updated[index],
+              completed: !updated[index].completed,
             }
+            return { progress: updated }
           }
 
           return {
@@ -48,42 +53,52 @@ export const useProgressStore = create<ProgressStore>()(
               ...state.progress,
               {
                 userId,
-                courseId,
+                courseId: normalizedCourseId,
                 lessonId,
                 completed: true,
-                completedAt: new Date(),
               },
             ],
           }
         })
       },
 
-      markIncomplete: (userId, courseId, lessonId) => {
-        set((state) => ({
-          progress: state.progress.map(p =>
-            p.userId === userId &&
-            p.courseId === courseId &&
-            p.lessonId === lessonId
-              ? { ...p, completed: false, completedAt: undefined }
-              : p
-          ),
-        }))
+      markLessonCompleted: (userId, courseId, lessonId) => {
+        set(state => {
+          const normalizedCourseId =
+            typeof courseId === 'string' ? parseInt(courseId, 10) : courseId
+
+          const exists = state.progress.some(
+            p =>
+              p.userId === userId &&
+              p.courseId === normalizedCourseId &&
+              p.lessonId === lessonId &&
+              p.completed
+          )
+
+          if (exists) return state
+
+          return {
+            progress: [
+              ...state.progress,
+              {
+                userId,
+                courseId: normalizedCourseId,
+                lessonId,
+                completed: true,
+              },
+            ],
+          }
+        })
       },
 
-      resetProgress: (userId, courseId) => {
-        set((state) => ({
-          progress: state.progress.filter(p => {
-            if (userId && p.userId === userId) {
-              if (courseId && p.courseId === courseId) return false
-              if (!courseId) return false
-            }
-            return true
-          }),
+      resetUserProgress: userId => {
+        set(state => ({
+          progress: state.progress.filter(p => p.userId !== userId),
         }))
       },
     }),
     {
-      name: 'progress-storage',
+      name: 'progress-store',
     }
   )
 )

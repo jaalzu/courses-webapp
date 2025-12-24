@@ -1,6 +1,6 @@
 // @/entities/progress/model/helpers.ts
 import type { LessonProgress } from './types'
-import type { Course } from '@/entities/course/model/types'
+import type { Course } from '@/entities/course/types'
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // HELPERS DE LECTURA (no modifican estado)

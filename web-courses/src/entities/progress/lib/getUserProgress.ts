@@ -1,5 +1,5 @@
 // @/entities/progress/lib/getUserProgress.ts
-import type { LessonProgress } from './model/types'
+import type { LessonProgress } from '../types'
 
 export function getUserProgress(
   progress: LessonProgress[],

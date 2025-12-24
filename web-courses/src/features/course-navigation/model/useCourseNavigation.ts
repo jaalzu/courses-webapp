@@ -1,7 +1,7 @@
 // @/features/course-navigation/model/useCourseNavigation.ts
 import { useState } from 'react'
 import { useCourseStore } from '@/entities/course/model/useCourseStore'
-import type { Lesson } from '@/entities/lesson/model/types'
+import type { Lesson } from '@/entities/lesson/types'
 import { 
   getNextLesson, 
   getPreviousLesson, 

@@ -1,7 +1,7 @@
 // @/entities/course/model/useCourseStore.ts
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { Course } from './types'
+import type { Course } from '../types'
 import { MOCK_COURSES as initialCourses } from '@/shared/mocks/curso'
 
 const cloneInitialCourses = (): Course[] =>

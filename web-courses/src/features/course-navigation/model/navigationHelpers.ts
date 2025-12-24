@@ -1,6 +1,6 @@
 // @/features/course-navigation/lib/navigationHelpers.ts
-import type { Lesson } from '@/entities/lesson/model/types'
-import type { Course } from '@/entities/course/model/types'
+import type { Lesson } from '@/entities/lesson/types'
+import type { Course } from '@/entities/course/types'
 
 export function getLessonIndex(course: Course, lessonId: number): number {
   return course.lessons.findIndex(l => l.id === lessonId)

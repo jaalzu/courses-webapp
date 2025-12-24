@@ -2,7 +2,7 @@
 
 import YouTube from "react-youtube";
 import { useRef } from "react";
-import type { Course } from "@/entities/course/model/types"
+import type { Course } from "@/entities/course/types"
 
 import { FavoriteButton } from "@/features/favorites/ui/favoriteButton";
 import { useFavoriteIds } from "@/features/favorites/model/hooks/useFavoritesIds";

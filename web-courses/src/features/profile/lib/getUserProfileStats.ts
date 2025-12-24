@@ -1,7 +1,7 @@
 import type { User } from "@/entities/user/model/types"
-import type { Course } from "@/entities/course/model/types"
-import type { LessonProgress } from "@/entities/progress/model/types"
-import { getCourseStats } from "@/entities/progress/model"
+import type { Course } from "@/entities/course/types"
+import type { LessonProgress } from "@/entities/progress/types"
+import { getCourseStats } from "@/entities/progress"
 
 interface GetUserProfileStatsParams {
   user: User

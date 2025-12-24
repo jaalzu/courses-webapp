@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useCourseStore } from "@/entities/course/model/useCourseStore"
-import type { Course } from "@/entities/course/model/types"
+import type { Course } from "@/entities/course/types"
 
 type EditStep = 'basic' | 'lessons' | 'closed'
 

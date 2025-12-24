@@ -1,5 +1,5 @@
 // entities/user/hooks/useUserList.ts
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import { userStorage } from '../api/userStorage'
 import type { User } from '../model/types'
 import { mockUsers } from '../model/mockUser'

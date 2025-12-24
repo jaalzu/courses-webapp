@@ -1,7 +1,7 @@
 'use client'
 
 import styles from "./lessonList.module.css"
-import type { Lesson } from "@/entities/lesson/model/types"
+import type { Lesson } from "@/entities/lesson/types"
 
 import {
   PlayIcon,
@@ -19,7 +19,7 @@ import {
 } from "@/shared/ui"
 
 import { cn } from "@/shared/lib/utils"
-import { useProgressStore, isLessonCompleted } from "@/entities/progress/model"
+import { useProgressStore, isLessonCompleted } from "@/entities/progress"
 
 interface LessonListProps {
   lessons: Lesson[]
@@ -36,9 +36,11 @@ export function LessonList({
   userId,
   onLessonSelect,
 }: LessonListProps) {
-  // ✅ Estado y acciones del store
+
   const progress = useProgressStore(state => state.progress)
-  const markComplete = useProgressStore(state => state.markComplete)
+const markLessonCompleted = useProgressStore(
+  state => state.markLessonCompleted
+)
 
   // Métricas
   const completedCount = lessons.filter(lesson =>
@@ -154,12 +156,15 @@ export function LessonList({
                     </button>
 
                     {!completed ? (
-                      <button
-                        onClick={() => markComplete(userId, courseId, lesson.id)}
-                        className="w-full bg-green-500 hover:bg-green-400 text-white font-medium py-2 rounded-lg"
-                      >
-                        Marcar como finalizada
-                      </button>
+                     <button
+  onClick={() =>
+    markLessonCompleted(userId, courseId, lesson.id)
+  }
+  className="w-full bg-green-500 hover:bg-green-400 text-white font-medium py-2 rounded-lg"
+>
+  Marcar como finalizada
+</button>
+
                     ) : (
                       <div className="w-full bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300 font-medium py-2 rounded-lg text-center">
                         Lección completada ✅

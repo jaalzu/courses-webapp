@@ -7,7 +7,7 @@ import CourseContent from "@/widgets/courseContent/courseContent"
 import { LessonList } from "@/widgets/lesson-list/lessonList"
 import InstructorCard from "@/widgets/courseContent/instructorCard"
 import { CourseSwitcher } from "@/widgets/courseContent/courseSwitcher"
-import type { Lesson } from "@/entities/lesson/model/types"
+import type { Lesson } from "@/entities/lesson/types"
 import { useCurrentUser } from "@/shared/mocks/useCurrentUser"
 
 interface CoursePageContentProps {
