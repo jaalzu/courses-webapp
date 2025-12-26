@@ -137,7 +137,7 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
                 name="image"
                 value={form.image}
                 onChange={handleChange}
-                placeholder="/images/course.jpg"
+                placeholder="/public/curso1.webp"
               />
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

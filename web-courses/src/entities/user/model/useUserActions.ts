@@ -15,7 +15,7 @@ export function useUserActions() {
     setError(null)
 
     try {
-      // 🔮 FUTURO SUPABASE
+      //  FUTURO SUPABASE
       /*
       const { error } = await supabase
         .from('users')

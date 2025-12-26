@@ -110,7 +110,7 @@ export default function Card({
               ? courseData.image.startsWith("/")
                 ? courseData.image
                 : `/${courseData.image}`
-              : "/curso1.jpg"
+              : "/curso1.webp"
           }
           alt={courseData.title}
           width={400}

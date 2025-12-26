@@ -88,7 +88,7 @@ export default function EditCourseBasicModal({ course, isOpen, onClose, onNext }
             name="image"
             value={formData.image}
             onChange={handleChange}
-            placeholder="/images/course.jpg"
+                placeholder="/public/curso1.webp"
           />
 
           <CourseFormField
