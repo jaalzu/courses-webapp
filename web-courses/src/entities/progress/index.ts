@@ -1,4 +1,3 @@
-// @/entities/progress/model/index.ts
 
 // Store (estado + acciones)
 export { useProgressStore } from './model/useProgressStore'

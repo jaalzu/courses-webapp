@@ -1,5 +1,5 @@
 import type { Lesson } from '@/entities/lesson/types'
-import type { LessonProgress } from './types'
+import type { LessonProgress } from '.././index'
 
 export function calculateCourseProgress(
   lessons: Lesson[],
