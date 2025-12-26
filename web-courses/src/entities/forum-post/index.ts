@@ -1,1 +1,1 @@
-export type { ForumPost, ForumComment } from './model/types'
+export type { ForumPost, ForumComment } from './types'
