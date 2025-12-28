@@ -1,84 +1,86 @@
-import { supabase } from '@/shared/lib/supabase/client';
 import { authQueries } from '@/shared/lib/supabase/queries/auth';
+import { profileQueries } from '@/shared/lib/supabase/queries/profiles';
+import { mapProfileToUser, mapUserToProfileUpdate } from './mappers/profileMapper';
+import { supabase } from '@/shared/lib/supabase/client';
 import type { User } from '@/entities/user/model/types';
 
 export const authService = {
-  // Registrar nuevo usuario
+  /**
+   * Registrar nuevo usuario
+   */
   signUp: async (email: string, password: string, name: string) => {
     const { data, error } = await authQueries.signUp(email, password, {
       name,
     });
 
     if (error) throw error;
-
     return data;
   },
 
-  // Iniciar sesión
+  /**
+   * Iniciar sesión con email/password
+   */
   signIn: async (email: string, password: string) => {
-    const { data, error } = await authQueries.signIn(email, password);
+    // 1. Autenticar con Supabase
+    const { data: authData, error: authError } = await authQueries.signIn(email, password);
+    if (authError) throw authError;
+    if (!authData.user) throw new Error('No user returned from auth');
 
-    if (error) throw error;
+    // 2. Obtener perfil completo
+    const { data: profile, error: profileError } = await profileQueries.getById(authData.user.id);
+    if (profileError) throw profileError;
+    if (!profile) throw new Error('Profile not found');
 
-    // Obtener el perfil del usuario desde la tabla profiles
-    if (data.user) {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', data.user.id)
-        .single();
-
-      return {
-        session: data.session,
-        user: profile ? mapProfileToUser(profile) : null,
-      };
-    }
-
-    return { session: data.session, user: null };
+    // 3. Retornar sesión + usuario mapeado
+    return {
+      session: authData.session,
+      user: mapProfileToUser(profile),
+    };
   },
 
-  // Cerrar sesión
+  /**
+   * Cerrar sesión
+   */
   signOut: async () => {
     const { error } = await authQueries.signOut();
     if (error) throw error;
   },
 
-  // Obtener usuario actual
+  /**
+   * Obtener usuario actual
+   */
   getCurrentUser: async (): Promise<User | null> => {
-    const { data } = await authQueries.getCurrentUser();
-    
-    if (!data) return null;
+    // 1. Verificar que hay sesión activa
+    const { data: authData } = await authQueries.getCurrentUser();
+    if (!authData) return null;
 
-    // Obtener perfil completo
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', data.id)
-      .single();
+    // 2. Obtener perfil completo
+    const { data: profile, error } = await profileQueries.getById(authData.id);
+    if (error || !profile) return null;
 
-    if (!profile) return null;
-
+    // 3. Mapear y retornar
     return mapProfileToUser(profile);
   },
 
-  // Actualizar perfil
+  /**
+   * Actualizar perfil del usuario
+   */
   updateProfile: async (userId: string, updates: Partial<User>) => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .update({
-        name: updates.name,
-        avatar_url: updates.avatar,
-        role: updates.role,
-      })
-      .eq('id', userId)
-      .select()
-      .single();
+    // 1. Mapear updates al formato de Supabase
+    const supabaseUpdates = mapUserToProfileUpdate(updates);
 
+    // 2. Actualizar en Supabase
+    const { data, error } = await profileQueries.update(userId, supabaseUpdates);
     if (error) throw error;
+    if (!data) throw new Error('No data returned from update');
+
+    // 3. Retornar usuario actualizado mapeado
     return mapProfileToUser(data);
   },
 
-  // Iniciar sesión con Google
+  /**
+   * Iniciar sesión con Google OAuth
+   */
   signInWithGoogle: async () => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
@@ -91,16 +93,3 @@ export const authService = {
     return data;
   },
 };
-
-// Helper para mapear el perfil de Supabase a  tipo User
-function mapProfileToUser(profile: any): User {
-  return {
-    id: profile.id,
-    name: profile.name || '',
-    email: profile.email,
-    role: profile.role as 'student' | 'admin',
-    avatar: profile.avatar_url || undefined,
-    createdAt: new Date(profile.created_at),
-    assignedCourses: [], // Por ahora vacío
-  };
-}

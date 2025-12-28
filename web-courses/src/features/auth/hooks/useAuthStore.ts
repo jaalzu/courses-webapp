@@ -62,7 +62,7 @@ export const useAuthStore = create<AuthStore>()(
           // Después del registro, hacer login automático
           await get().login(email, password);
         } catch (error: any) {
-          console.error('❌ Error en registro:', error.message);
+          console.error(' Error en registro:', error.message);
           throw error;
         } finally {
           set({ isLoading: false });
@@ -76,7 +76,7 @@ export const useAuthStore = create<AuthStore>()(
           await authService.signInWithGoogle();
           // El redirect se maneja automáticamente
         } catch (error: any) {
-          console.error('❌ Error en login con Google:', error.message);
+          console.error(' Error en login con Google:', error.message);
           throw error;
         } finally {
           set({ isLoading: false });
@@ -86,14 +86,14 @@ export const useAuthStore = create<AuthStore>()(
       // Logout
       logout: async () => {
         try {
-          console.log('👋 Cerrando sesión');
+          console.log(' Cerrando sesión');
           await authService.signOut();
           set({
             currentUser: null,
             isAuthenticated: false,
           });
         } catch (error: any) {
-          console.error('❌ Error en logout:', error.message);
+          console.error(' Error en logout:', error.message);
           throw error;
         }
       },
@@ -133,7 +133,7 @@ export const useAuthStore = create<AuthStore>()(
             });
           }
         } catch (error) {
-          console.error('❌ Error verificando auth:', error);
+          console.error(' Error verificando auth:', error);
           set({
             currentUser: null,
             isAuthenticated: false,
