@@ -1,10 +1,16 @@
+// app/(dashboard)/layout.tsx
 'use client'
 
 import { useEffect, useState } from "react"
+import dynamic from 'next/dynamic' // ← Agregar
 import { SidebarProvider } from "@/widgets/sidebar/sidebar"
 import { AppSidebar } from "@/widgets/sidebar/app-sidebar"
-import { Navbar } from "@/widgets/navbar/navbar"
 
+// ← Importar dinámicamente el Navbar
+const Navbar = dynamic(() => import("@/widgets/navbar/navbar").then(mod => ({ default: mod.Navbar })), {
+  ssr: false, // No renderizar en servidor
+  loading: () => <div className="h-13" /> // Placeholder mientras carga
+})
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [isDark, setIsDark] = useState<boolean | null>(null)
@@ -29,18 +35,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen ">
-        {/* Sidebar fijo en desktop */}
+      <div className="flex min-h-screen">
         <div className="hidden md:flex">
           <AppSidebar />
         </div>
 
-        {/* Contenido principal */}
         <div className="flex-1 flex flex-col w-full min-w-0">
-          {/* Navbar */}
           <Navbar onToggleTheme={toggleTheme} isDark={isDark} />
 
-          {/* Main content */}
           <main className="flex-1 relative">
             {children}
           </main>
