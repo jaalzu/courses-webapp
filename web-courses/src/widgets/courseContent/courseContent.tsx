@@ -38,7 +38,7 @@ export default function CourseContent({
   };
 
   return (
-    <section className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-6 space-y-6 w-full">
+    <section className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-4 md:p-5 space-y-6 w-full">
       {/* Título y favorito */}
       <div className="flex items-start justify-between">
         <div>
@@ -61,7 +61,7 @@ export default function CourseContent({
       {/* Video */}
       {videoToPlay && (
         <div className="w-full rounded-lg overflow-hidden shadow-sm">
-          <div className="relative w-full pb-[88%] sm:pb-[60%] md:pb-[68.25%]">
+          <div className="relative w-full pb-[90%] sm:pb-[60%] md:pb-[68.25%]">
             <YouTube
               videoId={extractVideoId(videoToPlay)}
               onReady={handleReady}
@@ -82,7 +82,7 @@ export default function CourseContent({
         <h2 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
           Descripción del curso
         </h2>
-        <p className="text-gray-700 text-sm leading-relaxed dark:text-blue-100 break-words whitespace-normal">
+        <p className="text-gray-800 text-sm leading-relaxed dark:text-blue-100 break-words whitespace-normal">
           {course.description}
         </p>
       </div>
@@ -93,7 +93,7 @@ export default function CourseContent({
           <h3 className="text-md font-semibold mb-2 text-gray-900 dark:text-white">
             Puntos clave
           </h3>
-          <ul className="list-disc list-inside text-sm text-gray-600 dark:text-blue-100 space-y-1">
+          <ul className="list-disc list-inside text-sm text-gray-700 dark:text-blue-100 space-y-3">
             {course.keyPoints.map((point, i) => (
               <li key={i}>{point}</li>
             ))}

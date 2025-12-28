@@ -92,7 +92,7 @@ export const authService = {
   },
 };
 
-// Helper para mapear el perfil de Supabase a tu tipo User
+// Helper para mapear el perfil de Supabase a tipo User
 function mapProfileToUser(profile: any): User {
   return {
     id: profile.id,
@@ -101,6 +101,6 @@ function mapProfileToUser(profile: any): User {
     role: profile.role as 'student' | 'admin',
     avatar: profile.avatar_url || undefined,
     createdAt: new Date(profile.created_at),
-    assignedCourses: [], // Por ahora vacío, lo llenarás después si lo necesitas
+    assignedCourses: [], // Por ahora vacío
   };
 }

@@ -45,7 +45,7 @@ export default function CoursePageContent({ courseId }: CoursePageContentProps) 
         <CourseSwitcher currentCourseId={courseId} />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-6">
         <CourseContent
           course={course}
           currentVideoUrl={currentVideoUrl} 
