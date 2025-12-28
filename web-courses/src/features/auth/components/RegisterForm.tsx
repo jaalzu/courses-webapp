@@ -8,6 +8,8 @@ import { UserIcon, LockIcon, EnvelopeIcon } from "./icons/icons"
 import Image from 'next/image'
 import { useAuthStore } from "@/features/auth/hooks/useAuthStore"
 
+
+
 export function RegisterForm() {
   const router = useRouter()
   const { register, loginWithGoogle, isLoading } = useAuthStore()
