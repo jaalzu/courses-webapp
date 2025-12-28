@@ -5,7 +5,6 @@ import { SidebarProvider } from "@/widgets/sidebar/sidebar"
 import { AppSidebar } from "@/widgets/sidebar/app-sidebar"
 import { Navbar } from "@/widgets/navbar/navbar"
 
-export const dynamic = 'force-dynamic' // ← Agregá esta línea al principio
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [isDark, setIsDark] = useState<boolean | null>(null)
