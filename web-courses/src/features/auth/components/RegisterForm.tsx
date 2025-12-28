@@ -7,6 +7,7 @@ import { Input } from "@/shared/ui/index"
 import { UserIcon, LockIcon, EnvelopeIcon } from "./icons/icons"
 import Image from 'next/image'
 import { useAuthStore } from "@/features/auth/hooks/useAuthStore"
+import { getAuthErrorMessage } from '@/shared/lib/supabase/errorHandler'
 
 
 
@@ -39,17 +40,17 @@ export function RegisterForm() {
       await register(email, password, name)
       router.push("/dashboard") // Redirigir al dashboard
     } catch (err: any) {
-      setError(err.message || "Error al crear la cuenta")
-    }
+  setError(getAuthErrorMessage(err))
+}
   }
 
   const handleGoogleLogin = async () => {
     try {
       await loginWithGoogle()
       // El redirect lo maneja Supabase
-    } catch (err: any) {
-      setError(err.message || "Error con Google")
-    }
+   } catch (err: any) {
+  setError(getAuthErrorMessage(err))
+}
   }
 
   return (

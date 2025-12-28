@@ -7,6 +7,7 @@ import { Input } from "@/shared/ui/index"
 import { LockIcon, EnvelopeIcon } from "./icons/icons"
 import Image from 'next/image'
 import { useAuthStore } from "@/features/auth/hooks/useAuthStore"
+import { getAuthErrorMessage } from '@/shared/lib/supabase/errorHandler'
 
 
 
@@ -26,8 +27,8 @@ export function LoginForm() {
       await login(email, password)
       router.push("/dashboard") // Redirigir al dashboard
     } catch (err: any) {
-      setError(err.message || "Error al iniciar sesión")
-    }
+  setError(getAuthErrorMessage(err))
+}
   }
 
   const handleGoogleLogin = async () => {
@@ -35,8 +36,8 @@ export function LoginForm() {
       await loginWithGoogle()
       // El redirect lo maneja Supabase
     } catch (err: any) {
-      setError(err.message || "Error con Google")
-    }
+  setError(getAuthErrorMessage(err))
+}
   }
 
   return (

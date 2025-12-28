@@ -2,9 +2,11 @@
 
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation" // ← AGREGAR
 import { Button } from "@/shared/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/index"
 import { SidebarTrigger } from "@/widgets/sidebar/sidebar"
+import { useAuthStore } from '@/features/auth/hooks/useAuthStore' // ← AGREGAR
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,7 +22,6 @@ import {
   TooltipTrigger,
 } from "@/shared/ui/tooltip"
 
-
 import {
   MoonIcon,
   SunIcon,
@@ -35,16 +36,22 @@ export function Navbar({
   onToggleTheme: () => void
   isDark: boolean
 }) {
+  const router = useRouter() 
+  const { logout, currentUser } = useAuthStore() 
+
+  const handleLogout = async () => {
+    await logout()
+    router.push('/login')
+  }
+
   return (
     <nav className="bg-white dark:bg-gray-900 shadow-sm sticky top-0 z-50 border-b border-gray-100 dark:border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-13 items-center">
-          {/* Mobile: botón sidebar */}
           <div className="md:hidden">
             <SidebarTrigger />
           </div>
 
-          {/* Logo + texto */}
           <Link
             href="/"
             className="md:flex-1 flex items-center justify-center md:justify-start gap-2"
@@ -63,55 +70,52 @@ export function Navbar({
             </span>
           </Link>
 
-          {/* Botón tema + Avatar */}
           <div className="flex items-center gap-2 md:gap-3">
-            {/* Modo oscuro / claro */}
             <TooltipProvider>
-  <Tooltip>
-    <TooltipTrigger asChild>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={onToggleTheme}
-        className="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-      >
-        {isDark ? (
-          <SunIcon className="!w-5.5 !h-5.5 text-gray-600 dark:text-gray-100" />
-        ) : (
-          <MoonIcon className="!w-5.5 !h-5.5 text-gray-600 dark:text-gray-100" />
-        )}
-      </Button>
-    </TooltipTrigger>
-    <TooltipContent>
-      <p>{isDark ? "Modo claro" : "Modo oscuro"}</p>
-    </TooltipContent>
-  </Tooltip>
-</TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={onToggleTheme}
+                    className="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  >
+                    {isDark ? (
+                      <SunIcon className="!w-5.5 !h-5.5 text-gray-600 dark:text-gray-100" />
+                    ) : (
+                      <MoonIcon className="!w-5.5 !h-5.5 text-gray-600 dark:text-gray-100" />
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{isDark ? "Modo claro" : "Modo oscuro"}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
 
-            {/* Avatar con menú */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-    <Button
-      variant="ghost"
-      className="relative h-10 w-10 rounded-full p-0 cursor-pointer 
-                 hover:scale-105 transition-transform duration-200 
-                 focus-visible:ring-0 focus-visible:ring-offset-0 
-                 focus:outline-none"
-    >
-      <Avatar className="h-10 w-10">
-        <AvatarImage src="/avatar.webp" alt="Usuario" />
-        <AvatarFallback className="bg-primary text-white dark:text-black dark:bg-white">
-          JD
-        </AvatarFallback>
-      </Avatar>
-    </Button>
-  </DropdownMenuTrigger>
+                <Button
+                  variant="ghost"
+                  className="relative h-10 w-10 rounded-full p-0 cursor-pointer 
+                             hover:scale-105 transition-transform duration-200 
+                             focus-visible:ring-0 focus-visible:ring-offset-0 
+                             focus:outline-none"
+                >
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage src={currentUser?.avatar || "/avatar.webp"} alt="Usuario" />
+                    <AvatarFallback className="bg-primary text-white dark:text-black dark:bg-white">
+                      {currentUser?.name?.charAt(0).toUpperCase() || 'U'}
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
 
               <DropdownMenuContent align="end" className="w-56">
                 <div className="flex items-center justify-start gap-2 p-2">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium">Juan Pérez</p>
-                    <p className="text-xs text-gray-500">juan@ejemplo.com</p>
+                    <p className="text-sm font-medium">{currentUser?.name || 'Usuario'}</p>
+                    <p className="text-xs text-gray-500">{currentUser?.email || ''}</p>
                   </div>
                 </div>
 
@@ -126,7 +130,10 @@ export function Navbar({
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem className="cursor-pointer text-red-600">
+                <DropdownMenuItem 
+                  className="cursor-pointer text-red-600"
+                  onClick={handleLogout}
+                >
                   <ArrowRightStartOnRectangleIcon className="mr-2 h-4 w-4" />
                   Cerrar sesión
                 </DropdownMenuItem>

@@ -26,7 +26,6 @@ export const useAuthStore = create<AuthStore>()(
       isLoading: false,
 
       setCurrentUser: (user) => {
-        console.log('✅ Usuario establecido:', user);
         set({
           currentUser: user,
           isAuthenticated: true,
@@ -38,7 +37,6 @@ export const useAuthStore = create<AuthStore>()(
         try {
           set({ isLoading: true });
           const { user } = await authService.signIn(email, password);
-          
           if (user) {
             set({
               currentUser: user,
@@ -46,9 +44,9 @@ export const useAuthStore = create<AuthStore>()(
             });
           }
         } catch (error: any) {
-          console.error(' Error en login:', error.message);
           throw error;
         } finally {
+
           set({ isLoading: false });
         }
       },
@@ -62,7 +60,6 @@ export const useAuthStore = create<AuthStore>()(
           // Después del registro, hacer login automático
           await get().login(email, password);
         } catch (error: any) {
-          console.error(' Error en registro:', error.message);
           throw error;
         } finally {
           set({ isLoading: false });
@@ -76,7 +73,6 @@ export const useAuthStore = create<AuthStore>()(
           await authService.signInWithGoogle();
           // El redirect se maneja automáticamente
         } catch (error: any) {
-          console.error(' Error en login con Google:', error.message);
           throw error;
         } finally {
           set({ isLoading: false });
@@ -93,7 +89,6 @@ export const useAuthStore = create<AuthStore>()(
             isAuthenticated: false,
           });
         } catch (error: any) {
-          console.error(' Error en logout:', error.message);
           throw error;
         }
       },
@@ -110,7 +105,6 @@ export const useAuthStore = create<AuthStore>()(
             currentUser: updatedUser,
           });
         } catch (error: any) {
-          console.error('❌ Error actualizando perfil:', error.message);
           throw error;
         }
       },
@@ -133,7 +127,6 @@ export const useAuthStore = create<AuthStore>()(
             });
           }
         } catch (error) {
-          console.error(' Error verificando auth:', error);
           set({
             currentUser: null,
             isAuthenticated: false,
