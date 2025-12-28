@@ -18,15 +18,25 @@ export async function GET(request: Request) {
             return cookieStore.getAll()
           },
           setAll(cookiesToSet) {
-            cookiesToSet.forEach(({ name, value, options }) => {
-              cookieStore.set({ name, value, ...options })
-            })
+            try {
+              cookiesToSet.forEach(({ name, value, options }) => {
+                cookieStore.set(name, value, options) // ← FIX: así es la sintaxis correcta
+              })
+            } catch (error) {
+              // En algunos casos Next.js no permite set en route handlers
+              console.error('Error setting cookies:', error)
+            }
           },
         },
       }
     )
 
-    await supabase.auth.exchangeCodeForSession(code)
+    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    
+    if (error) {
+      console.error('Error exchanging code:', error)
+      return NextResponse.redirect(new URL('/login?error=auth_error', request.url))
+    }
   }
 
   return NextResponse.redirect(new URL('/dashboard', request.url))

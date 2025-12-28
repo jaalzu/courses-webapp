@@ -92,7 +92,7 @@ export const authService = {
   },
 };
 
-// Helper para mapear el perfil de Supabase a tipo User
+// Helper para mapear el perfil de Supabase a  tipo User
 function mapProfileToUser(profile: any): User {
   return {
     id: profile.id,
