@@ -1,6 +1,7 @@
 'use client'
 
 import { CoursesDashboard } from "@/widgets/dashboard/CoursesDashboard"
+
 export const dynamic = 'force-dynamic'
 
 
