@@ -5,6 +5,8 @@ import CourseNotFound from "@/widgets/courseContent/courseNotFound"
 import CoursePageContent from "@/widgets/courseContent/coursePageContent"
 import { useCourseStore } from "@/entities/course/model/useCourseStore"
 
+export const dynamic = 'force-dynamic'
+
 export default function CoursePage() {
   const { id } = useParams()
   const courseId = Number(id)

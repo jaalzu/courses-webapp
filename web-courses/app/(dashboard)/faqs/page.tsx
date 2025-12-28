@@ -2,6 +2,8 @@
 
 import { FAQWrapper } from '@/widgets/faqs/FAQWrapper'
 
+export const dynamic = 'force-dynamic' // ← En cada una
+
 export default function FAQPage() {
   return (
     <main className="min-h-screen p-5 pt-12 md:p-12">

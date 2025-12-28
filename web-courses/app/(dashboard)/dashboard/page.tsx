@@ -1,7 +1,8 @@
 'use client'
 
 import { CoursesDashboard } from "@/widgets/dashboard/CoursesDashboard"
-export const dynamic = 'force-dynamic' // ← Agregá esta línea al principio
+export const dynamic = 'force-dynamic'
+
 
 export default function DashboardPage() {
   return <CoursesDashboard />
