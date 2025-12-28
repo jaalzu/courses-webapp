@@ -46,7 +46,7 @@ export const useAuthStore = create<AuthStore>()(
             });
           }
         } catch (error: any) {
-          console.error('❌ Error en login:', error.message);
+          console.error(' Error en login:', error.message);
           throw error;
         } finally {
           set({ isLoading: false });
