@@ -104,7 +104,8 @@ export default function CourseContent({
   );
 }
 
-function extractVideoId(url: string): string {
-  const match = url.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/);
-  return match ? match[1] : url;
+function extractVideoId(url: string | undefined): string {
+  if (!url) return "";
+  const match = url.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([a-zA-Z0-9_-]{11})/);
+  return match ? match[1] : url; 
 }

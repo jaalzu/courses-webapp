@@ -1,5 +1,5 @@
 export interface Lesson {
-  id: string
+  id: string   
   title: string
   duration: string
   videoUrl?: string 

@@ -50,7 +50,7 @@ export default function Card({
 }: CardProps) {
   const router = useRouter()
 
-  // ✅ OBTENER USUARIO si no se pasa como prop
+  // j OBTENER USUARIO si no se pasa como prop
   const currentUser = useCurrentUser()
   const actualUserId = userId || currentUser.id
 
@@ -63,7 +63,7 @@ export default function Card({
   // Cursos
   const deleteCourse = useCourseStore(state => state.deleteCourse)
 
-  // ✅ Progreso: leer estado + calcular stats
+  //  Progreso: leer estado + calcular stats
   const progress = useProgressStore(state => state.progress)
   const stats = getCourseStats(courseData, progress, actualUserId) // ✅ USAR actualUserId
 

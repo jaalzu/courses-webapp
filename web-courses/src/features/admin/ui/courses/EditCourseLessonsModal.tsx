@@ -29,7 +29,7 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
 
   // Estado para lecciones
   const [lessons, setLessons] = useState<Lesson[]>(course.lessons || [])
-  const [editingLesson, setEditingLesson] = useState<number | null>(null)
+  const [editingLesson, setEditingLesson] = useState<number | string | null>(null)
 
   // Form para punto clave
   const [keyPointInput, setKeyPointInput] = useState('')
@@ -60,19 +60,19 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
 
   // ===== FUNCIONES PARA LECCIONES =====
   const handleAddLesson = () => {
-    if (!lessonForm.title.trim() || !lessonForm.duration.trim()) return
+  if (!lessonForm.title.trim() || !lessonForm.duration.trim()) return
 
-    const newLesson: Lesson = {
-      id: Date.now(),
-      title: lessonForm.title,
-      duration: lessonForm.duration,
-      videoUrl: lessonForm.videoUrl,
-      // timestamps: []
-    }
-
-    setLessons([...lessons, newLesson])
-    setLessonForm({ title: '', duration: '', videoUrl: '' })
+  const newLesson: Lesson = {
+    // Genera un string único tipo: "123e4567-e89b-12d3-a456-426614174000"
+    id: crypto.randomUUID(), 
+    title: lessonForm.title,
+    duration: lessonForm.duration,
+    videoUrl: lessonForm.videoUrl,
   }
+
+  setLessons([...lessons, newLesson])
+  setLessonForm({ title: '', duration: '', videoUrl: '' })
+}
 
   const handleEditLesson = (lesson: Lesson) => {
     setEditingLesson(lesson.id)
@@ -95,7 +95,7 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
     setLessonForm({ title: '', duration: '', videoUrl: '' })
   }
 
-  const handleDeleteLesson = (id: number) => {
+  const handleDeleteLesson = (id: number | string) => {
     setLessons(lessons.filter(l => l.id !== id))
   }
 
