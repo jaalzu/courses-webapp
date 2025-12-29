@@ -8,9 +8,12 @@ export function useEditCourseFlow() {
   const getCourse = useCourseStore(state => state.getCourseById)
 
   const [step, setStep] = useState<EditStep>('closed')
-  const [courseId, setCourseId] = useState<number | null>(null)
+  
+  // 1. Cambiamos el estado inicial a string
+  const [courseId, setCourseId] = useState<string | null>(null)
 
-  const open = (id: number) => {
+  // 2. La función open ahora recibe un string (el UUID)
+  const open = (id: string) => {
     setCourseId(id)
     setStep('basic')
   }
@@ -28,6 +31,7 @@ export function useEditCourseFlow() {
     setStep('closed')
   }
 
+  // 3. getCourse(courseId) ahora funcionará perfecto porque ambos son strings
   const course: Course | undefined = courseId !== null ? getCourse(courseId) : undefined
 
   return {

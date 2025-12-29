@@ -29,7 +29,7 @@ import { useCurrentUser } from "@/shared/mocks/useCurrentUser" // ✅ IMPORTAR
 
 interface CardProps {
   userId?: string // ✅ HACER OPCIONAL
-  courseId: number
+  courseId: string
   href: string
   className?: string
   level: "beginner" | "intermediate" | "advanced"
@@ -104,19 +104,14 @@ export default function Card({
         onClick={handleEnterCourse}
         className="bg-white dark:bg-gray-900 rounded-md overflow-hidden flex flex-col h-full transition-shadow shadow-sm hover:shadow-md border"
       >
-        <Image
-          src={
-            courseData.image
-              ? courseData.image.startsWith("/")
-                ? courseData.image
-                : `/${courseData.image}`
-              : "/curso1.webp"
-          }
-          alt={courseData.title}
-          width={400}
-          height={200}
-          className="w-full h-40 object-cover"
-        />
+       <Image
+  src={courseData.image || "/curso1.webp"} // Si hay imagen, usala (sea URL o local). Si no, usa el placeholder.
+  alt={courseData.title}
+  width={400}
+  height={200}
+  className="w-full h-40 object-cover"
+  unoptimized // Opcional: útil si Next.js se queja de las imágenes externas de Supabase
+/>
 
         <div className="p-4 flex flex-col flex-1 justify-between">
           <div>

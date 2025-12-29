@@ -1,21 +1,30 @@
-// @/entities/course/model/useCourseStore.ts
 import { create } from 'zustand'
 import type { Course } from '../types'
 import { courseQueries } from '@/shared/lib/supabase/queries/courses'
+import { getCourseImage } from '@/shared/lib/supabase/storage' // <-- Importa tu helper
 
 interface CourseStore {
   courses: Course[]
   isLoading: boolean
   error: string | null
-  
   fetchCourses: () => Promise<void>
   addCourse: (course: Omit<Course, 'id'>) => Promise<void>
   updateCourse: (courseId: string, updates: Partial<Course>) => Promise<void>
   deleteCourse: (courseId: string) => Promise<void>
-  
   getCourseById: (courseId: string) => Course | undefined
-  resetError: () => void
 }
+
+// Función helper interna para no repetir la lógica de mapeo
+const mapVisualData = (dbData: any): Course => ({
+  ...dbData,
+  // Transformamos thumbnail_url de la DB en la propiedad image que usa el front
+  image: getCourseImage(dbData.thumbnail_url),
+  // Aseguramos que las lecciones no rompan si vienen null y mapeamos sus videos
+  lessons: (dbData.lessons || []).map((l: any) => ({
+    ...l,
+    videoUrl: l.video_url || ''
+  }))
+})
 
 export const useCourseStore = create<CourseStore>((set, get) => ({
   courses: [],
@@ -29,12 +38,13 @@ export const useCourseStore = create<CourseStore>((set, get) => ({
     if (error) {
       set({ error: error.message, isLoading: false })
     } else {
-      // Solución al error de "overlap": convertimos a unknown y luego a Course[]
+      // Mapeamos todo el array de cursos
+      const formattedCourses = (data as any[]).map(mapVisualData)
       set({ 
-        courses: (data as unknown) as Course[], 
+        courses: formattedCourses, 
         isLoading: false 
       })
-    } 
+    }
   },
 
   addCourse: async (newCourse) => {
@@ -45,7 +55,7 @@ export const useCourseStore = create<CourseStore>((set, get) => ({
       set({ error: error.message, isLoading: false })
     } else if (data) {
       set((state) => ({ 
-        courses: [(data as unknown) as Course, ...state.courses], 
+        courses: [mapVisualData(data), ...state.courses], 
         isLoading: false 
       }))
     }
@@ -57,10 +67,10 @@ export const useCourseStore = create<CourseStore>((set, get) => ({
 
     if (error) {
       set({ error: error.message, isLoading: false })
-    } else {
+    } else if (data) {
       set((state) => ({
         courses: state.courses.map((c) => 
-          c.id === courseId ? { ...c, ...((data as unknown) as Course) } : c
+          c.id === courseId ? mapVisualData(data) : c
         ),
         isLoading: false
       }))
@@ -81,9 +91,5 @@ export const useCourseStore = create<CourseStore>((set, get) => ({
     }
   },
 
-  getCourseById: (courseId) => {
-    return get().courses.find((c) => c.id === courseId)
-  },
-
-  resetError: () => set({ error: null })
+  getCourseById: (courseId) => get().courses.find((c) => c.id === courseId),
 }))

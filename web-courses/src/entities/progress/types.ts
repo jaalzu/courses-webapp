@@ -2,11 +2,11 @@
 
 export interface LessonProgress {
   userId: string
-  courseId: number
-  lessonId: number
+  courseId: string
+  lessonId: string ;
   completed: boolean
   completedAt?: Date
 }
 
-export type CourseId = number
-export type LessonId = number
+export type CourseId = string
+export type LessonId = string

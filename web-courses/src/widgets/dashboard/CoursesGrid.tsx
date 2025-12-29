@@ -3,7 +3,7 @@ import type { Course } from "@/entities/course/types"
 
 type CoursesGridProps = {
   courses: Course[]
-  onEdit: (id: number) => void
+  onEdit: (id: string | number) => void
 }
 
 export function CoursesGrid({ courses, onEdit }: CoursesGridProps) {

@@ -1,11 +1,13 @@
-// @/entities/progress/model/selectors.ts
-import type { LessonProgress, CourseId, LessonId } from '../types'
+import type { LessonProgress } from '../types'
 
+/**
+ * Verifica si una lección está completada
+ */
 export function isLessonCompleted(
   progress: LessonProgress[],
   userId: string,
-  courseId: CourseId,
-  lessonId: LessonId
+  courseId: string, 
+  lessonId: string
 ): boolean {
   return progress.some(
     p =>
@@ -16,38 +18,38 @@ export function isLessonCompleted(
   )
 }
 
+/**
+ * Obtiene el progreso de un curso específico
+ */
 export function getCourseProgress(
   progress: LessonProgress[],
   userId: string,
-  courseId: CourseId
+  courseId: string
 ): LessonProgress[] {
-  const normalizedCourseId = typeof courseId === 'string' 
-    ? parseInt(courseId, 10) 
-    : courseId
-
+  // 🚩 BORRAMOS el parseInt. Ya no necesitamos normalizar nada.
   return progress.filter(
     p =>
       p.userId === userId &&
-      p.courseId === normalizedCourseId &&
+      p.courseId === courseId &&
       p.completed
   )
 }
 
+/**
+ * Cuenta lecciones completadas
+ */
 export function getCompletedLessonsCount(
   progress: LessonProgress[],
   userId: string,
-  courseId?: CourseId
+  courseId?: string
 ): number {
   const userProgress = progress.filter(
     p => p.userId === userId && p.completed
   )
 
   if (courseId !== undefined) {
-    const normalizedCourseId = typeof courseId === 'string' 
-      ? parseInt(courseId, 10) 
-      : courseId
-
-    return userProgress.filter(p => p.courseId === normalizedCourseId).length
+    //  Comparamos string con string directamente
+    return userProgress.filter(p => p.courseId === courseId).length
   }
 
   return userProgress.length

@@ -23,8 +23,8 @@ import { useProgressStore, isLessonCompleted } from "@/entities/progress"
 
 interface LessonListProps {
   lessons: Lesson[]
-  currentLessonId: number
-  courseId: number
+  currentLessonId: string | number;
+  courseId: string
   userId: string
   onLessonSelect: (lesson: Lesson) => void
 }

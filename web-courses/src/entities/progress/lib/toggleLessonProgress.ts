@@ -3,8 +3,8 @@ import type { LessonProgress } from '../types'
 export function toggleLessonProgress(
   progress: LessonProgress[],
   userId: string,
-  courseId: number,
-  lessonId: number
+  courseId: string,
+  lessonId: string 
 ): LessonProgress[] {
   const existing = progress.find(
     p =>

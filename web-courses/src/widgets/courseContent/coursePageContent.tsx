@@ -11,11 +11,12 @@ import type { Lesson } from "@/entities/lesson/types"
 import { useCurrentUser } from "@/shared/mocks/useCurrentUser"
 
 interface CoursePageContentProps {
-  courseId: number
+  courseId: string
 }
 
 export default function CoursePageContent({ courseId }: CoursePageContentProps) {
   const [currentVideoUrl, setCurrentVideoUrl] = useState<string | undefined>()
+  
 
   const currentUser = useCurrentUser()
   const userId = currentUser?.id || "user-default"

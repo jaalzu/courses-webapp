@@ -5,7 +5,7 @@ import { useCourseStore } from "@/entities/course/model/useCourseStore"
 import styles from "./courseSwitcher.module.css"
 
 interface Props {
-  currentCourseId: number
+  currentCourseId: string
 }
 
 export function CourseSwitcher({ currentCourseId }: Props) {

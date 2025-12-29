@@ -6,8 +6,8 @@ export const courseQueries = {
     const { data, error } = await supabase
       .from('courses')
       .select('*, lessons(*)')
-      .order('created_at', { ascending: false });
-    
+.order('created_at', { ascending: true }) // O por 'title'  
+  
     return { data, error };
   },
 

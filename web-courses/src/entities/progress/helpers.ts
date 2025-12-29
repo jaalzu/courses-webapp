@@ -12,8 +12,8 @@ import type { Course } from '@/entities/course/types'
 export function isLessonCompleted(
   progress: LessonProgress[],
   userId: string,
-  courseId: number,
-  lessonId: number
+  courseId: string,
+  lessonId: string 
 ): boolean {
   return progress.some(
     p =>
@@ -40,7 +40,7 @@ export function getUserProgress(
 export function getCourseProgress(
   progress: LessonProgress[],
   userId: string,
-  courseId: number
+  courseId: string
 ): LessonProgress[] {
   return progress.filter(
     p => p.userId === userId && p.courseId === courseId && p.completed
@@ -83,16 +83,23 @@ export function getCourseStats(
 /**
  * Cuenta lecciones completadas (total o por curso)
  */
+// @/entities/progress/model/helpers.ts
+
+/**
+ * Cuenta lecciones completadas (total o por curso)
+ * CAMBIO: El retorno debe ser number, no string
+ */
 export function getCompletedCount(
   progress: LessonProgress[],
   userId: string,
-  courseId?: number
-): number {
+  courseId?: string 
+): number { 
   const userProgress = progress.filter(
     p => p.userId === userId && p.completed
   )
 
   if (courseId !== undefined) {
+    // Aquí p.courseId debe ser string en la interfaz LessonProgress
     return userProgress.filter(p => p.courseId === courseId).length
   }
 

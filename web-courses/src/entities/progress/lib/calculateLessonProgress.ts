@@ -5,7 +5,7 @@ export function calculateCourseProgress(
   lessons: Lesson[],
   progress: LessonProgress[],
   userId: string,
-  courseId: number
+  courseId: string
 ) {
   const completedCount = lessons.filter(lesson =>
     progress.some(
