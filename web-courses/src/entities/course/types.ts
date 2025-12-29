@@ -2,7 +2,7 @@
 import type { Lesson } from "@/entities/lesson/types"
 
 export interface Course {
-  id: number
+  id: string
   title: string
   description: string
   duration: string
