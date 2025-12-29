@@ -1,14 +1,16 @@
-// src/shared/lib/supabase/client.ts
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
 import type { Database } from './types'
 
 let supabaseInstance: SupabaseClient<Database> | null = null
 
+// HARDCODEADO TEMPORAL (solo para que funcione en Vercel)
+const FALLBACK_URL = 'https://gpafbzopphyreczrvfdj.supabase.co'
+const FALLBACK_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwYWZiem9wcGh5cmVjenJ2ZmRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY1NTI5NTAsImV4cCI6MjA4MjEyODk1MH0.IW-2XBQsNsFZaZOQxI44sE3CAfDIm_zEqhOrqg6Xc5Q'
+
 export const supabase = (() => {
   if (typeof window === 'undefined') {
-    // En el servidor
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || FALLBACK_URL
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || FALLBACK_KEY
     
     return createClient<Database>(supabaseUrl, supabaseAnonKey, {
       auth: {
@@ -19,14 +21,9 @@ export const supabase = (() => {
     })
   }
 
-  // En el cliente, usar singleton
   if (!supabaseInstance) {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-    
-    if (!supabaseUrl || !supabaseAnonKey) {
-      console.error('⚠️ Missing Supabase environment variables')
-    }
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || FALLBACK_URL
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || FALLBACK_KEY
     
     supabaseInstance = createClient<Database>(supabaseUrl, supabaseAnonKey, {
       auth: {
