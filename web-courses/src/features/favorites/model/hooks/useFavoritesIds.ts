@@ -1,28 +1,53 @@
 // hooks/useFavorites.ts
 import { useState, useEffect } from 'react';
-import type { FavoritesStorage } from '@/features/favorites/lib/favoriteStorage';
-export function useFavoriteIds(storage: FavoritesStorage) {
+import { useAuthStore } from '@/features/auth/model/useAuthStore';
+import { supabaseFavorites } from '@/features/favorites/lib/supabaseFavorites';
+import { localStorageFavorites } from '@/features/favorites/lib/favoriteStorage';
+
+export function useFavoriteIds() {
+  const currentUser = useAuthStore(state => state.currentUser);
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setFavorites(storage.get());
+    // 1. Decidir qué storage usar
+    const storage = currentUser?.id 
+      ? supabaseFavorites(currentUser.id) 
+      : localStorageFavorites;
 
-    const unsubscribe = storage.subscribe(() => {
-      setFavorites(storage.get());
-    });
+    // 2. Función para sincronizar el estado de React con el "cache" del storage
+    const sync = () => {
+      setFavorites([...storage.get()]);
+      setIsLoading(false);
+    };
 
-    return unsubscribe;
-  }, [storage]);
+    // 3. Sincronización inicial
+    sync();
 
-  const isFavorite = (id: string) => favorites.includes(id);
+    // 4. Suscribirse a cambios (y que el storage se encargue de avisar cuando cargue de la DB)
+    const unsubscribe = storage.subscribe(sync);
 
-  const toggleFavorite = (id: string) => {
+    return () => {
+      unsubscribe();
+    };
+  }, [currentUser?.id]); // Si el usuario cambia, reiniciamos el flujo
+
+  const toggleFavorite = async (id: string) => {
+    const storage = currentUser?.id 
+      ? supabaseFavorites(currentUser.id!) 
+      : localStorageFavorites;
+    
     if (favorites.includes(id)) {
-      storage.remove(id);
+      await storage.remove(id);
     } else {
-      storage.add(id);
+      await storage.add(id);
     }
   };
 
-  return { favorites, isFavorite, toggleFavorite };
+  return { 
+    favorites, 
+    isFavorite: (id: string) => favorites.includes(id), 
+    toggleFavorite,
+    isLoading 
+  };
 }

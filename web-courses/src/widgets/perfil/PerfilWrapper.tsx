@@ -29,7 +29,6 @@ function AvatarUser({ name, email }: AvatarUserProps) {
   
   const updateUserProfile = useAuthStore(state => state.updateUserProfile)
 
-  // Sincroniza el estado local cuando la prop cambia desde el Store
   useEffect(() => {
     setUserName(name)
   }, [name])
@@ -219,7 +218,6 @@ export function PerfilWrapper() {
 
   const userProgress = getUserProgress(progress, currentUser.id)
 
-  // ✅ SOLUCIÓN AL PROBLEMA DE REACTIVIDAD:
   // Buscamos primero en 'currentUser.name' (donde el Store guarda el dato fresco post-update)
   // Luego en metadata si lo anterior falla.
   const currentName = currentUser.name || 
@@ -245,7 +243,6 @@ export function PerfilWrapper() {
         <p className="text-gray-600 dark:text-gray-400 mt-1">Gestiona tu información y revisa tu progreso.</p>
       </div>
 
-      {/* ✅ Pasamos currentName y usamos la KEY para forzar el re-renderizado */}
       <AvatarUser 
         key={currentName} 
         name={currentName} 

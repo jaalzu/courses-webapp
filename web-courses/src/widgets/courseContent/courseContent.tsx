@@ -20,8 +20,7 @@ export default function CourseContent({
   onPlayerReady 
 }: CourseContentProps) {
   const playerRef = useRef<any>(null);
-  const { isFavorite, toggleFavorite } = useFavoriteIds(localStorageFavorites);
-
+const { isFavorite, toggleFavorite } = useFavoriteIds()
   // Usa el video de la lección actual, o el de la primera lección si existe
   const videoToPlay = currentVideoUrl || course.lessons?.[0]?.videoUrl || course.video;
 

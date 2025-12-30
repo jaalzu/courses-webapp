@@ -1,6 +1,6 @@
+// app/layout.tsx
 import { Montserrat } from 'next/font/google'
 import "../src/shared/styles/globals.css"
-import DebugClient from './debug-client'
 import { QueryProvider } from '@/shared/providers/QueryProvider'
 
 const montserrat = Montserrat({
@@ -18,15 +18,14 @@ export const metadata = {
   },
 }
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
       <body
         className={`${montserrat.variable} antialiased bg-gray-50 dark:bg-neutral-900`}
       >
         <QueryProvider>
-          <DebugClient />
-          {children}
+            {children}
         </QueryProvider>
       </body>
     </html>

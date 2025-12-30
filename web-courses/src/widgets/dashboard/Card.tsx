@@ -57,8 +57,7 @@ export default function Card({
   const isAdmin = currentUser?.role === 'admin' // ✅ Chequeo de admin real
 
   // 2. Favoritos
-  const { isFavorite, toggleFavorite } = useFavoriteIds(localStorageFavorites)
-
+const { isFavorite, toggleFavorite } = useFavoriteIds()
   // 3. Nivel
   const levelConfig = level ? getLevelConfig(level) : null
 
