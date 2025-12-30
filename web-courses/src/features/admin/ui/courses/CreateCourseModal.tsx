@@ -14,8 +14,11 @@ interface CreateCourseModalProps {
 export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
   const addCourse = useCourseStore(state => state.addCourse)
   const getCourse = useCourseStore(state => state.getCourseById)
+  
   const [step, setStep] = useState<'basic' | 'content'>('basic')
-  const [tempCourseId, setTempCourseId] = useState<number | null>(null)
+  
+  // ✅ CORRECCIÓN 1: Cambiamos el tipo de number a string
+  const [tempCourseId, setTempCourseId] = useState<string | null>(null)
 
   const [form, setForm] = useState({
     title: "",
@@ -33,7 +36,6 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
   }
 
   const handleNext = () => {
-    // Validación básica
     if (!form.title.trim() || !form.description.trim()) {
       alert("Por favor completa al menos el título y la descripción")
       return
@@ -52,14 +54,16 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
     // Obtener el ID del último curso agregado
     const courses = useCourseStore.getState().courses
     const lastCourse = courses[courses.length - 1]
-    setTempCourseId(lastCourse.id)
     
-    // Pasar al paso 2
+    // ✅ CORRECCIÓN 2: Ahora setTempCourseId acepta el ID (string/UUID)
+    if (lastCourse) {
+      setTempCourseId(lastCourse.id)
+    }
+    
     setStep('content')
   }
 
   const handleContentClose = () => {
-    // Reset todo
     setForm({
       title: "",
       description: "",
@@ -74,20 +78,17 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
   }
 
   const handleCancel = () => {
-    // Si estamos en el paso 2 y ya se creó el curso, volver al paso 1
     if (step === 'content' && tempCourseId) {
       setStep('basic')
       setTempCourseId(null)
       return
     }
-    
-    // Si estamos en paso 1, simplemente cerrar
     handleContentClose()
   }
 
   // Obtener el curso temporal para el paso 2
+  // ✅ Esto ahora funcionará porque tempCourseId y la función getCourse esperan un string
   const tempCourse = tempCourseId ? getCourse(tempCourseId) : null
-
   return (
     <>
       {/* PASO 1: Modal de información básica */}
