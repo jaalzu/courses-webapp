@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { useAuthStore } from '@/features/auth/hooks/useAuthStore'
+import { useAuthStore } from '@/features/auth/model/useAuthStore'
 import { useCourses } from "@/entities/course/useCourses"
 import { useProgressStore } from "@/entities/progress/model/useProgressStore"
 import { getUserProgress } from "@/entities/progress/lib/getUserProgress"

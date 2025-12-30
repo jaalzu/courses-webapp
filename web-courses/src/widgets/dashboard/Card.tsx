@@ -26,10 +26,10 @@ import { getLevelConfig } from "@/entities/course/model/helpers"
 import type { Course } from "@/entities/course/types"
 import { useCourseStore } from "@/entities/course/model/useCourseStore"
 import { useProgressStore, getCourseStats } from "@/entities/progress"
-import { useAuthStore } from '@/features/auth/hooks/useAuthStore'
+import { useAuthStore } from '@/features/auth/model/useAuthStore'
 
 interface CardProps {
-  userId?: string // ✅ HACER OPCIONAL
+  userId?: string 
   courseId: string
   href: string
   className?: string
@@ -51,26 +51,27 @@ export default function Card({
 }: CardProps) {
   const router = useRouter()
 
-  const currentUser = useAuthStore(state => state.currentUser) // ✅
-const actualUserId = currentUser?.id || "user-default"
+  // 1. Auth & Roles
+  const currentUser = useAuthStore(state => state.currentUser)
+  const actualUserId = currentUser?.id || "user-default"
+  const isAdmin = currentUser?.role === 'admin' // ✅ Chequeo de admin real
 
-  // Favoritos
+  // 2. Favoritos
   const { isFavorite, toggleFavorite } = useFavoriteIds(localStorageFavorites)
 
-  // Nivel
+  // 3. Nivel
   const levelConfig = level ? getLevelConfig(level) : null
 
-  // Cursos
+  // 4. Stores (Cursos y Progreso)
   const deleteCourse = useCourseStore(state => state.deleteCourse)
-
-  //  Progreso: leer estado + calcular stats
   const progress = useProgressStore(state => state.progress)
-  const stats = getCourseStats(courseData, progress, actualUserId) // ✅ USAR actualUserId
-  const fetchUserProgress = useProgressStore(state => state.fetchUserProgress) // ← Agregar
+  const fetchUserProgress = useProgressStore(state => state.fetchUserProgress)
+  
+  // 5. Calcular stats
+  const stats = getCourseStats(courseData, progress, actualUserId)
 
-   // ← AGREGAR ESTE useEffect
   useEffect(() => {
-    if (actualUserId) {
+    if (actualUserId && actualUserId !== "user-default") {
       fetchUserProgress(actualUserId)
     }
   }, [actualUserId, fetchUserProgress])
@@ -79,11 +80,7 @@ const actualUserId = currentUser?.id || "user-default"
   const handleEditClick = () => onEdit?.()
 
   const handleDeleteClick = () => {
-    if (
-      !confirm(
-        "¿Seguro que querés eliminar este curso? Esta acción no se puede deshacer."
-      )
-    ) {
+    if (!confirm("¿Seguro que querés eliminar este curso? Esta acción no se puede deshacer.")) {
       return
     }
     deleteCourse(courseId)
@@ -97,10 +94,17 @@ const actualUserId = currentUser?.id || "user-default"
 
   return (
     <div className={`relative ${className} flex flex-col h-full`}>
-      {/* Botones */}
+      
+      {/* --- BOTONES DE ACCIÓN (Admin & User) --- */}
       <div className="absolute top-2 right-2 z-10 flex gap-2">
-        {enableEdit && onEdit && <EditButton onEdit={handleEditClick} />}
-        {enableEdit && <DeleteButton onDelete={handleDeleteClick} />}
+        {/* Solo si la prop lo permite Y el usuario logueado es admin */}
+        {enableEdit && isAdmin && (
+          <>
+            {onEdit && <EditButton onEdit={handleEditClick} />}
+            <DeleteButton onDelete={handleDeleteClick} />
+          </>
+        )}
+        
         <FavoriteButton
           isFavorite={isFavorite(courseId)}
           onToggle={() => toggleFavorite(courseId)}
@@ -112,14 +116,14 @@ const actualUserId = currentUser?.id || "user-default"
         onClick={handleEnterCourse}
         className="bg-white dark:bg-gray-900 rounded-md overflow-hidden flex flex-col h-full transition-shadow shadow-sm hover:shadow-md border"
       >
-       <Image
-  src={courseData.image || "/curso1.webp"} // Si hay imagen, usala (sea URL o local). Si no, usa el placeholder.
-  alt={courseData.title}
-  width={400}
-  height={200}
-  className="w-full h-40 object-cover"
-  unoptimized // Opcional: útil si Next.js se queja de las imágenes externas de Supabase
-/>
+        <Image
+          src={courseData.image || "/curso1.webp"}
+          alt={courseData.title}
+          width={400}
+          height={200}
+          className="w-full h-40 object-cover"
+          unoptimized 
+        />
 
         <div className="p-4 flex flex-col flex-1 justify-between">
           <div>
@@ -133,7 +137,7 @@ const actualUserId = currentUser?.id || "user-default"
               </Badge>
             )}
 
-            <p className="text-sm text-dark dark:text-gray-300 mt-3">
+            <p className="text-sm text-dark dark:text-gray-300 mt-3 line-clamp-2">
               {courseData.description}
             </p>
           </div>

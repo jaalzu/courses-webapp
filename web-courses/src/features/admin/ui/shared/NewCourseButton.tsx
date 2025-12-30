@@ -4,9 +4,18 @@ import { useState } from "react"
 import { PlusIcon } from "@heroicons/react/24/outline"
 import { IconButton } from "@/shared/ui/index"
 import { CreateCourseModal } from "@/features/admin/ui/courses/CreateCourseModal"
+import { useAuthStore } from "@/features/auth/model/useAuthStore" // ✅ Importamos el store
 
 export function NewCourseButton({ className = "" }) {
   const [open, setOpen] = useState(false)
+  
+  // 1. Obtenemos el usuario actual
+  const currentUser = useAuthStore((state) => state.currentUser)
+  
+  // 2. Si no es admin, no renderizamos ABSOLUTAMENTE NADA
+  if (currentUser?.role !== 'admin') {
+    return null
+  }
 
   return (
     <>

@@ -8,7 +8,7 @@ import { LessonList } from "@/widgets/lesson-list/lessonList"
 import InstructorCard from "@/widgets/courseContent/instructorCard"
 import { CourseSwitcher } from "@/widgets/courseContent/courseSwitcher"
 import type { Lesson } from "@/entities/lesson/types"
-import { useAuthStore } from '@/features/auth/hooks/useAuthStore'
+import { useAuthStore } from '@/features/auth/model/useAuthStore'
 
 
 interface CoursePageContentProps {

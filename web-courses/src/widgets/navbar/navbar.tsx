@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation" // ← AGREGAR
 import { Button } from "@/shared/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/index"
 import { SidebarTrigger } from "@/widgets/sidebar/sidebar"
-import { useAuthStore } from '@/features/auth/hooks/useAuthStore' // ← AGREGAR
+import { useAuthStore } from '@/features/auth/model/useAuthStore' // ← AGREGAR
 import {
   DropdownMenu,
   DropdownMenuContent,

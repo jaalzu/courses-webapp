@@ -6,7 +6,7 @@ import { Button } from "@/shared/ui/index"
 import { Input } from "@/shared/ui/index"
 import { LockIcon, EnvelopeIcon } from "./icons/icons"
 import Image from 'next/image'
-import { useAuthStore } from "@/features/auth/hooks/useAuthStore"
+import { useAuthStore } from "@/features/auth/model/useAuthStore"
 import { getAuthErrorMessage } from '@/shared/lib/supabase/errorHandler'
 
 
