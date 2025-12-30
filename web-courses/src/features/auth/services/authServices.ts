@@ -1,6 +1,6 @@
 import { authQueries } from '@/shared/lib/supabase/queries/auth';
 import { profileQueries } from '@/shared/lib/supabase/queries/profiles';
-import { mapProfileToUser, mapUserToProfileUpdate } from './mappers/profileMapper';
+import { mapProfileToUser, mapUserToProfileUpdate } from './profileMapper';
 import { supabase } from '@/shared/lib/supabase/client';
 import type { User } from '@/entities/user/model/types';
 

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { User } from '@/entities/user/model/types';
-import { authService } from '@/shared/services/authServices';
+import { authService } from '@/features/auth/services/authServices';
 
 interface AuthStore {
   currentUser: User | null;
