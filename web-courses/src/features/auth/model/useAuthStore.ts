@@ -20,7 +20,7 @@ interface AuthStore {
 export const useAuthStore = create<AuthStore>()((set, get) => ({
   currentUser: null,
   isAuthenticated: false,
-  isLoading: true,
+  isLoading: false,
 
   setCurrentUser: (user) => {
     set({
