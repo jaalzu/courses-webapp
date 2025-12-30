@@ -25,13 +25,17 @@ interface AvatarUserProps {
 function AvatarUser({ name, email }: AvatarUserProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [userName, setUserName] = useState(name)
+  const [isSaving, setIsSaving] = useState(false)
+  
+  const updateUserProfile = useAuthStore(state => state.updateUserProfile)
 
+  // Sincroniza el estado local cuando la prop cambia desde el Store
   useEffect(() => {
     setUserName(name)
   }, [name])
 
   const initials =
-    typeof userName === "string" && userName.trim().length > 0
+    userName && userName.trim().length > 0
       ? userName
           .trim()
           .split(" ")
@@ -41,10 +45,20 @@ function AvatarUser({ name, email }: AvatarUserProps) {
           .slice(0, 2)
       : "??"
 
-  const handleSave = () => {
-    // TIP: Aquí podrías usar supabase.auth.updateUser({ data: { full_name: userName } })
-    setIsEditing(false)
-  }
+  const handleSave = async () => {
+    if (!userName.trim()) return;
+
+    setIsSaving(true);
+    try {
+      await updateUserProfile({ name: userName.trim() });
+      setIsEditing(false);
+    } catch (error) {
+      console.error(error);
+      alert("No se pudo guardar el nombre");
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const handleCancel = () => {
     setUserName(name)
@@ -69,15 +83,22 @@ function AvatarUser({ name, email }: AvatarUserProps) {
                 type="text"
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
+                disabled={isSaving}
                 className="w-full md:w-auto px-4 py-2.5 border-2 border-blue-500 dark:border-blue-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold text-lg"
-                placeholder="Tu nombre"
+                placeholder="Tu nombre completo"
                 autoFocus
               />
               <div className="flex items-center justify-center md:justify-start gap-2">
-                <Button onClick={handleSave} size="sm" className="bg-green-600 hover:bg-green-700 text-white">
-                  <CheckIcon className="w-4 h-4 mr-1" /> Guardar
+                <Button 
+                  onClick={handleSave} 
+                  size="sm" 
+                  disabled={isSaving}
+                  className="bg-green-600 hover:bg-green-700 text-white"
+                >
+                  <CheckIcon className="w-4 h-4 mr-1" /> 
+                  {isSaving ? "Guardando..." : "Guardar"}
                 </Button>
-                <Button onClick={handleCancel} variant="outline" size="sm">
+                <Button onClick={handleCancel} variant="outline" size="sm" disabled={isSaving}>
                   <XMarkIcon className="w-4 h-4 mr-1" /> Cancelar
                 </Button>
               </div>
@@ -86,9 +107,14 @@ function AvatarUser({ name, email }: AvatarUserProps) {
             <div className="space-y-2">
               <div className="flex items-center justify-center md:justify-start gap-3">
                 <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100">
-                  {userName || 'Usuario'}
+                  {name || 'Usuario'}
                 </h1>
-                <Button onClick={() => setIsEditing(true)} variant="ghost" size="sm" className="hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full">
+                <Button 
+                  onClick={() => setIsEditing(true)} 
+                  variant="ghost" 
+                  size="sm" 
+                  className="hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full h-8 w-8 p-0"
+                >
                   <PencilIcon className="w-4 h-4" />
                 </Button>
               </div>
@@ -155,9 +181,9 @@ function UserStats({ completedCourses, inProgressCourses, totalCourses, progress
     </div>
   )
 }
+
 // ========== Main Component ==========
 export function PerfilWrapper() {
-  // 1. CORRECCIÓN: Usamos 'currentUser' que es el nombre real en tu AuthStore
   const currentUser = useAuthStore(state => state.currentUser)
   const checkAuth = useAuthStore(state => state.checkAuth)
   const isLoadingAuth = useAuthStore(state => state.isLoading)
@@ -166,21 +192,14 @@ export function PerfilWrapper() {
   const progress = useProgressStore(state => state.progress)
   const fetchUserProgress = useProgressStore(state => state.fetchUserProgress) 
 
-  // 2. Verificación inicial: Si no hay usuario, disparamos checkAuth por si la persistencia falló
   useEffect(() => {
-    if (!currentUser) {
-      checkAuth()
-    }
+    if (!currentUser) checkAuth()
   }, [currentUser, checkAuth])
 
-  // 3. Efecto para cargar progreso cuando tengamos el ID
   useEffect(() => {
-    if (currentUser?.id) {
-      fetchUserProgress(currentUser.id)
-    }
+    if (currentUser?.id) fetchUserProgress(currentUser.id)
   }, [currentUser?.id, fetchUserProgress])
 
-  // 4. Estado de carga: Mientras no haya usuario Y el store esté "cargando"
   if (!currentUser && isLoadingAuth) {
     return (
       <div className="p-10 text-center">
@@ -189,26 +208,30 @@ export function PerfilWrapper() {
     )
   }
 
-  // 5. Si terminó de cargar y NO hay usuario, redirigir o mostrar mensaje
   if (!currentUser) {
     return (
       <div className="p-10 text-center space-y-4">
         <p className="text-gray-600">No se encontró una sesión activa.</p>
-        <Button onClick={() => window.location.href = '/login'}>
-          Ir al Login
-        </Button>
+        <Button onClick={() => window.location.href = '/login'}>Ir al Login</Button>
       </div>
     )
   }
 
-  // 6. Si llegamos aquí, tenemos un currentUser real
   const userProgress = getUserProgress(progress, currentUser.id)
+
+  // ✅ SOLUCIÓN AL PROBLEMA DE REACTIVIDAD:
+  // Buscamos primero en 'currentUser.name' (donde el Store guarda el dato fresco post-update)
+  // Luego en metadata si lo anterior falla.
+  const currentName = currentUser.name || 
+                     (currentUser as any).user_metadata?.name || 
+                     (currentUser as any).user_metadata?.full_name || 
+                     currentUser.email?.split('@')[0] || 
+                     'Usuario';
 
   const stats = getUserProfileStats({
     user: {
       id: currentUser.id,
-      // Usamos el tipado de Supabase que viene en tu store
-      name: (currentUser as any).user_metadata?.full_name || currentUser.email?.split('@')[0] || 'Usuario',
+      name: currentName,
       email: currentUser.email || '',
     },
     courses,
@@ -222,7 +245,12 @@ export function PerfilWrapper() {
         <p className="text-gray-600 dark:text-gray-400 mt-1">Gestiona tu información y revisa tu progreso.</p>
       </div>
 
-      <AvatarUser name={stats.userName} email={stats.email} />
+      {/* ✅ Pasamos currentName y usamos la KEY para forzar el re-renderizado */}
+      <AvatarUser 
+        key={currentName} 
+        name={currentName} 
+        email={currentUser.email || ''} 
+      />
       
       <UserStats 
         completedCourses={stats.completedCourses}

@@ -11,8 +11,7 @@ interface AuthStore {
   // Actions
   setCurrentUser: (user: User) => void;
   logout: () => Promise<void>;
-  updateUserProfile: (updates: Partial<User>) => Promise<void>;
-  login: (email: string, password: string) => Promise<void>;
+updateUserProfile: (updates: Partial<User> & { name?: string }) => Promise<void>;  login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name: string) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
   checkAuth: () => Promise<void>;
@@ -93,21 +92,29 @@ export const useAuthStore = create<AuthStore>()(
         }
       },
 
-      // Actualizar perfil
-      updateUserProfile: async (updates: Partial<User>) => {
-        try {
-          const { currentUser } = get();
-          if (!currentUser) return;
+     // useAuthStore.ts
 
-          const updatedUser = await authService.updateProfile(currentUser.id, updates);
-          
-          set({
-            currentUser: updatedUser,
-          });
-        } catch (error: any) {
-          throw error;
-        }
-      },
+updateUserProfile: async (updates) => {
+  try {
+    const { currentUser } = get();
+    if (!currentUser) return;
+
+    // 1. El servicio actualiza la DB y devuelve el User mapeado con el nuevo nombre
+    const updatedUser = await authService.updateProfile(currentUser.id, updates);
+    
+    // 2. IMPORTANTE: Pisamos el estado con la data que viene de la DB
+    set({
+      currentUser: updatedUser, // Esto tiene que tener el name nuevo
+    });
+    
+    // 3. Opcional: Forzamos un re-fetch de la sesión si ves que sigue fallando
+    // await get().checkAuth(); 
+
+  } catch (error: any) {
+    console.error("Error en store:", error);
+    throw error;
+  }
+},
 
       // Verificar autenticación al cargar la app
       checkAuth: async () => {

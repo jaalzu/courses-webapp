@@ -65,18 +65,25 @@ export const authService = {
   /**
    * Actualizar perfil del usuario
    */
-  updateProfile: async (userId: string, updates: Partial<User>) => {
-    // 1. Mapear updates al formato de Supabase
-    const supabaseUpdates = mapUserToProfileUpdate(updates);
+  // authServices.ts
 
-    // 2. Actualizar en Supabase
-    const { data, error } = await profileQueries.update(userId, supabaseUpdates);
-    if (error) throw error;
-    if (!data) throw new Error('No data returned from update');
+updateProfile: async (userId: string, updates: Partial<User>) => {
+  // 1. Actualiza la tabla profiles (Lo que ya funciona)
+  const supabaseUpdates = mapUserToProfileUpdate(updates);
+  const { data, error } = await profileQueries.update(userId, supabaseUpdates);
+  if (error) throw error;
 
-    // 3. Retornar usuario actualizado mapeado
-    return mapProfileToUser(data);
-  },
+  // 2. 🔥 ESTO ES LO QUE TE FALTA:
+  // Actualizamos la metadata del AUTH de Supabase para que coincida con la DB
+  const { error: authError } = await supabase.auth.updateUser({
+    data: { name: updates.name }
+  });
+
+  if (authError) console.error("Error actualizando sesión:", authError.message);
+
+  // 3. Retornamos el perfil de la DB
+  return mapProfileToUser(data);
+},
 
   /**
    * Iniciar sesión con Google OAuth
