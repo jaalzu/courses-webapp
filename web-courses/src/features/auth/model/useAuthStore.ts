@@ -20,7 +20,7 @@ interface AuthStore {
 export const useAuthStore = create<AuthStore>()((set, get) => ({
   currentUser: null,
   isAuthenticated: false,
-  isLoading: false,
+  isLoading: true,
 
   setCurrentUser: (user) => {
     set({
@@ -104,21 +104,19 @@ export const useAuthStore = create<AuthStore>()((set, get) => ({
 
   // Verificar autenticación al cargar la app
   checkAuth: async () => {
-    try {
-      set({ isLoading: true });
-      const user = await authService.getCurrentUser();
-      
-      set({
-        currentUser: user,
-        isAuthenticated: !!user,
-      });
-    } catch (error) {
-      set({
-        currentUser: null,
-        isAuthenticated: false,
-      });
-    } finally {
-      set({ isLoading: false });
-    }
-  },
+  try {
+    set({ isLoading: true }); // Por si se llama manualmente después
+    const user = await authService.getCurrentUser();
+    
+    set({
+      currentUser: user,
+      isAuthenticated: !!user,
+    });
+  } catch (error) {
+    console.error("Error checking auth:", error);
+    set({ currentUser: null, isAuthenticated: false });
+  } finally {
+    set({ isLoading: false });
+  }
+},
 }));

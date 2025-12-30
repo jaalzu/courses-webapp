@@ -4,21 +4,25 @@ import type { PostgrestError } from '@supabase/supabase-js';
 interface SupabaseQueryOptions<TData> extends Omit<UseQueryOptions<TData, PostgrestError>, 'queryFn'> {
   queryFn: () => Promise<{ data: TData | null; error: PostgrestError | null }>;
 }
-
 export function useSupabaseQuery<TData = unknown>({
   queryFn,
   ...options
 }: SupabaseQueryOptions<TData>) {
   return useQuery<TData, PostgrestError>({
     ...options,
+    // El enabled es clave: si es false, React Query ni lo intenta
+    enabled: options.enabled !== false, 
     queryFn: async () => {
       const { data, error } = await queryFn();
       
       if (error) {
+        console.error("Supabase Query Error:", error);
         throw error;
       }
       
       if (data === null) {
+        // En lugar de tirar error seco, podrías retornar null 
+        // o manejarlo según tu lógica de negocio
         throw new Error('No data returned');
       }
       
