@@ -4,7 +4,11 @@ import type { LessonProgress } from "@/entities/progress/types"
 import { getCourseStats } from "@/entities/progress"
 
 interface GetUserProfileStatsParams {
-  user: User
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  }
   courses: Course[]
   progress: LessonProgress[]
 }

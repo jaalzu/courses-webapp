@@ -1,6 +1,7 @@
 'use client'
 
 // features
+import { useEffect } from "react" 
 import { DeleteButton } from "@/features/admin/ui/shared/DeleteButton"
 import { EditButton } from "@/features/admin/ui/shared/EditButton"
 import { FavoriteButton } from "@/features/favorites/ui/favoriteButton"
@@ -25,7 +26,7 @@ import { getLevelConfig } from "@/entities/course/model/helpers"
 import type { Course } from "@/entities/course/types"
 import { useCourseStore } from "@/entities/course/model/useCourseStore"
 import { useProgressStore, getCourseStats } from "@/entities/progress"
-import { useCurrentUser } from "@/shared/mocks/useCurrentUser" // ✅ IMPORTAR
+import { useAuthStore } from '@/features/auth/hooks/useAuthStore'
 
 interface CardProps {
   userId?: string // ✅ HACER OPCIONAL
@@ -50,9 +51,8 @@ export default function Card({
 }: CardProps) {
   const router = useRouter()
 
-  // j OBTENER USUARIO si no se pasa como prop
-  const currentUser = useCurrentUser()
-  const actualUserId = userId || currentUser.id
+  const currentUser = useAuthStore(state => state.currentUser) // ✅
+const actualUserId = currentUser?.id || "user-default"
 
   // Favoritos
   const { isFavorite, toggleFavorite } = useFavoriteIds(localStorageFavorites)
@@ -66,7 +66,15 @@ export default function Card({
   //  Progreso: leer estado + calcular stats
   const progress = useProgressStore(state => state.progress)
   const stats = getCourseStats(courseData, progress, actualUserId) // ✅ USAR actualUserId
+  const fetchUserProgress = useProgressStore(state => state.fetchUserProgress) // ← Agregar
 
+   // ← AGREGAR ESTE useEffect
+  useEffect(() => {
+    if (actualUserId) {
+      fetchUserProgress(actualUserId)
+    }
+  }, [actualUserId, fetchUserProgress])
+  
   // Handlers
   const handleEditClick = () => onEdit?.()
 

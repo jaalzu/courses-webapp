@@ -29,7 +29,7 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
 
   // Estado para lecciones
   const [lessons, setLessons] = useState<Lesson[]>(course.lessons || [])
-  const [editingLesson, setEditingLesson] = useState<number | string | null>(null)
+  const [editingLesson, setEditingLesson] = useState<string | null>(null)
 
   // Form para punto clave
   const [keyPointInput, setKeyPointInput] = useState('')
@@ -95,24 +95,44 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
     setLessonForm({ title: '', duration: '', videoUrl: '' })
   }
 
-  const handleDeleteLesson = (id: number | string) => {
+  const handleDeleteLesson = (id: string) => {
     setLessons(lessons.filter(l => l.id !== id))
   }
 
   // ===== GUARDAR TODO =====
   const handleSave = async () => {
-    setIsSaving(true)
-    try {
-      updateCourse(course.id, {
-        ...courseContent,
-        lessons
-      })
-      await new Promise(r => setTimeout(r, 300))
-      onClose()
-    } finally {
-      setIsSaving(false)
-    }
+  setIsSaving(true)
+  try {
+    // 1. Formateamos las lecciones para que Supabase las entienda
+    const formattedLessons = lessons.map(({ id, videoUrl, title, duration }) => {
+      const isNew = id.length > 20; // Si es UUID generado por crypto, es nueva
+      
+      return {
+        ...(isNew ? {} : { id }), // Si es vieja, mandamos el ID para que actualice
+        title,
+        duration,
+        video_url: videoUrl, // <--- Crucial: mapeo a snake_case
+      };
+    });
+
+    // 2. Ejecutamos la actualización y ESPERAMOS (await)
+    // Usamos el store de Zustand que ya maneja la lógica de Supabase
+    await updateCourse(course.id, {
+      keyPoints: courseContent.keyPoints, // Asegúrate que coincida con el nombre en la DB
+      extraInfo: courseContent.extraInfo,
+      lessons: formattedLessons as any 
+    });
+
+    // No hace falta el setTimeout si usamos await, 
+    // pero si querés dejarlo por un tema visual de "loading", podés.
+    onClose();
+  } catch (error) {
+    console.error("Error al guardar el curso:", error);
+    alert("Hubo un error al guardar los cambios.");
+  } finally {
+    setIsSaving(false);
   }
+};
 
   if (!isOpen) return null
 

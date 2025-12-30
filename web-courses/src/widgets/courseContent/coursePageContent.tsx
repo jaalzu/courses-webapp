@@ -8,7 +8,8 @@ import { LessonList } from "@/widgets/lesson-list/lessonList"
 import InstructorCard from "@/widgets/courseContent/instructorCard"
 import { CourseSwitcher } from "@/widgets/courseContent/courseSwitcher"
 import type { Lesson } from "@/entities/lesson/types"
-import { useCurrentUser } from "@/shared/mocks/useCurrentUser"
+import { useAuthStore } from '@/features/auth/hooks/useAuthStore'
+
 
 interface CoursePageContentProps {
   courseId: string
@@ -16,10 +17,9 @@ interface CoursePageContentProps {
 
 export default function CoursePageContent({ courseId }: CoursePageContentProps) {
   const [currentVideoUrl, setCurrentVideoUrl] = useState<string | undefined>()
-  
 
-  const currentUser = useCurrentUser()
-  const userId = currentUser?.id || "user-default"
+const currentUser = useAuthStore(state => state.currentUser) // ✅
+  const userId = useAuthStore(state => state.currentUser?.id) || "user-default"
 
   const { course, currentLesson, selectLesson } = useCourseNavigation(courseId)
 
@@ -70,12 +70,14 @@ export default function CoursePageContent({ courseId }: CoursePageContentProps) 
         </div>
       </div>
 
+      
+
       <div className="border-t border-gray-200 dark:border-gray-700 pt-8 mt-8">
-        <ForumSection
-          courseId={String(courseId)}
-          currentUserId={userId}
-          currentUserName={currentUser?.name || "Usuario"}
-        />
+              <ForumSection
+        courseId={String(courseId)}
+        currentUserId={userId}
+        currentUserName={currentUser?.name || "Usuario"}
+      />
       </div>
     </main>
   )

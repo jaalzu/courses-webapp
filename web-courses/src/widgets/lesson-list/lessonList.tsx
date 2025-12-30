@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from "react"
 import styles from "./lessonList.module.css"
 import type { Lesson } from "@/entities/lesson/types"
 
@@ -38,9 +39,15 @@ export function LessonList({
 }: LessonListProps) {
 
   const progress = useProgressStore(state => state.progress)
-const markLessonCompleted = useProgressStore(
-  state => state.markLessonCompleted
-)
+  const markLessonCompleted = useProgressStore(state => state.markLessonCompleted)
+  const fetchUserProgress = useProgressStore(state => state.fetchUserProgress)
+
+  // Cargar progreso del usuario
+  useEffect(() => {
+    if (userId) {
+      fetchUserProgress(userId)
+    }
+  }, [userId, fetchUserProgress])
 
   // Métricas
   const completedCount = lessons.filter(lesson =>
@@ -52,6 +59,11 @@ const markLessonCompleted = useProgressStore(
     totalLessons > 0
       ? Math.round((completedCount / totalLessons) * 100)
       : 0
+
+  // Handler async para marcar completada
+  const handleMarkComplete = async (lessonId: string) => {
+    await markLessonCompleted(userId, courseId, lessonId)
+  }
 
   return (
     <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm overflow-hidden">
@@ -157,9 +169,8 @@ const markLessonCompleted = useProgressStore(
 
                     {!completed ? (
                      <button
-  onClick={() =>
-    markLessonCompleted(userId, courseId, lesson.id)
-  }
+onClick={() => handleMarkComplete(lesson.id)}
+
   className="w-full bg-green-500 hover:bg-green-400 text-white font-medium py-2 rounded-lg"
 >
   Marcar como finalizada
