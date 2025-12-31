@@ -2,6 +2,7 @@
 import { Montserrat } from 'next/font/google'
 import "../src/shared/styles/globals.css"
 import { QueryProvider } from '@/shared/providers/QueryProvider'
+import { AuthProvider } from '@/shared/providers/AuthProvider'
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -25,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         className={`${montserrat.variable} antialiased bg-gray-50 dark:bg-neutral-900`}
       >
         <QueryProvider>
-            {children}
+              {children}
         </QueryProvider>
       </body>
     </html>

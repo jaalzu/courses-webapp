@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { User } from '@/entities/user/model/types';
 import { authService } from '@/features/auth/services/authServices';
 
@@ -8,7 +9,7 @@ interface AuthStore {
   isLoading: boolean;
 
   // Actions
-  setCurrentUser: (user: User | null) => void; // Ahora acepta null para cerrar sesión
+  setCurrentUser: (user: User | null) => void;
   logout: () => Promise<void>;
   updateUserProfile: (updates: Partial<User> & { name?: string }) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
@@ -17,95 +18,97 @@ interface AuthStore {
   checkAuth: () => Promise<void>;
 }
 
-export const useAuthStore = create<AuthStore>()((set, get) => ({
-  currentUser: null,
-  isAuthenticated: false,
-  isLoading: false,
+export const useAuthStore = create<AuthStore>()(
+  persist(
+    (set, get) => ({
+      currentUser: null,
+      isAuthenticated: false,
+      isLoading: false,
 
-  setCurrentUser: (user) => {
-    set({
-      currentUser: user,
-      isAuthenticated: !!user,
-    });
-  },
-
-  // Login con email/password
-  login: async (email: string, password: string) => {
-    try {
-      set({ isLoading: true });
-      const { user } = await authService.signIn(email, password);
-      if (user) {
+      setCurrentUser: (user) => {
         set({
           currentUser: user,
-          isAuthenticated: true,
+          isAuthenticated: !!user,
         });
-      }
-    } catch (error: any) {
-      throw error;
-    } finally {
-      set({ isLoading: false });
-    }
-  },
+      },
 
-  // Registrar nuevo usuario
-  register: async (email: string, password: string, name: string) => {
-    try {
-      set({ isLoading: true });
-      await authService.signUp(email, password, name);
-      // Después del registro, hacer login automático
-      await get().login(email, password);
-    } catch (error: any) {
-      throw error;
-    } finally {
-      set({ isLoading: false });
-    }
-  },
+      // Login con email/password
+      login: async (email: string, password: string) => {
+        try {
+          set({ isLoading: true });
+          const { user } = await authService.signIn(email, password);
+          if (user) {
+            set({
+              currentUser: user,
+              isAuthenticated: true,
+            });
+          }
+        } catch (error: any) {
+          throw error;
+        } finally {
+          set({ isLoading: false });
+        }
+      },
 
-  // Login con Google
-  loginWithGoogle: async () => {
-    try {
-      set({ isLoading: true });
-      await authService.signInWithGoogle();
-    } catch (error: any) {
-      throw error;
-    } finally {
-      set({ isLoading: false });
-    }
-  },
+      // Registrar nuevo usuario
+      register: async (email: string, password: string, name: string) => {
+        try {
+          set({ isLoading: true });
+          await authService.signUp(email, password, name);
+          await get().login(email, password);
+        } catch (error: any) {
+          throw error;
+        } finally {
+          set({ isLoading: false });
+        }
+      },
 
-  // Logout
-  logout: async () => {
-    try {
-      await authService.signOut();
-      set({
-        currentUser: null,
-        isAuthenticated: false,
-      });
-    } catch (error: any) {
-      throw error;
-    }
-  },
+      // Login con Google
+      loginWithGoogle: async () => {
+        try {
+          set({ isLoading: true });
+          await authService.signInWithGoogle();
+        } catch (error: any) {
+          throw error;
+        } finally {
+          set({ isLoading: false });
+        }
+      },
 
-  updateUserProfile: async (updates) => {
-    try {
-      const { currentUser } = get();
-      if (!currentUser) return;
+      // Logout
+      logout: async () => {
+        try {
+          await authService.signOut();
+          set({
+            currentUser: null,
+            isAuthenticated: false,
+          });
+        } catch (error: any) {
+          throw error;
+        }
+      },
 
-      const updatedUser = await authService.updateProfile(currentUser.id, updates);
-      
-      set({
-        currentUser: updatedUser,
-      });
-    } catch (error: any) {
-      console.error("Error en store:", error);
-      throw error;
-    }
-  },
+      updateUserProfile: async (updates) => {
+        try {
+          const { currentUser } = get();
+          if (!currentUser) return;
 
-  // Verificar autenticación al cargar la app
-  checkAuth: async () => {
+          const updatedUser = await authService.updateProfile(currentUser.id, updates);
+          
+          set({
+            currentUser: updatedUser,
+          });
+        } catch (error: any) {
+          throw error;
+        }
+      },
+
+      // Verificar autenticación al cargar la app
+      // Verificar autenticación al cargar la app
+checkAuth: async () => {
+  set({ isLoading: true });
+  
   try {
-    set({ isLoading: true }); // Por si se llama manualmente después
     const user = await authService.getCurrentUser();
     
     set({
@@ -113,10 +116,19 @@ export const useAuthStore = create<AuthStore>()((set, get) => ({
       isAuthenticated: !!user,
     });
   } catch (error) {
-    console.error("Error checking auth:", error);
-    set({ currentUser: null, isAuthenticated: false });
+    console.error('Error checkAuth:', error);
+    // No borrar si hay error, persist maneja la sesión
   } finally {
     set({ isLoading: false });
   }
 },
-}));
+    }),
+    {
+      name: 'auth-storage',
+      partialize: (state) => ({
+        currentUser: state.currentUser,
+        isAuthenticated: state.isAuthenticated,
+      }),
+    }
+  )
+);

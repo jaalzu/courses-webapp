@@ -29,6 +29,7 @@ export function CoursesDashboard() {
             <CoursesSkeleton key={i} />
           ))}
         </div>
+        
       </DashboardLayout>
     )
   }
