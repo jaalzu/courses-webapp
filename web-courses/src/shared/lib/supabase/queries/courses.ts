@@ -32,16 +32,15 @@ export const courseQueries = {
     return { data, error };
   },
 
-
 update: async (id: string, updates: any) => {
-  // PRUEBA ATÓMICA: Solo mandamos el título
+  // Quitamos el objeto fijo { title: updates.title } 
+  // y mandamos 'updates', que ya viene mapeado desde el Store
   const { data, error } = await supabase
     .from('courses')
-    .update({ title: updates.title }) 
+    .update(updates) 
     .eq('id', id)
     .select();
   
-  console.log("¡Con un solo campo funcionó!", data);
   return { data, error };
 },
 

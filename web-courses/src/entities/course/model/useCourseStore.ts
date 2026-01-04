@@ -63,42 +63,55 @@ export const useCourseStore = create<CourseStore>((set, get) => ({
     }
   },
 
-
 updateCourse: async (courseId, updates) => {
-  set({ isLoading: true, error: null });
+ set({ isLoading: true, error: null });
 
-  // 1. TRADUCCIÓN: De lo que viene del Form a lo que entiende la DB
-  const dbUpdates: any = { ...updates };
+  // 1. Solo enviamos campos que sabemos que existen en la tabla 'courses'
+  const dbUpdates: any = {};
   
+if (updates.title !== undefined) dbUpdates.title = updates.title;
+if (updates.description !== undefined) dbUpdates.description = updates.description;
+  if (updates.duration) dbUpdates.duration = Number(updates.duration);
+  if (updates.instructor) dbUpdates.instructor = updates.instructor;
+  
+  // Mapeo de nombres (Front -> DB)
   if (updates.image) {
+  // 1. Si es una URL de tu Storage de Supabase, extraemos solo el nombre final
+  if (updates.image.includes('supabase.co/storage')) {
+    const urlParts = updates.image.split('/');
+    // Tomamos el último segmento (ej: "curso1.webp")
+    dbUpdates.thumbnail_url = urlParts.pop(); 
+  } else {
+    // 2. Si es una ruta relativa o una URL externa, la dejamos como está
     dbUpdates.thumbnail_url = updates.image;
-    delete (dbUpdates as any).image;
   }
-  
-  if (updates.level) {
-    dbUpdates.difficulty = updates.level;
-    delete (dbUpdates as any).level;
-  }
+}
+  if (updates.level) dbUpdates.difficulty = updates.level;
+
+  console.log("Enviando a DB:", dbUpdates);
 
   const { data, error } = await courseQueries.update(courseId, dbUpdates);
 
   if (error) {
+    console.error("Error de Supabase:", error);
     set({ error: error.message, isLoading: false });
   } else if (data) {
-    // Supabase devuelve un objeto o un array de un objeto
+    // 🔥 LOG CLAVE 2: ¿Qué nos respondió la DB?
+    console.log("Lo que nos devolvió Supabase:", data);
+
     const rawData = Array.isArray(data) ? data[0] : data;
 
     set((state) => ({
       courses: state.courses.map((c) => {
         if (c.id === courseId) {
-          // 2. TRADUCCIÓN: De lo que devolvió la DB a lo que usa el Front
           const formatted = mapVisualData(rawData);
-          
           return {
-            ...c,         // Mantenemos lo viejo (aquí viven las lessons)
-            ...formatted, // Pisamos con lo nuevo mapeado (title, description, level, image)
-            // Forzamos mantener las lessons si la DB no las mandó (que es lo normal)
-            lessons: (rawData as any).lessons ? formatted.lessons : c.lessons
+            ...c,
+            ...formatted,
+            // Si la data de la DB no trae lecciones, mantenemos las locales
+            lessons: (rawData as any).lessons ? formatted.lessons : c.lessons,
+            // Forzamos la descripción si no cambió
+            description: rawData.description || c.description
           };
         }
         return c;
