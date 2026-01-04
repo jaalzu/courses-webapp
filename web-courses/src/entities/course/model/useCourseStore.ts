@@ -63,6 +63,8 @@ export const useCourseStore = create<CourseStore>((set, get) => ({
     }
   },
 
+
+
 updateCourse: async (courseId, updates) => {
  set({ isLoading: true, error: null });
 
@@ -76,13 +78,10 @@ if (updates.description !== undefined) dbUpdates.description = updates.descripti
   
   // Mapeo de nombres (Front -> DB)
   if (updates.image) {
-  // 1. Si es una URL de tu Storage de Supabase, extraemos solo el nombre final
   if (updates.image.includes('supabase.co/storage')) {
     const urlParts = updates.image.split('/');
-    // Tomamos el último segmento (ej: "curso1.webp")
     dbUpdates.thumbnail_url = urlParts.pop(); 
   } else {
-    // 2. Si es una ruta relativa o una URL externa, la dejamos como está
     dbUpdates.thumbnail_url = updates.image;
   }
 }
@@ -96,8 +95,6 @@ if (updates.description !== undefined) dbUpdates.description = updates.descripti
     console.error("Error de Supabase:", error);
     set({ error: error.message, isLoading: false });
   } else if (data) {
-    // 🔥 LOG CLAVE 2: ¿Qué nos respondió la DB?
-    console.log("Lo que nos devolvió Supabase:", data);
 
     const rawData = Array.isArray(data) ? data[0] : data;
 
@@ -108,9 +105,7 @@ if (updates.description !== undefined) dbUpdates.description = updates.descripti
           return {
             ...c,
             ...formatted,
-            // Si la data de la DB no trae lecciones, mantenemos las locales
             lessons: (rawData as any).lessons ? formatted.lessons : c.lessons,
-            // Forzamos la descripción si no cambió
             description: rawData.description || c.description
           };
         }
