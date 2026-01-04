@@ -31,13 +31,16 @@ export const progressQueries = {
   ) => {
     const { data, error } = await supabase
       .from('user_progress')
-      .upsert({
-        user_id: userId,
-        course_id: courseId,
-        lesson_id: lessonId,
-        status,
-        updated_at: new Date().toISOString(),
-      })
+      .upsert(
+        {
+          user_id: userId,
+          course_id: courseId,
+          lesson_id: lessonId,
+          status,
+          updated_at: new Date().toISOString(),
+        }, 
+        { onConflict: 'user_id,lesson_id' } 
+      )
       .select();
     
     return { data, error };
@@ -47,14 +50,17 @@ export const progressQueries = {
   markLessonComplete: async (userId: string, courseId: string, lessonId: string) => {
     const { data, error } = await supabase
       .from('user_progress')
-      .upsert({
-        user_id: userId,
-        course_id: courseId,
-        lesson_id: lessonId,
-        status: 'completed',
-        completed_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      })
+      .upsert(
+        {
+          user_id: userId,
+          course_id: courseId,
+          lesson_id: lessonId,
+          status: 'completed',
+          completed_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'user_id,lesson_id' } 
+      )
       .select();
     
     return { data, error };

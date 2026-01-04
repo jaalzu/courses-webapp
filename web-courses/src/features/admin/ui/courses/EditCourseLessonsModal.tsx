@@ -99,36 +99,20 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
     setLessons(lessons.filter(l => l.id !== id))
   }
 
-  // ===== GUARDAR TODO =====
-  const handleSave = async () => {
-  setIsSaving(true)
+ const handleSave = async () => {
+  setIsSaving(true);
   try {
-    // 1. Formateamos las lecciones para que Supabase las entienda
-    const formattedLessons = lessons.map(({ id, videoUrl, title, duration }) => {
-      const isNew = id.length > 20; // Si es UUID generado por crypto, es nueva
-      
-      return {
-        ...(isNew ? {} : { id }), // Si es vieja, mandamos el ID para que actualice
-        title,
-        duration,
-        video_url: videoUrl, // <--- Crucial: mapeo a snake_case
-      };
-    });
-
-    // 2. Ejecutamos la actualización y ESPERAMOS (await)
-    // Usamos el store de Zustand que ya maneja la lógica de Supabase
+    // Ya no necesitas lógica rara de IDs ni UUIDs aquí, 
+    // solo mandale al store lo que tenés en el estado.
     await updateCourse(course.id, {
-      keyPoints: courseContent.keyPoints, // Asegúrate que coincida con el nombre en la DB
+      keyPoints: courseContent.keyPoints,
       extraInfo: courseContent.extraInfo,
-      lessons: formattedLessons as any 
+      lessons: lessons // El store se encarga del mapeo a video_url
     });
 
-    // No hace falta el setTimeout si usamos await, 
-    // pero si querés dejarlo por un tema visual de "loading", podés.
     onClose();
   } catch (error) {
-    console.error("Error al guardar el curso:", error);
-    alert("Hubo un error al guardar los cambios.");
+    alert("Error al guardar");
   } finally {
     setIsSaving(false);
   }

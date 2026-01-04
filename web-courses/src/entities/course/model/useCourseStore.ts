@@ -2,6 +2,8 @@ import { create } from 'zustand'
 import type { Course } from '../types'
 import { courseQueries } from '@/shared/lib/supabase/queries/courses'
 import { getCourseImage } from '@/shared/lib/supabase/storage' // <-- Importa tu helper
+import { supabase } from '@/shared/lib/supabase/client' 
+import { useProgressStore } from '@/entities/progress/model/useProgressStore';
 
 interface CourseStore {
   courses: Course[]
@@ -14,19 +16,35 @@ interface CourseStore {
   getCourseById: (courseId: string) => Course | undefined
 }
 
-// Función helper interna para no repetir la lógica de mapeo
-const mapVisualData = (dbData: any): Course => ({
-  ...dbData,
-  // 1. Traducimos thumbnail_url -> image
-  image: getCourseImage(dbData.thumbnail_url),
-  // 2. Traducimos difficulty -> level (Esto arregla que no se vea la dificultad)
-  level: dbData.difficulty || 'beginner', 
-  // 3. Protegemos las lecciones
-  lessons: (dbData.lessons || []).map((l: any) => ({
-    ...l,
-    videoUrl: l.video_url || ''
-  }))
-})
+const mapVisualData = (dbData: any): Course => {
+  // 1. Si dbData no existe (null/undefined), devolvemos un objeto Course base
+  if (!dbData) {
+    return {
+      id: '',
+      title: '',
+      description: '',
+      image: '',
+      level: 'beginner',
+      lessons: [],
+      // Agregá aquí los campos obligatorios de tu interface Course
+    } as Course;
+  }
+
+  return {
+    ...dbData,
+    // 2. Protegemos el thumbnail_url (si es null, mandamos string vacío)
+    image: dbData.thumbnail_url ? getCourseImage(dbData.thumbnail_url) : '',
+    
+    // 3. Traducimos difficulty -> level con fallback
+    level: dbData.difficulty || 'beginner', 
+    
+    // 4. Protegemos las lecciones y sus campos internos
+    lessons: (dbData.lessons || []).map((l: any) => ({
+      ...l,
+      videoUrl: l.video_url || ''
+    }))
+  };
+};
 
 export const useCourseStore = create<CourseStore>((set, get) => ({
   courses: [],
@@ -66,56 +84,80 @@ export const useCourseStore = create<CourseStore>((set, get) => ({
 
 
 updateCourse: async (courseId, updates) => {
- set({ isLoading: true, error: null });
+  set({ isLoading: true, error: null });
 
-  // 1. Solo enviamos campos que sabemos que existen en la tabla 'courses'
-  const dbUpdates: any = {};
-  
-if (updates.title !== undefined) dbUpdates.title = updates.title;
-if (updates.description !== undefined) dbUpdates.description = updates.description;
-  if (updates.duration) dbUpdates.duration = Number(updates.duration);
-  if (updates.instructor) dbUpdates.instructor = updates.instructor;
-  
-  // Mapeo de nombres (Front -> DB)
-  if (updates.image) {
-  if (updates.image.includes('supabase.co/storage')) {
-    const urlParts = updates.image.split('/');
-    dbUpdates.thumbnail_url = urlParts.pop(); 
-  } else {
-    dbUpdates.thumbnail_url = updates.image;
-  }
-}
-  if (updates.level) dbUpdates.difficulty = updates.level;
+  try {
+    // --- PARTE A: ACTUALIZAR TABLA 'COURSES' ---
+    const dbUpdates: any = {};
+    if (updates.title !== undefined) dbUpdates.title = updates.title;
+    if (updates.description !== undefined) dbUpdates.description = updates.description;
+    if (updates.duration) dbUpdates.duration = Number(updates.duration);
+    if (updates.instructor) dbUpdates.instructor = updates.instructor;
+    
+    if (updates.image) {
+      if (updates.image.includes('supabase.co/storage')) {
+        dbUpdates.thumbnail_url = updates.image.split('/').pop(); 
+      } else {
+        dbUpdates.thumbnail_url = updates.image;
+      }
+    }
+    if (updates.level) dbUpdates.difficulty = updates.level;
 
-  console.log("Enviando a DB:", dbUpdates);
+    const { data: courseData, error: courseError } = await courseQueries.update(courseId, dbUpdates);
+    if (courseError) throw courseError;
 
-  const { data, error } = await courseQueries.update(courseId, dbUpdates);
+    // --- PARTE B: ACTUALIZAR TABLA 'LESSONS' ---
+    if (updates.lessons) {
+      // 1. Borramos las viejas
+      const { error: delError } = await supabase.from('lessons').delete().eq('course_id', courseId);
+      if (delError) throw delError;
+      
+      // 2. Insertamos las nuevas
+      const lessonsToInsert = updates.lessons.map((l: any, index: number) => ({
+        course_id: courseId,
+        title: l.title,
+        duration: isNaN(Number(l.duration)) ? 0 : Number(l.duration), 
+        video_url: l.videoUrl || l.video_url || '',
+        order_index: index, 
+      }));
+      
+      const { error: insError } = await supabase.from('lessons').insert(lessonsToInsert);
+      if (insError) throw insError;
+    }
 
-  if (error) {
-    console.error("Error de Supabase:", error);
-    set({ error: error.message, isLoading: false });
-  } else if (data) {
-
-    const rawData = Array.isArray(data) ? data[0] : data;
+    // --- PARTE C: ACTUALIZAR ESTADO LOCAL SIN PERDER DATOS ---
+    const rawData = Array.isArray(courseData) && courseData.length > 0 ? courseData[0] : null;
 
     set((state) => ({
       courses: state.courses.map((c) => {
         if (c.id === courseId) {
+          // Si Supabase NO devolvió el curso (rawData es null), 
+          // mantenemos el curso actual 'c' y solo actualizamos las lecciones.
+          if (!rawData) {
+            return {
+              ...c,
+              lessons: updates.lessons || c.lessons
+            };
+          }
+
+          // Si devolvió datos, mapeamos y mezclamos
           const formatted = mapVisualData(rawData);
           return {
-            ...c,
-            ...formatted,
-            lessons: (rawData as any).lessons ? formatted.lessons : c.lessons,
-            description: rawData.description || c.description
+            ...c,           // Datos viejos
+            ...formatted,   // Datos nuevos de la DB
+            lessons: updates.lessons || c.lessons // Lecciones del form
           };
         }
         return c;
       }),
       isLoading: false
     }));
+
+  } catch (err: any) {
+    console.error("Error en updateCourse:", err);
+    set({ error: err.message, isLoading: false });
   }
 },
-
 
   deleteCourse: async (courseId) => {
     set({ isLoading: true, error: null })
