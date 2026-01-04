@@ -2,7 +2,6 @@
 import { Montserrat } from 'next/font/google'
 import "../src/shared/styles/globals.css"
 import { QueryProvider } from '@/shared/providers/QueryProvider'
-import { AuthProvider } from '@/shared/providers/AuthProvider'
 
 const montserrat = Montserrat({
   subsets: ['latin'],

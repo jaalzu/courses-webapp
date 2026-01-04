@@ -6,7 +6,7 @@ export const courseQueries = {
     const { data, error } = await supabase
       .from('courses')
       .select('*, lessons(*)')
-.order('created_at', { ascending: true }) // O por 'title'  
+      .order('created_at', { ascending: true }) // O por 'title'  
   
     return { data, error };
   },
@@ -32,17 +32,18 @@ export const courseQueries = {
     return { data, error };
   },
 
-  // Cambiado a number
-  update: async (id: string, updates: any) => {
-    const { data, error } = await supabase
-      .from('courses')
-      .update(updates)
-      .eq('id', id)
-      .select()
-      .single();
-    
-    return { data, error };
-  },
+
+update: async (id: string, updates: any) => {
+  // PRUEBA ATÓMICA: Solo mandamos el título
+  const { data, error } = await supabase
+    .from('courses')
+    .update({ title: updates.title }) 
+    .eq('id', id)
+    .select();
+  
+  console.log("¡Con un solo campo funcionó!", data);
+  return { data, error };
+},
 
   // Cambiado a number
   delete: async (id: string) => {

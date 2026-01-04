@@ -17,9 +17,11 @@ interface CourseStore {
 // Función helper interna para no repetir la lógica de mapeo
 const mapVisualData = (dbData: any): Course => ({
   ...dbData,
-  // Transformamos thumbnail_url de la DB en la propiedad image que usa el front
+  // 1. Traducimos thumbnail_url -> image
   image: getCourseImage(dbData.thumbnail_url),
-  // Aseguramos que las lecciones no rompan si vienen null y mapeamos sus videos
+  // 2. Traducimos difficulty -> level (Esto arregla que no se vea la dificultad)
+  level: dbData.difficulty || 'beginner', 
+  // 3. Protegemos las lecciones
   lessons: (dbData.lessons || []).map((l: any) => ({
     ...l,
     videoUrl: l.video_url || ''
@@ -61,21 +63,51 @@ export const useCourseStore = create<CourseStore>((set, get) => ({
     }
   },
 
-  updateCourse: async (courseId, updates) => {
-    set({ isLoading: true, error: null })
-    const { data, error } = await courseQueries.update(courseId, updates)
 
-    if (error) {
-      set({ error: error.message, isLoading: false })
-    } else if (data) {
-      set((state) => ({
-        courses: state.courses.map((c) => 
-          c.id === courseId ? mapVisualData(data) : c
-        ),
-        isLoading: false
-      }))
-    }
-  },
+updateCourse: async (courseId, updates) => {
+  set({ isLoading: true, error: null });
+
+  // 1. TRADUCCIÓN: De lo que viene del Form a lo que entiende la DB
+  const dbUpdates: any = { ...updates };
+  
+  if (updates.image) {
+    dbUpdates.thumbnail_url = updates.image;
+    delete (dbUpdates as any).image;
+  }
+  
+  if (updates.level) {
+    dbUpdates.difficulty = updates.level;
+    delete (dbUpdates as any).level;
+  }
+
+  const { data, error } = await courseQueries.update(courseId, dbUpdates);
+
+  if (error) {
+    set({ error: error.message, isLoading: false });
+  } else if (data) {
+    // Supabase devuelve un objeto o un array de un objeto
+    const rawData = Array.isArray(data) ? data[0] : data;
+
+    set((state) => ({
+      courses: state.courses.map((c) => {
+        if (c.id === courseId) {
+          // 2. TRADUCCIÓN: De lo que devolvió la DB a lo que usa el Front
+          const formatted = mapVisualData(rawData);
+          
+          return {
+            ...c,         // Mantenemos lo viejo (aquí viven las lessons)
+            ...formatted, // Pisamos con lo nuevo mapeado (title, description, level, image)
+            // Forzamos mantener las lessons si la DB no las mandó (que es lo normal)
+            lessons: (rawData as any).lessons ? formatted.lessons : c.lessons
+          };
+        }
+        return c;
+      }),
+      isLoading: false
+    }));
+  }
+},
+
 
   deleteCourse: async (courseId) => {
     set({ isLoading: true, error: null })

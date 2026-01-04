@@ -6,10 +6,9 @@ import dynamic from 'next/dynamic' // ← Agregar
 import { SidebarProvider } from "@/widgets/sidebar/sidebar"
 import { AppSidebar } from "@/widgets/sidebar/app-sidebar"
 
-// ← Importar dinámicamente el Navbar
 const Navbar = dynamic(() => import("@/widgets/navbar/navbar").then(mod => ({ default: mod.Navbar })), {
-  ssr: false, // No renderizar en servidor
-  loading: () => <div className="h-13" /> // Placeholder mientras carga
+  ssr: false, 
+  loading: () => <div className="h-13" />
 })
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {

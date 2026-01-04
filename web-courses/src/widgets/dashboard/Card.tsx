@@ -117,8 +117,8 @@ const { isFavorite, toggleFavorite } = useFavoriteIds()
       >
         <Image
           src={courseData.image || "/curso1.webp"}
-          alt={courseData.title}
-          width={400}
+        alt={courseData.title || "Imagen del curso"}
+            width={400}
           height={200}
           className="w-full h-40 object-cover"
           unoptimized 
