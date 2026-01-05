@@ -1,17 +1,32 @@
-// @/shared/supabase/queries/cursos.ts
 import { supabase } from '../client';
+import { getCourseImage } from '../storage';
+
+// Helper para formatear cursos
+const formatCourse = (dbCourse: any) => ({
+  ...dbCourse,
+  image: dbCourse.thumbnail_url ? getCourseImage(dbCourse.thumbnail_url) : '',
+  level: dbCourse.difficulty || 'beginner',
+  keyPoints: dbCourse.key_points || [], // ✅ Este sí
+  lessons: (dbCourse.lessons || []).map((l: any) => ({
+    ...l,
+    duration: String(l.duration || '0'),
+    videoUrl: l.video_url || ''
+  }))
+});
 
 export const courseQueries = {
   getAll: async () => {
     const { data, error } = await supabase
       .from('courses')
       .select('*, lessons(*)')
-      .order('created_at', { ascending: true }) // O por 'title'  
+      .order('created_at', { ascending: true });
   
-    return { data, error };
+    if (error) return { data: null, error };
+    
+    const formatted = (data || []).map(formatCourse);
+    return { data: formatted, error: null };
   },
 
-  // Cambiado de string a number
   getById: async (id: string) => {
     const { data, error } = await supabase
       .from('courses')
@@ -19,7 +34,9 @@ export const courseQueries = {
       .eq('id', id)
       .single();
     
-    return { data, error };
+    if (error) return { data: null, error };
+    
+    return { data: formatCourse(data), error: null };
   },
 
   create: async (course: any) => {
@@ -29,22 +46,25 @@ export const courseQueries = {
       .select()
       .single();
     
-    return { data, error };
+    if (error) return { data: null, error };
+    
+    return { data: formatCourse(data), error: null };
   },
 
-update: async (id: string, updates: any) => {
-  // Quitamos el objeto fijo { title: updates.title } 
-  // y mandamos 'updates', que ya viene mapeado desde el Store
-  const { data, error } = await supabase
-    .from('courses')
-    .update(updates) 
-    .eq('id', id)
-    .select();
+  update: async (id: string, updates: any) => {
+    const { data, error } = await supabase
+      .from('courses')
+      .update(updates) 
+      .eq('id', id)
+      .select()
+       .maybeSingle(); // Cambiá .single() por .maybeSingle()
   
-  return { data, error };
-},
+  if (error) return { data: null, error };
+  if (!data) return { data: null, error: { message: 'Curso no encontrado' } };
+  
+  return { data: formatCourse(data), error: null };
+  },
 
-  // Cambiado a number
   delete: async (id: string) => {
     const { error } = await supabase
       .from('courses')
@@ -60,6 +80,9 @@ update: async (id: string, updates: any) => {
       .select('*')
       .or(`title.ilike.%${query}%,description.ilike.%${query}%`);
     
-    return { data, error };
+    if (error) return { data: null, error };
+    
+    const formatted = (data || []).map(formatCourse);
+    return { data: formatted, error: null };
   }
 };
