@@ -2,8 +2,7 @@ import { create } from 'zustand'
 import type { Course } from '../types'
 import { courseQueries } from '@/shared/lib/supabase/queries/courses'
 import { getCourseImage } from '@/shared/lib/supabase/storage' // <-- Importa tu helper
-import { supabase } from '@/shared/lib/supabase/client' 
-import { useProgressStore } from '@/entities/progress/model/useProgressStore';
+import { lessonQueries } from '@/shared/lib/supabase/queries/lessons';
 
 interface CourseStore {
   courses: Course[]
@@ -87,65 +86,46 @@ updateCourse: async (courseId, updates) => {
   set({ isLoading: true, error: null });
 
   try {
-    // --- PARTE A: ACTUALIZAR TABLA 'COURSES' ---
+    // --- PARTE A: ACTUALIZAR CURSO ---
     const dbUpdates: any = {};
     if (updates.title !== undefined) dbUpdates.title = updates.title;
     if (updates.description !== undefined) dbUpdates.description = updates.description;
-    if (updates.duration) dbUpdates.duration = Number(updates.duration);
+    // IMPORTANTE: El curso también tiene duración, lo pasamos a String
+    if (updates.duration) dbUpdates.duration = String(updates.duration);
     if (updates.instructor) dbUpdates.instructor = updates.instructor;
     
     if (updates.image) {
-      if (updates.image.includes('supabase.co/storage')) {
-        dbUpdates.thumbnail_url = updates.image.split('/').pop(); 
-      } else {
-        dbUpdates.thumbnail_url = updates.image;
-      }
+      dbUpdates.thumbnail_url = updates.image.includes('supabase.co/storage') 
+        ? updates.image.split('/').pop() 
+        : updates.image;
     }
     if (updates.level) dbUpdates.difficulty = updates.level;
 
     const { data: courseData, error: courseError } = await courseQueries.update(courseId, dbUpdates);
     if (courseError) throw courseError;
 
-    // --- PARTE B: ACTUALIZAR TABLA 'LESSONS' ---
+    // --- PARTE B: LLAMAR A LA QUERY UNIFICADA ---
+    let finalLessons = updates.lessons;
     if (updates.lessons) {
-      // 1. Borramos las viejas
-      const { error: delError } = await supabase.from('lessons').delete().eq('course_id', courseId);
-      if (delError) throw delError;
-      
-      // 2. Insertamos las nuevas
-      const lessonsToInsert = updates.lessons.map((l: any, index: number) => ({
-        course_id: courseId,
-        title: l.title,
-        duration: isNaN(Number(l.duration)) ? 0 : Number(l.duration), 
-        video_url: l.videoUrl || l.video_url || '',
-        order_index: index, 
-      }));
-      
-      const { error: insError } = await supabase.from('lessons').insert(lessonsToInsert);
-      if (insError) throw insError;
+      // Usamos la función del archivo queries
+      const { data: newLessons } = await lessonQueries.syncLessons(courseId, updates.lessons);
+      if (newLessons) finalLessons = newLessons;
     }
 
-    // --- PARTE C: ACTUALIZAR ESTADO LOCAL SIN PERDER DATOS ---
+    // --- PARTE C: ACTUALIZAR ESTADO LOCAL ---
     const rawData = Array.isArray(courseData) && courseData.length > 0 ? courseData[0] : null;
 
     set((state) => ({
       courses: state.courses.map((c) => {
         if (c.id === courseId) {
-          // Si Supabase NO devolvió el curso (rawData es null), 
-          // mantenemos el curso actual 'c' y solo actualizamos las lecciones.
-          if (!rawData) {
-            return {
-              ...c,
-              lessons: updates.lessons || c.lessons
-            };
-          }
-
-          // Si devolvió datos, mapeamos y mezclamos
-          const formatted = mapVisualData(rawData);
+          const baseData = rawData ? mapVisualData(rawData) : c;
           return {
-            ...c,           // Datos viejos
-            ...formatted,   // Datos nuevos de la DB
-            lessons: updates.lessons || c.lessons // Lecciones del form
+            ...baseData,
+            lessons: finalLessons ? finalLessons.map((l: any) => ({
+              ...l,
+              duration: String(l.duration || '0'),
+              videoUrl: l.video_url || l.videoUrl || ''
+            })) : c.lessons
           };
         }
         return c;
@@ -155,6 +135,9 @@ updateCourse: async (courseId, updates) => {
 
   } catch (err: any) {
     console.error("Error en updateCourse:", err);
+    console.error("Error detallado:", JSON.stringify(err, null, 2));
+  console.error("Mensaje:", err.message);
+  console.error("Detalle:", err.details); // Propiedad típica de Supabase
     set({ error: err.message, isLoading: false });
   }
 },

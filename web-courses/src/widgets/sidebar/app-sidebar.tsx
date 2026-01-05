@@ -36,7 +36,7 @@ const items = [
     title: "Metricas", 
     url: "/metricas", 
     icon: PresentationChartBarIcon, 
-    isAdmin: true // Flag para identificar rutas protegidas
+    isAdmin: true 
   },
 ]
 
@@ -104,19 +104,6 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link href="/settings" className="flex items-center gap-2 w-full">
-                <Cog6ToothIcon className="w-5 h-5" />
-                <span>Configuración</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
     </Sidebar>
   )
 }
