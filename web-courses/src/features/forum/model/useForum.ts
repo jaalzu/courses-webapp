@@ -9,21 +9,22 @@ export const useForum = (courseId: string) => {
 
   // Cargar posts al montar
   useEffect(() => {
+    const loadPosts = async () => { 
+      setLoading(true);
+      try {
+        const { data, error } = await forumQueries.getPosts(courseId);
+        if (error) throw error;
+        setPosts(data || []);
+      } catch (error) {
+        console.error('Error cargando posts:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     loadPosts();
   }, [courseId]);
 
-  const loadPosts = async () => {
-    setLoading(true);
-    try {
-      const { data, error } = await forumQueries.getPosts(courseId);
-      if (error) throw error;
-      setPosts(data || []);
-    } catch (error) {
-      console.error('Error cargando posts:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const createPost = async (content: string, userId: string) => {
     try {

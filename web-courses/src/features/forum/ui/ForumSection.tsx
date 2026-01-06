@@ -17,14 +17,14 @@ interface Props {
   courseId: string;
   currentUserId: string;
   currentUserName: string;
-  isCurrentUserAdmin?: boolean; // 👈 Nueva prop
+  isCurrentUserAdmin?: boolean; 
 }
 
 export const ForumSection = ({ 
   courseId, 
   currentUserId, 
   currentUserName,
-  isCurrentUserAdmin = false // 👈 Destructurar
+  isCurrentUserAdmin = false 
 }: Props) => {
   const { posts, loading, createPost, addComment, deleteComment, deletePost } = useForum(courseId);
   const [newPostContent, setNewPostContent] = useState('');
@@ -32,16 +32,15 @@ export const ForumSection = ({
   const handleCreatePost = (e: React.FormEvent) => {
     e.preventDefault();
     if (newPostContent.trim()) {
-      createPost(newPostContent, currentUserId, currentUserName);
+      createPost(newPostContent, currentUserId);
       setNewPostContent('');
     }
   };
 
   const handleAddComment = (postId: string, content: string) => {
-    addComment(postId, content, currentUserId, currentUserName);
+    addComment(postId, content, currentUserId);
   };
 
-  // 👇 Nueva función handler
   const handleDeleteComment = (postId: string, commentId: string) => {
     deleteComment(postId, commentId);
   };
@@ -151,7 +150,7 @@ export const ForumSection = ({
   isCurrentUserAdmin={isCurrentUserAdmin}
   onAddComment={handleAddComment}
   onDeleteComment={handleDeleteComment}
-  onDeletePost={handleDeletePost} // 👈 Agregar esta línea
+  onDeletePost={handleDeletePost} 
   onSharePost={sharePost}
   onShareComment={shareComment}
 />
