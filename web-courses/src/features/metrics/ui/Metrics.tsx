@@ -1,6 +1,6 @@
 'use client'
 
-import { useUserList } from '@/entities/user/hooks/useUserList'
+import { useUserList } from '@/features/admin/model/useUserList'
 import { useCourseStore } from '@/entities/course/model/useCourseStore'
 import { useProgressStore } from '@/entities/progress/model/useProgressStore'
 

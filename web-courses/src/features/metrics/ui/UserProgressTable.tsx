@@ -2,7 +2,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useUserActions } from '@/entities/user/model/useUserActions'
+import { useUserActions } from '@/features/admin/model/useUserActions'
 
 interface UserWithProgress {
   id: string;
