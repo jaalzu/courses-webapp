@@ -11,18 +11,19 @@ interface Props {
   isOpen: boolean
   onClose: () => void
   onBack: () => void
+  isNewCourse?: boolean // 
 }
 
-export default function EditCourseContentModal({ course, isOpen, onClose, onBack }: Props) {
+export default function EditCourseContentModal({ course, isOpen, onClose, onBack, isNewCourse = false}: Props) {
   const updateCourse = useCourseStore(state => state.updateCourse)
   const [isSaving, setIsSaving] = useState(false)
 
   // Estado para key points
-  const [keyPoints, setKeyPoints] = useState<string[]>(course.keyPoints || [])
+  const [keyPoints, setKeyPoints] = useState<string[]>(isNewCourse ? [] : (course.keyPoints || []))
   const [keyPointInput, setKeyPointInput] = useState('')
 
   // Estado para lecciones
-  const [lessons, setLessons] = useState<Lesson[]>(course.lessons || [])
+  const [lessons, setLessons] = useState<Lesson[]>(course.lessons?.length ? course.lessons : [])
   const [editingLesson, setEditingLesson] = useState<string | null>(null)
 
   // Form para lección

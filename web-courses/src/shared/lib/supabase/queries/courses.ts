@@ -39,17 +39,31 @@ export const courseQueries = {
     return { data: formatCourse(data), error: null };
   },
 
+
+
   create: async (course: any) => {
-    const { data, error } = await supabase
-      .from('courses')
-      .insert(course)
-      .select()
-      .single();
-    
-    if (error) return { data: null, error };
-    
-    return { data: formatCourse(data), error: null };
-  },
+  // Mapear de frontend a DB antes de insertar
+  const dbCourse = {
+    title: course.title,
+    description: course.description,
+    thumbnail_url: course.image || null,
+    duration: course.duration || null,
+    instructor: course.instructor || null,
+    difficulty: course.level,
+    key_points: course.keyPoints || [],
+  }
+
+  const { data, error } = await supabase
+    .from('courses')
+    .insert(dbCourse) // Insertar el objeto mapeado
+    .select()
+    .single();
+  
+  if (error) return { data: null, error };
+  
+  return { data: formatCourse(data), error: null };
+},
+
 
   update: async (id: string, updates: any) => {
     const { data, error } = await supabase
