@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { ForumSection } from '@/features/forum/ui/ForumSection'
-import { useCourseNavigation } from "@/features/course-navigation/model/useCourseNavigation"
+import { useCourseNavigation } from "@/features/course-navigation/useCourseNavigation"
 import CourseContent from "@/widgets/courseContent/courseContent"
 import { LessonList } from "@/widgets/lesson-list/lessonList"
 import InstructorCard from "@/widgets/courseContent/instructorCard"

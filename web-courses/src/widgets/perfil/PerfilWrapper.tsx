@@ -5,7 +5,7 @@ import { useAuthStore } from '@/features/auth/model/useAuthStore'
 import { useCourses } from "@/entities/course/useCourses"
 import { useProgressStore } from "@/entities/progress/model/useProgressStore"
 import { getUserProgress } from "@/entities/progress/lib/getUserProgress"
-import { getUserProfileStats } from "@/features/profile/lib/getUserProfileStats"
+import { getUserProfileStats } from "@/features/profile/getUserProfileStats"
 import { Avatar, AvatarFallback, Button } from "@/shared/ui/index"
 import { 
   CheckCircleIcon, 
