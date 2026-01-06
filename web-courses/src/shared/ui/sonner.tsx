@@ -1,12 +1,13 @@
 "use client"
 
 import {
-  CircleCheckIcon,
-  InfoIcon,
-  Loader2Icon,
-  OctagonXIcon,
-  TriangleAlertIcon,
-} from "lucide-react"
+  CheckCircleIcon,
+  InformationCircleIcon,
+  ArrowPathIcon,
+  ExclamationTriangleIcon,
+  XCircleIcon, // Agregamos este para errores reales
+} from "@heroicons/react/24/outline"
+
 import { useTheme } from "next-themes"
 import { Toaster as Sonner, type ToasterProps } from "sonner"
 
@@ -18,11 +19,11 @@ const Toaster = ({ ...props }: ToasterProps) => {
       theme={theme as ToasterProps["theme"]}
       className="toaster group"
       icons={{
-        success: <CircleCheckIcon className="size-4" />,
-        info: <InfoIcon className="size-4" />,
-        warning: <TriangleAlertIcon className="size-4" />,
-        error: <OctagonXIcon className="size-4" />,
-        loading: <Loader2Icon className="size-4 animate-spin" />,
+        success: <CheckCircleIcon className="size-4 text-green-500" />,
+        info: <InformationCircleIcon className="size-4 text-blue-500" />,
+        warning: <ExclamationTriangleIcon className="size-4 text-yellow-500" />,
+        error: <XCircleIcon className="size-4 text-red-500" />, // Diferenciamos el error
+        loading: <ArrowPathIcon className="size-4 animate-spin" />,
       }}
       style={
         {
