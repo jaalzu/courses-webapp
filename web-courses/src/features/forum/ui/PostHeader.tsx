@@ -22,7 +22,7 @@ export const PostHeader = ({
   return (
     <div className="flex items-start gap-3 mb-6 mt-1">
       {/* AVATAR */}
-      <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 relative">
+      <div className="w-12 h-12 rounded-full overflow-hidden shrink-0 relative">
   <Image
     src={avatar}
     alt={post.userName}
@@ -55,7 +55,7 @@ export const PostHeader = ({
                 rounded-lg
               "
             >
-              <TrashIcon className="w-4 h-4" />
+              <TrashIcon className="w-5 h-5" />
             </button>
           )}
         </div>

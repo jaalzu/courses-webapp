@@ -1,44 +1,59 @@
 'use client'
 
+import { useEffect } from 'react'
 import { useUserList } from '@/features/admin/model/useUserList'
 import { useCourseStore } from '@/entities/course/model/useCourseStore'
 import { useProgressStore } from '@/entities/progress/model/useProgressStore'
 
+import { MetricsSkeleton } from './MetricsSkeleton'
 import { deriveMetrics } from '../lib/deriveMetrics'
 import { StatsCard } from './StatsCard'
 import { UserProgressTable } from './UserProgressTable'
 import { PopularCourses } from './PopularCourses'
 
 export function Metrics() {
-  // 1. Obtener datos base
-  const { users, refetch } = useUserList()
-  const { courses } = useCourseStore()
-  const { progress } = useProgressStore()
+  const { users, isLoading: usersLoading, refetch } = useUserList()
+  const { courses, isLoading: coursesLoading, fetchCourses } = useCourseStore()
+  const { progress, isLoading: progressLoading, fetchAllProgress } = useProgressStore()
 
-  // 2. Derivar métricas (lógica pura)
+  useEffect(() => {
+    if (courses.length === 0) fetchCourses()
+    if (progress.length === 0 && fetchAllProgress) fetchAllProgress()
+  }, [courses.length, progress.length, fetchCourses, fetchAllProgress])
+
+  const isLoading = usersLoading || coursesLoading || progressLoading
+
+  if (isLoading) {
+    return <MetricsSkeleton />
+  }
+
+  // 4. Derivar métricas (solo cuando ya no hay carga)
   const metrics = deriveMetrics({
     users,
     courses,
     progress,
   })
 
-  // 3. Callback que se pasa a la tabla
-  const handleRoleUpdate = () => {
-    refetch()
-  }
-
-  // 4. UI
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 px-4 py-6 sm:px-6">
       <div className="max-w-7xl mx-auto">
+        
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-            Métricas del Sistema
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">
-            Panel de administración y estadísticas
-          </p>
+        <div className="mb-8 flex justify-between items-end">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+              Métricas del Sistema
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-2">
+              Panel de administración y estadísticas en tiempo real
+            </p>
+          </div>
+          <button 
+            onClick={() => refetch()}
+            className="text-sm text-blue-600 dark:text-blue-400 hover:underline font-medium"
+          >
+            Actualizar datos
+          </button>
         </div>
 
         {/* Stats Cards */}
@@ -62,11 +77,13 @@ export function Metrics() {
           <PopularCourses courses={metrics.popularCourses} />
         </div>
 
-        {/* Users Table */}
-        <UserProgressTable
-          users={metrics.usersWithProgress}
-          onRoleUpdate={handleRoleUpdate}
-        />
+        {/* Users Table - Ahora de solo lectura según lo pedido */}
+        <div className="mb-8">
+          <UserProgressTable
+            users={metrics.usersWithProgress}
+          />
+        </div>
+
       </div>
     </div>
   )

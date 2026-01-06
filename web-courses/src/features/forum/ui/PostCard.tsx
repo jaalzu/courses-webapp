@@ -37,7 +37,7 @@ export const PostCard = ({
         post={post} 
         currentUserName={currentUserName}
         isCurrentUserAdmin={isCurrentUserAdmin}
-        onDeletePost={onDeletePost} // 👈 Pasar props
+        onDeletePost={onDeletePost} 
       />
 
       {/* Acciones */}

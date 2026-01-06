@@ -1,4 +1,3 @@
-'use client'
 
 import { FavoriteCourses } from '@/features/favorites/ui/FavoriteCourses'
 

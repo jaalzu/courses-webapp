@@ -1,4 +1,3 @@
-'use client'
 
 import { CoursesDashboard } from "@/widgets/dashboard/CoursesDashboard"
 

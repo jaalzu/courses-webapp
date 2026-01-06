@@ -43,7 +43,7 @@ export const PostActions = ({
         transition-colors
       "
     >
-      <ShareIcon className="w-4 h-4" />
+      <ShareIcon className="w-5 h-5" />
       <span className="text-sm font-medium">Compartir</span>
     </button>
   </div>

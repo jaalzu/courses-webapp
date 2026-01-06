@@ -136,7 +136,7 @@ const { isFavorite, toggleFavorite } = useFavoriteIds()
               </Badge>
             )}
 
-            <p className="text-sm text-dark dark:text-gray-300 mt-3 line-clamp-2">
+            <p className="text-sm text-dark dark:text-gray-300 mt-5 line-clamp-5">
               {courseData.description}
             </p>
           </div>

@@ -87,7 +87,7 @@ export const ForumSection = ({
       <div className="p-6 border-b border-blue-200/30 dark:border-white-300/10 bg-white/70 dark:bg-gray-900  relative z-10">
 
         <div className="flex items-center gap-3 mb-4">
-       <div className="relative w-10 h-10 rounded-full overflow-hidden shrink-0">
+       <div className="relative w-13 h-13 rounded-full overflow-hidden shrink-0">
   <Image
     src="/avatar.webp"
     alt={currentUserName}

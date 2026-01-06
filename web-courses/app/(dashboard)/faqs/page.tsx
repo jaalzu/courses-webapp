@@ -1,4 +1,3 @@
-'use client'
 
 import { FAQWrapper } from '@/widgets/faqs/FAQWrapper'
 

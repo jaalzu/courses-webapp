@@ -1,12 +1,12 @@
 "use client";
 
 import YouTube from "react-youtube";
+import dynamic from 'next/dynamic';
 import { useRef } from "react";
 import type { Course } from "@/entities/course/types"
 
 import { FavoriteButton } from "@/features/favorites/ui/favoriteButton";
 import { useFavoriteIds } from "@/features/favorites/model/hooks/useFavoritesIds";
-import { localStorageFavorites } from "@/features/favorites/lib/favoriteStorage";
 
 interface CourseContentProps {
   course: Course;
@@ -23,6 +23,12 @@ export default function CourseContent({
 const { isFavorite, toggleFavorite } = useFavoriteIds()
   // Usa el video de la lección actual, o el de la primera lección si existe
   const videoToPlay = currentVideoUrl || course.lessons?.[0]?.videoUrl || course.video;
+
+
+const YouTube = dynamic(() => import("react-youtube"), { 
+  ssr: false, 
+  loading: () => <div className="w-full h-[300px] bg-gray-200 animate-pulse rounded-lg" /> 
+});
 
   const handleReady = (event: any) => {
     playerRef.current = event.target;

@@ -37,19 +37,17 @@ export const CommentsSection = ({
 
   return (
     <div className="mt-4 pb-4">
-      {/* Listado de Comentarios */}
       <div className="space-y-1">
         {post.comments.map((comment) => {
           const canDelete = comment.userName === currentUserName || isCurrentUserAdmin
 
           return (
             <div key={comment.id} className="relative group">
-              {/* LA LÍNEA REDDIT: Se muestra a la izquierda del contenido */}
               <div className="flex gap-3 px-4">
                 
-                {/* Columna de la izquierda: Avatar + Línea de seguimiento */}
+                {/* Columna de la izquierda: Avatar + Línea */}
                 <div className="flex flex-col items-center">
-                  <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 relative z-10 border-2 border-white dark:border-gray-900">
+                  <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 relative z-10 border-2 border-white dark:border-gray-900">
                     <Image
                       src={comment.userAvatar || '/avatar.webp'}
                       alt={comment.userName}
@@ -57,7 +55,6 @@ export const CommentsSection = ({
                       className="object-cover"
                     />
                   </div>
-                  {/* Esta es la línea vertical de trackeo */}
                   <div className="w-0.5 h-full bg-gray-200 dark:bg-gray-800 group-hover:bg-blue-500/50 transition-colors" />
                 </div>
 
@@ -65,40 +62,37 @@ export const CommentsSection = ({
                 <div className="flex-1 pb-6">
                   <div className="flex justify-between items-center mb-1">
                     <div className="flex gap-2 items-center">
-                      <span className="font-bold text-xs hover:underline cursor-pointer">
+                      <span className="font-bold text-sm hover:underline cursor-pointer">
                         {comment.userName}
                       </span>
-                      <span className="text-[10px] text-gray-500">
+                      <span className="text-xs text-gray-500">
                         • {formatDate(comment.createdAt)}
                       </span>
                     </div>
 
-                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                       {canDelete && (
                         <button
                           onClick={() => onDeleteComment(post.id, comment.id)}
-                          className="p-1 text-gray-400 hover:text-red-500 transition-colors"
+                          className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-all"
+                          title="Eliminar comentario"
                         >
-                          <TrashIcon className="w-3.5 h-3.5" />
+                          <TrashIcon className="w-5 h-5" />
                         </button>
                       )}
                       <button
                         onClick={() => onShareComment(comment, post)}
-                        className="p-1 text-gray-400 hover:text-blue-500 transition-colors"
+                        className="p-2 text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-full transition-all"
+                        title="Compartir"
                       >
-                        <ShareIcon className="w-3.5 h-3.5" />
+                        <ShareIcon className="w-5 h-5" />
                       </button>
                     </div>
                   </div>
 
-                  <p className="text-sm text-gray-700 dark:text-gray-300 leading-snug">
+                  <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                     {comment.content}
                   </p>
-                  
-                  {/* Botón de respuesta rápido (Estético para que parezca Reddit) */}
-                  <button className="text-[11px] font-bold text-gray-500 mt-2 hover:bg-gray-100 dark:hover:bg-gray-800 px-2 py-1 rounded">
-                    Responder
-                  </button>
                 </div>
               </div>
             </div>
@@ -106,7 +100,7 @@ export const CommentsSection = ({
         })}
       </div>
 
-      {/* Input de respuesta: Ahora más integrado */}
+      {/* Input de respuesta */}
       <div className="flex gap-3 px-4 mt-2 ml-11">
         <input
           value={input}
@@ -131,9 +125,9 @@ export const CommentsSection = ({
         <button
           onClick={submit}
           disabled={!input.trim()}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-full disabled:opacity-40 transition-all"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-5 rounded-full disabled:opacity-40 transition-all flex items-center justify-center"
         >
-          <span className="text-xs font-bold uppercase tracking-wider">Publicar</span>
+          <ArrowRightIcon className="w-4 h-4" />
         </button>
       </div>
     </div>
