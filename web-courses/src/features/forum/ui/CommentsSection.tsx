@@ -1,3 +1,4 @@
+// features/forum/ui/CommentsSection.tsx
 'use client'
 
 import { useState } from 'react'
@@ -19,7 +20,7 @@ interface Props {
 export const CommentsSection = ({
   post,
   currentUserName,
-  isCurrentUserAdmin = false,
+  isCurrentUserAdmin = false, 
   onAddComment,
   onShareComment,
   onDeleteComment,
@@ -29,92 +30,80 @@ export const CommentsSection = ({
 
   const submit = () => {
     if (!input.trim()) return
-    onAddComment(post.id, input)
+    onAddComment(post.id, input) // ⭐ Esto ya llama al hook con rate limiting
     setInput('')
   }
 
   if (!open) return null
 
   return (
-    <div className="mt-4 pb-4">
-      <div className="space-y-1">
-        {post.comments.map((comment) => {
-          const canDelete = comment.userName === currentUserName || isCurrentUserAdmin
+    <div className="mt-5 space-y-6 relative z-10">
+      {post.comments.map((comment) => {
+        const canDelete = comment.userName === currentUserName || isCurrentUserAdmin
 
-          return (
-            <div key={comment.id} className="relative group">
-              <div className="flex gap-3 px-4">
-                
-                {/* Columna de la izquierda: Avatar + Línea */}
-                <div className="flex flex-col items-center">
-                  <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 relative z-10 border-2 border-white dark:border-gray-900">
-                    <Image
-                      src={comment.userAvatar || '/avatar.webp'}
-                      alt={comment.userName}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="w-0.5 h-full bg-gray-200 dark:bg-gray-800 group-hover:bg-blue-500/50 transition-colors" />
+        return (
+          <div key={comment.id} className="flex gap-4 px-3">
+            <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 relative">
+              <Image
+                src={comment.userAvatar || '/avatar.webp'}
+                alt={comment.userName}
+                fill
+                className="object-cover"
+              />
+            </div>
+
+            <div className="flex-1 dark:bg-gray-900/30 text-gray-800 dark:text-gray-100 p-1">
+              <div className="flex justify-between mb-2">
+                <div className="flex gap-2 items-center">
+                  <span className="font-semibold text-sm">
+                    {comment.userName}
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    {formatDate(comment.createdAt)}
+                  </span>
                 </div>
 
-                {/* Contenido del comentario */}
-                <div className="flex-1 pb-6">
-                  <div className="flex justify-between items-center mb-1">
-                    <div className="flex gap-2 items-center">
-                      <span className="font-bold text-sm hover:underline cursor-pointer">
-                        {comment.userName}
-                      </span>
-                      <span className="text-xs text-gray-500">
-                        • {formatDate(comment.createdAt)}
-                      </span>
-                    </div>
+                <div className="flex gap-3">
+                  {canDelete && (
+                    <button
+                      onClick={() => onDeleteComment(post.id, comment.id)}
+                      className="text-gray-400 hover:text-red-500 transition-colors"
+                    >
+                      <TrashIcon className="w-3.5 h-3.5" />
+                    </button>
+                  )}
 
-                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      {canDelete && (
-                        <button
-                          onClick={() => onDeleteComment(post.id, comment.id)}
-                          className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-all"
-                          title="Eliminar comentario"
-                        >
-                          <TrashIcon className="w-5 h-5" />
-                        </button>
-                      )}
-                      <button
-                        onClick={() => onShareComment(comment, post)}
-                        className="p-2 text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-full transition-all"
-                        title="Compartir"
-                      >
-                        <ShareIcon className="w-5 h-5" />
-                      </button>
-                    </div>
-                  </div>
-
-                  <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-                    {comment.content}
-                  </p>
+                  <button
+                    onClick={() => onShareComment(comment, post)}
+                    className="text-gray-400 hover:text-blue-500 transition-colors"
+                  >
+                    <ShareIcon className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </div>
-            </div>
-          )
-        })}
-      </div>
 
-      {/* Input de respuesta */}
-      <div className="flex gap-3 px-4 mt-2 ml-11">
+              <p className="text-sm">{comment.content}</p>
+            </div>
+          </div>
+        )
+      })}
+
+      {/* Input para agregar comentario */}
+      <div className="flex gap-3 border-t pt-4">
+        <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 relative">
+          <Image
+            src="/avatar.webp"
+            alt={currentUserName}
+            fill
+            className="object-cover"
+          />
+        </div>
+
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="¿Qué piensas?"
-          className="
-            flex-1
-            bg-gray-100 dark:bg-gray-800/50
-            text-gray-800 dark:text-white
-            border border-transparent
-            focus:border-blue-500/50
-            rounded-full px-4 py-2 text-sm
-            focus:outline-none 
-          "
+          placeholder="Agrega tu respuesta..."
+          className="flex-1 bg-white dark:bg-gray-900 text-gray-800 dark:text-white border border-blue-200/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1"
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault()
@@ -122,10 +111,11 @@ export const CommentsSection = ({
             }
           }}
         />
+
         <button
           onClick={submit}
           disabled={!input.trim()}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-5 rounded-full disabled:opacity-40 transition-all flex items-center justify-center"
+          className="bg-blue-800 text-white p-3 rounded-lg disabled:opacity-40 transition-colors hover:bg-blue-900"
         >
           <ArrowRightIcon className="w-4 h-4" />
         </button>

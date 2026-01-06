@@ -5,7 +5,6 @@ import Link from "next/link"
 import {
   HomeIcon,
   UserIcon,
-  Cog6ToothIcon,
   QuestionMarkCircleIcon,
   HeartIcon,
   PresentationChartBarIcon 
@@ -21,17 +20,32 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarHeader,
-  SidebarFooter,
   SidebarTrigger,
 } from "@/widgets/sidebar/sidebar"
 
 import { useAuthStore } from "@/features/auth/model/useAuthStore"
 
 const items = [
-  { title: "Inicio", url: "/dashboard", icon: HomeIcon },
-  { title: "Perfil", url: "/perfil", icon: UserIcon },
-  { title: "Favoritos", url: "/favoritos", icon: HeartIcon },
-  { title: "FAQS", url: "/faqs", icon: QuestionMarkCircleIcon },
+  { 
+    title: "Inicio",
+     url: "/dashboard",
+      icon: HomeIcon 
+    },
+  { 
+    title: "Perfil",
+     url: "/perfil",
+      icon: UserIcon 
+    },
+  { 
+    title: "Favoritos",
+     url: "/favoritos",
+      icon: HeartIcon 
+    },
+  {
+     title: "FAQS",
+      url: "/faqs",
+       icon: QuestionMarkCircleIcon
+  },
   { 
     title: "Metricas", 
     url: "/metricas", 

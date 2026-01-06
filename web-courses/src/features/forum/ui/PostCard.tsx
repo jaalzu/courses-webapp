@@ -1,8 +1,8 @@
+// features/forum/ui/PostCard.tsx
 'use client'
 
 import { useState } from 'react'
 import { ForumPost, ForumComment } from '@/entities/forum-post'
-
 import { PostHeader } from './PostHeader'
 import { PostActions } from './PostActions'
 import { CommentsSection } from './CommentsSection'
@@ -32,29 +32,26 @@ export const PostCard = ({
 
   return (
     <div className="p-8 group relative">
-      {/* Header */}
       <PostHeader 
         post={post} 
         currentUserName={currentUserName}
         isCurrentUserAdmin={isCurrentUserAdmin}
-        onDeletePost={onDeletePost} 
+        onDeletePost={onDeletePost}
       />
 
-      {/* Acciones */}
       <PostActions
         commentsCount={post.comments.length}
         onToggleComments={() => setShowComments(v => !v)}
         onShare={() => onSharePost(post)}
       />
 
-      {/* Comentarios */}
       <CommentsSection
         post={post}
         open={showComments}
         currentUserName={currentUserName}
         isCurrentUserAdmin={isCurrentUserAdmin} 
         onAddComment={onAddComment}
-        onDeleteComment={onDeleteComment} 
+        onDeleteComment={onDeleteComment}
         onShareComment={onShareComment}
       />
     </div>
