@@ -9,8 +9,6 @@ import Image from 'next/image'
 import { useAuthStore } from "@/features/auth/model/useAuthStore"
 import { getAuthErrorMessage } from '@/shared/lib/supabase/errorHandler'
 
-
-
 export function LoginForm() {
   const router = useRouter()
   const { login, loginWithGoogle, isLoading } = useAuthStore()
@@ -18,26 +16,42 @@ export function LoginForm() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
+  const [emailError, setEmailError] = useState("") // ⭐ Nuevo
+
+  // ⭐ Validación básica de email
+  const validateEmail = (value: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(value)) {
+      setEmailError("Email inválido")
+      return false
+    }
+    setEmailError("")
+    return true
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
 
+    // ⭐ Validar antes de enviar
+    if (!validateEmail(email)) {
+      return
+    }
+
     try {
       await login(email, password)
-      router.push("/dashboard") // Redirigir al dashboard
+      router.push("/dashboard")
     } catch (err: any) {
-  setError(getAuthErrorMessage(err))
-}
+      setError(getAuthErrorMessage(err))
+    }
   }
 
   const handleGoogleLogin = async () => {
     try {
       await loginWithGoogle()
-      // El redirect lo maneja Supabase
     } catch (err: any) {
-  setError(getAuthErrorMessage(err))
-}
+      setError(getAuthErrorMessage(err))
+    }
   }
 
   return (
@@ -63,7 +77,6 @@ export function LoginForm() {
         Iniciar sesión con Google
       </Button>
 
-      {/* Separador */}
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
@@ -73,37 +86,43 @@ export function LoginForm() {
         </div>
       </div>
 
-      {/* Error message */}
       {error && (
         <div className="bg-red-50 text-red-600 px-4 py-2 rounded-md text-sm">
           {error}
         </div>
       )}
 
-      {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-3">
         <div className="relative w-full">
           <EnvelopeIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
           <Input
             type="email"
             placeholder="javieralzuu@gmail.com"
-            className="pl-10 w-full"
+            className={`pl-10 w-full ${emailError ? 'border-red-500' : ''}`}
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value)
+              if (emailError) validateEmail(e.target.value) // ⭐ Validar mientras escribe si hubo error
+            }}
+            onBlur={() => validateEmail(email)} // ⭐ Validar al salir del input
             required
             disabled={isLoading}
           />
+          {emailError && (
+            <span className="text-red-500 text-xs mt-1">{emailError}</span>
+          )}
         </div>
 
         <div className="relative w-full mt-3">
           <LockIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
           <Input
             type="password"
-            placeholder="Javier.20"
+            placeholder="Contraseña"
             className="pl-10 w-full"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            minLength={6} // ⭐ Mínimo 6 caracteres
             disabled={isLoading}
           />
         </div>
@@ -134,4 +153,3 @@ export function LoginForm() {
     </div>
   )
 }
-

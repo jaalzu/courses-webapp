@@ -6,6 +6,7 @@ import { useCourses } from "@/entities/course/useCourses"
 import { useProgressStore } from "@/entities/progress/model/useProgressStore"
 import { getUserProgress } from "@/entities/progress/lib/getUserProgress"
 import { getUserProfileStats } from "@/features/profile/getUserProfileStats"
+import { validateName } from '@/shared/lib/supabase/queries/profiles'
 import { Avatar, AvatarFallback, Button } from "@/shared/ui/index"
 import { 
   CheckCircleIcon, 
@@ -25,6 +26,7 @@ interface AvatarUserProps {
 function AvatarUser({ name, email }: AvatarUserProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [userName, setUserName] = useState(name)
+  const [nameError, setNameError] = useState("")
   const [isSaving, setIsSaving] = useState(false)
   
   const updateUserProfile = useAuthStore(state => state.updateUserProfile)
@@ -44,16 +46,35 @@ function AvatarUser({ name, email }: AvatarUserProps) {
           .slice(0, 2)
       : "??"
 
-  const handleSave = async () => {
-    if (!userName.trim()) return;
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setUserName(value)
+    
+    // Validar en tiempo real si ya hay error
+    if (nameError || value.length >= 3) {
+      const validation = validateName(value)
+      setNameError(validation.valid ? "" : validation.error || "")
+    }
+  }
+
+const handleSave = async () => {
+    // 1. Validar localmente antes de intentar disparar la acción
+    const validation = validateName(userName);
+    if (!validation.valid) {
+      setNameError(validation.error || "Nombre no válido");
+      return;
+    }
 
     setIsSaving(true);
+    setNameError(""); // Limpiamos errores previos antes de intentar
+
     try {
       await updateUserProfile({ name: userName.trim() });
       setIsEditing(false);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      alert("No se pudo guardar el nombre");
+      // En lugar de alert, usamos el estado de error
+      setNameError("Hubo un problema al conectar con el servidor. Intenta de nuevo.");
     } finally {
       setIsSaving(false);
     }
@@ -61,6 +82,7 @@ function AvatarUser({ name, email }: AvatarUserProps) {
 
   const handleCancel = () => {
     setUserName(name)
+    setNameError("")
     setIsEditing(false)
   }
 
@@ -78,21 +100,38 @@ function AvatarUser({ name, email }: AvatarUserProps) {
         <div className="flex-1 text-center md:text-left space-y-3 w-full">
           {isEditing ? (
             <div className="space-y-3">
-              <input
-                type="text"
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-                disabled={isSaving}
-                className="w-full md:w-auto px-4 py-2.5 border-2 border-blue-500 dark:border-blue-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold text-lg"
-                placeholder="Tu nombre completo"
-                autoFocus
-              />
+              <div>
+                <input
+                  type="text"
+                  value={userName}
+                  onChange={handleNameChange}
+                  onBlur={() => {
+                    const validation = validateName(userName)
+                    setNameError(validation.valid ? "" : validation.error || "")
+                  }}
+                  disabled={isSaving}
+                  maxLength={50}
+                  className={`w-full md:w-auto px-4 py-2.5 border-2 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 font-semibold text-lg ${
+                    nameError 
+                      ? 'border-red-500 focus:ring-red-500' 
+                      : 'border-blue-500 dark:border-blue-600 focus:ring-blue-500'
+                  }`}
+                  placeholder="Tu nombre completo"
+                  autoFocus
+                />
+                {nameError && (
+                  <p className="text-red-500 text-sm mt-1 text-left">{nameError}</p>
+                )}
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 text-left">
+                  {userName.length}/50 caracteres
+                </p>
+              </div>
               <div className="flex items-center justify-center md:justify-start gap-2">
                 <Button 
                   onClick={handleSave} 
                   size="sm" 
-                  disabled={isSaving}
-                  className="bg-green-600 hover:bg-green-700 text-white"
+                  disabled={isSaving || !!nameError}
+                  className="bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
                 >
                   <CheckIcon className="w-4 h-4 mr-1" /> 
                   {isSaving ? "Guardando..." : "Guardar"}
@@ -218,8 +257,6 @@ export function PerfilWrapper() {
 
   const userProgress = getUserProgress(progress, currentUser.id)
 
-  // Buscamos primero en 'currentUser.name' (donde el Store guarda el dato fresco post-update)
-  // Luego en metadata si lo anterior falla.
   const currentName = currentUser.name || 
                      (currentUser as any).user_metadata?.name || 
                      (currentUser as any).user_metadata?.full_name || 
