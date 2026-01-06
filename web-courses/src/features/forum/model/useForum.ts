@@ -1,66 +1,97 @@
-'use client'
-
-import { useEffect, useState } from 'react'
-import { ForumPost } from '@/entities/forum-post'
-import { forumStorage } from '../api/forumStorage'
-import { createNewPost, createNewComment } from './forumFactories'
+// @/features/forum/model/useForum.ts
+import { useState, useEffect } from 'react';
+import { ForumPost } from '@/entities/forum-post';
+import { forumQueries } from '@/shared/lib/supabase/queries/forum'; 
 
 export const useForum = (courseId: string) => {
-  const [posts, setPosts] = useState<ForumPost[]>([])
-  const [loading, setLoading] = useState(true)
+  const [posts, setPosts] = useState<ForumPost[]>([]);
+  const [loading, setLoading] = useState(true);
 
+  // Cargar posts al montar
   useEffect(() => {
-    setLoading(true)
-    const data = forumStorage.getPosts(courseId)
-    const safeData = structuredClone(data)
-    setPosts(safeData)
-    setLoading(false)
-  }, [courseId])
+    loadPosts();
+  }, [courseId]);
 
-  const createPost = (
-    content: string,
-    userId: string,
-    userName: string
-  ) => {
-    const newPost = createNewPost(courseId, content, userId, userName)
-    forumStorage.savePost(newPost)
-    setPosts(prev => [newPost, ...prev])
-  }
+  const loadPosts = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await forumQueries.getPosts(courseId);
+      if (error) throw error;
+      setPosts(data || []);
+    } catch (error) {
+      console.error('Error cargando posts:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const addComment = (
-    postId: string,
-    content: string,
-    userId: string,
-    userName: string
-  ) => {
-    const newComment = createNewComment(postId, content, userId, userName)
-    forumStorage.addComment(postId, newComment)
+  const createPost = async (content: string, userId: string) => {
+    try {
+      const { data, error } = await forumQueries.createPost(
+        courseId,
+        userId,
+        content
+      );
+      
+      if (error) throw error;
+      if (data) {
+        setPosts([data, ...posts]);
+      }
+    } catch (error) {
+      console.error('Error creando post:', error);
+      alert('Error al crear publicación');
+    }
+  };
 
-    setPosts(prev =>
-      prev.map(post =>
-        post.id === postId
-          ? { ...post, comments: [...post.comments, newComment] }
-          : post
-      )
-    )
-  }
+  const addComment = async (postId: string, content: string, userId: string) => {
+    try {
+      const { data, error } = await forumQueries.createComment(
+        postId,
+        userId,
+        content
+      );
 
-  const deleteComment = (postId: string, commentId: string) => {
-    forumStorage.deleteComment(postId, commentId)
+      if (error) throw error;
+      if (data) {
+        setPosts(posts.map(p =>
+          p.id === postId
+            ? { ...p, comments: [...p.comments, data] }
+            : p
+        ));
+      }
+    } catch (error) {
+      console.error('Error agregando comentario:', error);
+      alert('Error al agregar comentario');
+    }
+  };
 
-    setPosts(prev =>
-      prev.map(post =>
-        post.id === postId
-          ? { ...post, comments: post.comments.filter(c => c.id !== commentId) }
-          : post
-      )
-    )
-  }
+  const deleteComment = async (postId: string, commentId: string) => {
+    try {
+      const { error } = await forumQueries.deleteComment(commentId);
+      if (error) throw error;
 
-  const deletePost = (postId: string) => {
-    forumStorage.deletePost(postId)
-    setPosts(prev => prev.filter(post => post.id !== postId))
-  }
+      setPosts(posts.map(p =>
+        p.id === postId
+          ? { ...p, comments: p.comments.filter(c => c.id !== commentId) }
+          : p
+      ));
+    } catch (error) {
+      console.error('Error eliminando comentario:', error);
+      alert('Error al eliminar comentario');
+    }
+  };
+
+  const deletePost = async (postId: string) => {
+    try {
+      const { error } = await forumQueries.deletePost(postId);
+      if (error) throw error;
+
+      setPosts(posts.filter(p => p.id !== postId));
+    } catch (error) {
+      console.error('Error eliminando post:', error);
+      alert('Error al eliminar publicación');
+    }
+  };
 
   return {
     posts,
@@ -69,5 +100,5 @@ export const useForum = (courseId: string) => {
     addComment,
     deleteComment,
     deletePost
-  }
-}
+  };
+};
