@@ -100,8 +100,7 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
   }
 
   if (!isOpen) return null
-
-  return (
+return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
 
@@ -131,39 +130,51 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
 
             {/* Formulario para agregar/editar lección */}
             <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
-              <p className="text-sm font-medium mb-3 text-gray-700 dark:text-gray-300">
-                {editingLesson ? 'Editar lección' : 'Nueva lección'}
-              </p>
+              <div className="flex justify-between items-center mb-3">
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {editingLesson ? 'Editar lección' : 'Nueva lección'}
+                </p>
+                <span className={`text-[10px] ${lessonForm.title.length >= 80 ? 'text-red-500 font-bold' : 'text-gray-400'}`}>
+                  {lessonForm.title.length} / 80
+                </span>
+              </div>
 
               <div className="space-y-3">
                 <input
                   type="text"
                   placeholder="Título de la lección"
                   value={lessonForm.title}
+                  maxLength={80}
                   onChange={(e) => setLessonForm({ ...lessonForm, title: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100 outline-none"
                 />
 
                 <div className="grid grid-cols-2 gap-3">
-                  <input
-                    type="text"
-                    placeholder="Duración (15:30)"
-                    value={lessonForm.duration}
-                    onChange={(e) => setLessonForm({ ...lessonForm, duration: e.target.value })}
-                    className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                  />
+                  <div className="space-y-1">
+                    <input
+                      type="text"
+                      placeholder="Duración (Ej: 15:30)"
+                      value={lessonForm.duration}
+                      maxLength={10}
+                      onChange={(e) => setLessonForm({ ...lessonForm, duration: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100 outline-none"
+                    />
+                  </div>
 
-                  <input
-                    type="text"
-                    placeholder="URL del video"
-                    value={lessonForm.videoUrl}
-                    onChange={(e) => setLessonForm({ ...lessonForm, videoUrl: e.target.value })}
-                    className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                  />
+                  <div className="space-y-1">
+                    <input
+                      type="text"
+                      placeholder="URL del video"
+                      value={lessonForm.videoUrl}
+                      maxLength={255}
+                      onChange={(e) => setLessonForm({ ...lessonForm, videoUrl: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100 outline-none"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div className="flex gap-2 mt-3">
+              <div className="flex gap-2 mt-4">
                 {editingLesson ? (
                   <>
                     <Button
@@ -196,9 +207,9 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
             </div>
 
             {/* Lista de lecciones */}
-            <div className="space-y-2 max-h-96 overflow-y-auto">
+            <div className="space-y-2 max-h-96 overflow-y-auto pr-2">
               {lessons.length === 0 ? (
-                <p className="text-center text-gray-500 dark:text-gray-400 py-8">
+                <p className="text-center text-gray-500 dark:text-gray-400 py-8 italic border border-dashed border-gray-300 dark:border-gray-600 rounded-lg">
                   No hay lecciones aún
                 </p>
               ) : (
@@ -207,12 +218,12 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
                     key={lesson.id}
                     className="flex items-center justify-between p-3 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow"
                   >
-                    <div className="flex items-center gap-3 flex-1">
-                      <span className="flex items-center justify-center w-6 h-6 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-600 rounded-full">
+                    <div className="flex items-center gap-3 flex-1 overflow-hidden">
+                      <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-600 rounded-full">
                         {index + 1}
                       </span>
-                      <div className="flex-1">
-                        <p className="font-medium text-gray-900 dark:text-gray-100">
+                      <div className="flex-1 truncate">
+                        <p className="font-medium text-gray-900 dark:text-gray-100 truncate">
                           {lesson.title}
                         </p>
                         <div className="flex items-center gap-2 mt-1">
@@ -220,15 +231,15 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
                             {lesson.duration}
                           </p>
                           {lesson.videoUrl && (
-                            <span className="text-xs text-green-600 dark:text-green-400">
-                              • Video
+                            <span className="text-[10px] px-1.5 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded">
+                              VIDEO
                             </span>
                           )}
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 ml-4">
                       <button
                         onClick={() => handleEditLesson(lesson)}
                         className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
@@ -255,18 +266,24 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
             </h3>
 
             <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
-              <p className="text-sm font-medium mb-3 text-gray-700 dark:text-gray-300">
-                Agregar punto clave
-              </p>
+              <div className="flex justify-between items-center mb-3">
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Agregar punto clave
+                </p>
+                <span className={`text-[10px] ${keyPointInput.length >= 150 ? 'text-red-500 font-bold' : 'text-gray-400'}`}>
+                  {keyPointInput.length} / 150
+                </span>
+              </div>
 
               <div className="flex gap-2">
                 <input
                   type="text"
                   value={keyPointInput}
+                  maxLength={150}
                   onChange={(e) => setKeyPointInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleAddKeyPoint()}
                   placeholder="Ej: Aprenderás los fundamentos..."
-                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100"
+                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100 outline-none"
                 />
                 <Button
                   onClick={handleAddKeyPoint}
@@ -279,9 +296,9 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
             </div>
 
             {/* Lista de key points */}
-            <div className="space-y-2 max-h-96 overflow-y-auto">
+            <div className="space-y-2 max-h-96 overflow-y-auto pr-2">
               {keyPoints.length === 0 ? (
-                <p className="text-center text-gray-500 dark:text-gray-400 py-8">
+                <p className="text-center text-gray-500 dark:text-gray-400 py-8 italic border border-dashed border-gray-300 dark:border-gray-600 rounded-lg">
                   No hay puntos clave aún
                 </p>
               ) : (
@@ -290,15 +307,15 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
                     key={index}
                     className="flex items-start justify-between p-3 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow"
                   >
-                    <div className="flex items-start gap-2 flex-1">
-                      <span className="text-blue-600 dark:text-blue-400 mt-0.5">•</span>
-                      <p className="text-sm text-gray-700 dark:text-gray-300 flex-1">
+                    <div className="flex items-start gap-2 flex-1 overflow-hidden">
+                      <span className="text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0">•</span>
+                      <p className="text-sm text-gray-700 dark:text-gray-300 flex-1 break-words">
                         {point}
                       </p>
                     </div>
                     <button
                       onClick={() => handleDeleteKeyPoint(index)}
-                      className="p-1.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                      className="p-1.5 ml-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors flex-shrink-0"
                     >
                       <TrashIcon className="w-4 h-4" />
                     </button>
@@ -309,7 +326,7 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
           </div>
         </div>
 
-        {/* Botones de navegación */}
+        {/* Botones de navegación del modal */}
         <div className="flex justify-between gap-2 pt-6 mt-6 border-t border-gray-200 dark:border-gray-700">
           <Button
             onClick={onBack}
@@ -332,7 +349,7 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
             <Button
               onClick={handleSave}
               disabled={isSaving}
-              className="bg-green-600 hover:bg-green-700 text-white"
+              className="bg-green-600 hover:bg-green-700 text-white px-8"
             >
               {isSaving ? "Guardando..." : "Guardar todo"}
             </Button>
