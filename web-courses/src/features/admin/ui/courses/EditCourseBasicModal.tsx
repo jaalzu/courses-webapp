@@ -1,5 +1,6 @@
 'use client'
-import { useCourseStore } from "@/entities/course/model/useCourseStore"
+import { useCourses } from '@/entities/course/useCourses'
+
 import { Button } from "@/shared/ui/index"
 import { XMarkIcon, ArrowRightIcon } from "@heroicons/react/24/outline"
 import { useEditCourseForm } from "../../hooks/useEditCourseForm"
@@ -14,7 +15,7 @@ interface Props {
 }
 
 export default function EditCourseBasicModal({ course, isOpen, onClose, onNext }: Props) {
-  const updateCourse = useCourseStore(state => state.updateCourse)
+  const {updateCourse} = useCourses()
   const { formData, handleChange, isSaving, setIsSaving } = useEditCourseForm(course, isOpen)
 
   const handleSaveAndNext = async (e: React.FormEvent) => {
@@ -64,7 +65,7 @@ export default function EditCourseBasicModal({ course, isOpen, onClose, onNext }
     value={formData.title}
     onChange={handleChange}
     placeholder="Ej: Curso de React Avanzado"
-    maxLength={60} // 👈 Agregalo acá
+    maxLength={60} 
   />
 
          <CourseFormField
@@ -74,7 +75,7 @@ export default function EditCourseBasicModal({ course, isOpen, onClose, onNext }
     onChange={handleChange}
     type="textarea"
     placeholder="Describe el contenido del curso..."
-    maxLength={500} // 👈 Agregalo acá
+    maxLength={500} 
   />
 
          <CourseFormField
@@ -83,7 +84,7 @@ export default function EditCourseBasicModal({ course, isOpen, onClose, onNext }
     value={formData.instructor}
     onChange={handleChange}
     placeholder="Nombre del instructor"
-    maxLength={40} // 👈 Agregalo acá
+    maxLength={40} 
   />
 
           <CourseFormField
@@ -100,7 +101,7 @@ export default function EditCourseBasicModal({ course, isOpen, onClose, onNext }
     value={formData.duration}
     onChange={handleChange}
     placeholder="Ej: 10 horas"
-    maxLength={20} // 👈 Agregalo acá
+    maxLength={20} 
   />
 
           <CourseFormField

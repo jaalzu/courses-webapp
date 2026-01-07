@@ -1,6 +1,6 @@
 // @/features/course-navigation/model/useCourseNavigation.ts
 import { useState, useEffect } from 'react'
-import { useCourseStore } from '@/entities/course/model/useCourseStore'
+import { useCourses } from '@/entities/course/useCourses'
 import type { Lesson } from '@/entities/lesson/types'
 import { 
   getNextLesson, 
@@ -10,14 +10,13 @@ import {
 } from './navigationHelpers'
 
 export function useCourseNavigation(courseId: string) {
-  const course = useCourseStore(state => state.getCourseById(courseId))
+  const { courses } = useCourses() 
+  const course = courses.find(c => c.id === courseId) 
   
-  // 1. Manejo seguro del estado inicial
   const [currentLesson, setCurrentLesson] = useState<Lesson | undefined>(
     course?.lessons?.[0]
   )
 
-  // 2. Efecto para sincronizar cuando el curso termina de cargar de Supabase
   useEffect(() => {
     if (course?.lessons?.length && !currentLesson) {
       setCurrentLesson(course.lessons[0])
@@ -29,10 +28,8 @@ export function useCourseNavigation(courseId: string) {
   }
 
   const goToNext = () => {
-    // 3. Validamos que existan lecciones antes de navegar
     if (!course?.lessons || !currentLesson) return
     
-    // Asegúrate que currentLesson.id sea string en la interfaz Lesson
     const next = getNextLesson(course, currentLesson.id)
     if (next) setCurrentLesson(next)
   }
@@ -50,7 +47,6 @@ export function useCourseNavigation(courseId: string) {
     selectLesson,
     goToNext,
     goToPrevious,
-    // 4. Agregamos el check de lecciones aquí también
     hasNext: (course?.lessons && currentLesson) 
       ? hasNextLesson(course, currentLesson.id) 
       : false,

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import type { Course ,CourseLevel} from "@/entities/course/types"
+import type { Course } from "@/entities/course/types"
 
 export function useEditCourseForm(course: Course, isOpen: boolean) {
   const [formData, setFormData] = useState({
@@ -8,7 +8,7 @@ export function useEditCourseForm(course: Course, isOpen: boolean) {
     image: course.image || "",
     duration: course.duration || "",
     instructor: course.instructor || "",
-    level: course.level || "beginner" as CourseLevel,
+    level: course.level ?? "beginner",  
   })
 
   const [isSaving, setIsSaving] = useState(false)

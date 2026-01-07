@@ -1,29 +1,24 @@
 'use client'
 
-// features
 import { useEffect } from "react" 
 import { DeleteButton } from "@/features/admin/ui/shared/DeleteButton"
 import { EditButton } from "@/features/admin/ui/shared/EditButton"
 import { FavoriteButton } from "@/features/favorites/ui/favoriteButton"
 import { useFavoriteIds } from "@/features/favorites/model/hooks/useFavoritesIds"
+import { useCourses } from "@/entities/course/useCourses" // ← FIX: añade /model
 
-// ui
 import { Button } from "@/shared/ui/button"
 import { Progress } from "@/shared/ui"
 import { Badge } from "@/shared/ui"
 
-// next
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
-// icons
 import { CheckCircleIcon } from "@heroicons/react/24/solid"
 
-// entities
 import { getLevelConfig } from "@/entities/course/model/helpers"
 import type { Course } from "@/entities/course/types"
-import { useCourseStore } from "@/entities/course/model/useCourseStore"
 import { useProgressStore, getCourseStats } from "@/entities/progress"
 import { useAuthStore } from '@/features/auth/model/useAuthStore'
 
@@ -49,18 +44,14 @@ export default function Card({
 }: CardProps) {
   const router = useRouter()
 
-  // 1. Auth & Roles
   const currentUser = useAuthStore(state => state.currentUser)
   const actualUserId = currentUser?.id || "user-default"
-  const isAdmin = currentUser?.role === 'admin' // 
+  const isAdmin = currentUser?.role === 'admin'
 
-  // 2. Favoritos
-const { isFavorite, toggleFavorite } = useFavoriteIds()
-  // 3. Nivel
+  const { isFavorite, toggleFavorite } = useFavoriteIds()
   const levelConfig = level ? getLevelConfig(level) : null
 
-  // 4. Stores (Cursos y Progreso)
-  const deleteCourse = useCourseStore(state => state.deleteCourse)
+  const { deleteCourse } = useCourses() // ← CAMBIA ESTO
   const progress = useProgressStore(state => state.progress)
   const fetchUserProgress = useProgressStore(state => state.fetchUserProgress)
   

@@ -1,18 +1,17 @@
 import { useState } from "react"
-import { useCourseStore } from "@/entities/course/model/useCourseStore"
 import type { Course } from "@/entities/course/types"
+import { useCourses } from '@/entities/course/useCourses'
+
 
 type EditStep = 'basic' | 'lessons' | 'closed'
 
 export function useEditCourseFlow() {
-  const getCourse = useCourseStore(state => state.getCourseById)
+  const { courses } = useCourses() 
 
   const [step, setStep] = useState<EditStep>('closed')
   
-  // 1. Cambiamos el estado inicial a string
   const [courseId, setCourseId] = useState<string | null>(null)
 
-  // 2. La función open ahora recibe un string (el UUID)
   const open = (id: string) => {
     setCourseId(id)
     setStep('basic')
@@ -31,8 +30,9 @@ export function useEditCourseFlow() {
     setStep('closed')
   }
 
-  // 3. getCourse(courseId) ahora funcionará perfecto porque ambos son strings
-  const course: Course | undefined = courseId !== null ? getCourse(courseId) : undefined
+  const course: Course | undefined = courseId !== null 
+    ? courses.find(c => c.id === courseId) 
+    : undefined
 
   return {
     step,

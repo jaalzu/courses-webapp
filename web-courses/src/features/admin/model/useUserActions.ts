@@ -15,7 +15,6 @@ export function useUserActions() {
     setError(null)
 
     try {
-      // ✅ ACTUALIZACIÓN REAL EN TABLA 'profiles'
       const { error: sbError } = await supabase
         .from('profiles')
         .update({ role: newRole })

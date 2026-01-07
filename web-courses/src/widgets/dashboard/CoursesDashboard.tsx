@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect } from "react" // 1. Importar useEffect
-import { useCourseStore } from "@/entities/course/model/useCourseStore"
+import { useEffect } from "react"
+import { useCourses } from "@/entities/course/useCourses" 
 import { useEditCourseFlow } from "@/features/admin/hooks/useEditCourseFlow"
 import { NewCourseButton } from "@/features/admin/ui/shared/NewCourseButton"
 import EditCourseManager from "@/features/admin/ui/courses/EditCourseManager"
@@ -11,11 +11,9 @@ import { DashboardLayout } from "./DashboardLayout"
 import { CoursesGrid } from "./CoursesGrid"
 
 export function CoursesDashboard() {
-  // 2. Traer isLoading y fetchCourses del store
-  const { courses, isLoading, fetchCourses } = useCourseStore()
+  const { courses, isLoading, fetchCourses } = useCourses() 
   const editFlow = useEditCourseFlow()
 
-  // 3. Disparar la carga al montar el componente
   useEffect(() => {
     fetchCourses()
   }, [fetchCourses])

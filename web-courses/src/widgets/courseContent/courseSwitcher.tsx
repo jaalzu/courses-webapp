@@ -1,7 +1,8 @@
 'use client'
 
 import Link from "next/link"
-import { useCourseStore } from "@/entities/course/model/useCourseStore"
+import { useCourses } from '@/entities/course/useCourses'
+
 import styles from "./courseSwitcher.module.css"
 
 interface Props {
@@ -9,7 +10,7 @@ interface Props {
 }
 
 export function CourseSwitcher({ currentCourseId }: Props) {
-  const courses = useCourseStore(state => state.courses)
+  const { courses } = useCourses()
   const currentIndex = courses.findIndex(c => c.id === currentCourseId)
   const prevCourse = courses[currentIndex - 1]
   const nextCourse = courses[currentIndex + 1]

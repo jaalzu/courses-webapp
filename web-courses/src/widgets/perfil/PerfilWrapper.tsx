@@ -226,7 +226,7 @@ export function PerfilWrapper() {
   const checkAuth = useAuthStore(state => state.checkAuth)
   const isLoadingAuth = useAuthStore(state => state.isLoading)
   
-  const courses = useCourses()
+const { courses } = useCourses() 
   const progress = useProgressStore(state => state.progress)
   const fetchUserProgress = useProgressStore(state => state.fetchUserProgress) 
 

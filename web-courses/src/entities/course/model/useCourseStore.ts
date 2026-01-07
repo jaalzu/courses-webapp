@@ -1,137 +1,42 @@
+// entities/course/model/useCourseStore.ts
 import { create } from 'zustand'
 import type { Course } from '../types'
-import { courseQueries } from '@/shared/lib/supabase/queries/courses'
-import { lessonQueries } from '@/shared/lib/supabase/queries/lessons'
 
 interface CourseStore {
   courses: Course[]
   isLoading: boolean
   error: string | null
-  fetchCourses: () => Promise<void>
-  addCourse: (course: Omit<Course, 'id'>) => Promise<void>
-  updateCourse: (courseId: string, updates: Partial<Course>) => Promise<void>
-  deleteCourse: (courseId: string) => Promise<void>
-  getCourseById: (courseId: string) => Course | undefined
+  
+  setCourses: (courses: Course[]) => void
+  addCourseToState: (course: Course) => void
+  updateCourseInState: (courseId: string, updates: Partial<Course>) => void
+  removeCourseFromState: (courseId: string) => void
+  setLoading: (loading: boolean) => void
+  setError: (error: string | null) => void
 }
 
-export const useCourseStore = create<CourseStore>((set, get) => ({
+export const useCourseStore = create<CourseStore>((set) => ({
   courses: [],
   isLoading: false,
   error: null,
-
-  fetchCourses: async () => {
-    set({ isLoading: true, error: null })
-    
-    try {
-      const { data, error } = await courseQueries.getAll()
-      if (error) throw new Error(error.message)
-      
-      set({ courses: data || [], isLoading: false })
-    } catch (err: any) {
-      set({ error: err.message, isLoading: false })
-    }
-  },
-
-// useCourseStore.ts
-
-addCourse: async (newCourse) => {
-  // 1. Validación de límite de caracteres
-  const MAX_TITLE_LENGTH = 60;
   
-  if (newCourse.title.length > MAX_TITLE_LENGTH) {
-    set({ error: `El título es demasiado largo (máximo ${MAX_TITLE_LENGTH} caracteres)` });
-    return; // Frenamos la ejecución acá
-  }
-
-  set({ isLoading: true, error: null });
+  setCourses: (courses) => set({ courses }),
   
-  try {
-    const { data, error } = await courseQueries.create(newCourse);
-    if (error) throw new Error(error.message);
-    if (!data) throw new Error('No se pudo crear el curso');
-    
-    set((state) => ({ 
-      courses: [data, ...state.courses], 
-      isLoading: false 
-    }));
-  } catch (err: any) {
-    set({ error: err.message, isLoading: false });
-  }
-},
-
-updateCourse: async (courseId, updates) => {
-  set({ isLoading: true, error: null })
-
-  try {
-    // Mapear de frontend a DB
-    const dbUpdates: any = {}
-    if (updates.title !== undefined) dbUpdates.title = updates.title
-    if (updates.description !== undefined) dbUpdates.description = updates.description
-    if (updates.duration !== undefined) dbUpdates.duration = String(updates.duration)
-    if (updates.instructor !== undefined) dbUpdates.instructor = updates.instructor
-    if (updates.keyPoints !== undefined) dbUpdates.key_points = updates.keyPoints  
-
-    if (updates.image !== undefined) {
-      dbUpdates.thumbnail_url = updates.image.includes('supabase.co/storage') 
-        ? updates.image.split('/').pop() 
-        : updates.image
-    }
-    if (updates.level) dbUpdates.difficulty = updates.level
-
-    // Solo actualizar curso si hay cambios
-    let courseData = null
-    if (Object.keys(dbUpdates).length > 0) {
-      const { data, error: courseError } = await courseQueries.update(courseId, dbUpdates)
-      if (courseError) throw new Error(courseError.message)
-      courseData = data
-    }
-
-    // Sincronizar lecciones si las hay
-    let updatedLessons = undefined
-    if (updates.lessons) {
-      const { data: lessonsData, error: lessonsError } = await lessonQueries.syncLessons(
-        courseId, 
-        updates.lessons
-      )
-      if (lessonsError) throw new Error(lessonsError.message)
-      updatedLessons = lessonsData
-    }
-
-    // Actualizar estado local
+  addCourseToState: (course) => 
+    set((state) => ({ courses: [course, ...state.courses] })),
+  
+  updateCourseInState: (courseId, updates) =>
     set((state) => ({
-      courses: state.courses.map((course) => {
-        if (course.id !== courseId) return course
-        
-        return {
-          ...course,
-          ...(courseData || {}),
-          lessons: updatedLessons || course.lessons
-        }
-      }),
-      isLoading: false
-    }))
-
-  } catch (err: any) {
-    console.error('Error actualizando curso:', err)
-    set({ error: err.message, isLoading: false })
-  }
-},
-
-  deleteCourse: async (courseId) => {
-    set({ isLoading: true, error: null })
-    
-    try {
-      const { error } = await courseQueries.delete(courseId)
-      if (error) throw new Error(error.message)
-      
-      set((state) => ({
-        courses: state.courses.filter((c) => c.id !== courseId),
-        isLoading: false
-      }))
-    } catch (err: any) {
-      set({ error: err.message, isLoading: false })
-    }
-  },
-
-  getCourseById: (courseId) => get().courses.find((c) => c.id === courseId)
+      courses: state.courses.map((c) => 
+        c.id === courseId ? { ...c, ...updates } : c
+      )
+    })),
+  
+  removeCourseFromState: (courseId) =>
+    set((state) => ({
+      courses: state.courses.filter((c) => c.id !== courseId)
+    })),
+  
+  setLoading: (isLoading) => set({ isLoading }),
+  setError: (error) => set({ error })
 }))

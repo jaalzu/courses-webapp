@@ -1,11 +1,8 @@
-import type { Course, CourseLevel } from '../types'
+import type {  CourseLevel } from '../types'
 
 //  Generar ID 
-// ./src/entities/course/model/helpers.ts
 
-// Ya no necesitamos los cursos para "calcular" el siguiente ID
 export function generateCourseId(): string {
-  // crypto.randomUUID() es nativo en navegadores modernos y Next.js
   return typeof window !== 'undefined' 
     ? window.crypto.randomUUID() 
     : Math.random().toString(36).substring(2, 15); // Fallback simple para SSR

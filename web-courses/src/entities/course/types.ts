@@ -1,6 +1,8 @@
 // types/course.ts
 import type { Lesson } from "@/entities/lesson/types"
 
+export type CourseLevel = 'beginner' | 'intermediate' | 'advanced'
+
 export interface Course {
   id: string
   title: string
@@ -8,7 +10,7 @@ export interface Course {
   duration: string
   video: string
   instructor?: string
-  level?: 'beginner' | 'intermediate' | 'advanced'
+  level?: CourseLevel 
   lessons: Lesson[]
   image: string
   keyPoints?: string[]
@@ -17,5 +19,3 @@ export interface Course {
 }
 
 export type CourseInput = Omit<Course, "id">
-
-export type CourseLevel = 'beginner' | 'intermediate' | 'advanced'

@@ -80,15 +80,7 @@ export function getCourseStats(
   }
 }
 
-/**
- * Cuenta lecciones completadas (total o por curso)
- */
-// @/entities/progress/model/helpers.ts
 
-/**
- * Cuenta lecciones completadas (total o por curso)
- * CAMBIO: El retorno debe ser number, no string
- */
 export function getCompletedCount(
   progress: LessonProgress[],
   userId: string,
@@ -99,7 +91,6 @@ export function getCompletedCount(
   )
 
   if (courseId !== undefined) {
-    // Aquí p.courseId debe ser string en la interfaz LessonProgress
     return userProgress.filter(p => p.courseId === courseId).length
   }
 

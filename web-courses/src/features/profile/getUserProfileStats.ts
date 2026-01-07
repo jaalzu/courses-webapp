@@ -18,6 +18,11 @@ export function getUserProfileStats({
   courses,
   progress,
 }: GetUserProfileStatsParams) {
+  // Validación de seguridad
+  if (!courses || !Array.isArray(courses)) {
+    return { courseStats: [] }
+  }
+
   // Calcular stats por cada curso
   const courseStats = courses.map(course =>
     getCourseStats(course, progress, user.id)

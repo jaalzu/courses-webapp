@@ -2,7 +2,8 @@
 
 import { useState } from "react"
 import EditCourseContentModal from "@/features/admin/ui/courses/EditCourseLessonsModal"
-import { useCourseStore } from "@/entities/course/model/useCourseStore"
+import { useCourses } from '@/entities/course/useCourses'
+
 import { CourseFormField } from "@/features/admin/ui/courses/CourseFormField"
 import { XMarkIcon, ArrowRightIcon } from "@heroicons/react/24/outline"
 import { toast } from "sonner"
@@ -13,8 +14,7 @@ interface CreateCourseModalProps {
 }
 
 export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
-  const addCourse = useCourseStore(state => state.addCourse)
-  const getCourse = useCourseStore(state => state.getCourseById)
+  const { addCourse, courses } = useCourses() 
   
   const [step, setStep] = useState<'basic' | 'content'>('basic')
   const [tempCourseId, setTempCourseId] = useState<string | null>(null)
@@ -35,14 +35,12 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
- const handleNext = async () => {
-    // 1. Validaciones de presencia
+  const handleNext = async () => {
     if (!form.title.trim() || !form.description.trim()) {
       toast.error("El título y la descripción son obligatorios")
       return
     }
 
-    // 2. Validaciones de LÍMITES (Doble check de seguridad)
     if (form.title.length > 60) {
       toast.warning("El título no puede tener más de 60 caracteres")
       return
@@ -70,7 +68,9 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
       
       await addCourse(newCourse)
       
-      const courses = useCourseStore.getState().courses
+      // ❌ ANTES: const courses = useCourses.getState().courses
+      // ✅ AHORA: ya tienes courses arriba
+      const createdCourse = courses[0] // O el último agregado
       const lastCourse = courses[0]
       
       if (lastCourse?.id) {
@@ -111,11 +111,12 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
     handleContentClose()
   }
 
-  const tempCourse = tempCourseId ? getCourse(tempCourseId) : null
+const tempCourse = tempCourseId ? courses.find(c => c.id === tempCourseId) : null
+
 
   return (
     <>
-      {/* PASO 1: Modal de información básica */}
+      {/*  Modal de información básica */}
       {step === 'basic' && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999]">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl w-[95%] max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -179,7 +180,7 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
       value={form.duration}
       onChange={handleChange}
       placeholder="Ej: 10 horas"
-      maxLength={20} // 👈 Agregado: Límite para duración
+      maxLength={20} 
     />
 
                 <CourseFormField
@@ -220,7 +221,7 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
         </div>
       )}
 
-      {/* PASO 2: Reutilizar EditCourseContentModal */}
+      {/*Reutilizar EditCourseContentModal */}
       {step === 'content' && tempCourse && (
        <EditCourseContentModal
     course={tempCourse}

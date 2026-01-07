@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react"
-import { useCourseStore } from "@/entities/course/model/useCourseStore"
+import { useCourses } from "@/entities/course/useCourses" // ← Cambia esto
 import { Button } from "@/shared/ui/index"
 import { XMarkIcon, ArrowLeftIcon, PlusIcon, TrashIcon, PencilIcon } from "@heroicons/react/24/outline"
 import type { Course } from "@/entities/course/types"
@@ -11,11 +11,11 @@ interface Props {
   isOpen: boolean
   onClose: () => void
   onBack: () => void
-  isNewCourse?: boolean // 
+  isNewCourse?: boolean
 }
 
 export default function EditCourseContentModal({ course, isOpen, onClose, onBack, isNewCourse = false}: Props) {
-  const updateCourse = useCourseStore(state => state.updateCourse)
+  const { updateCourse } = useCourses() // ← Usa el hook, no el store
   const [isSaving, setIsSaving] = useState(false)
 
   // Estado para key points

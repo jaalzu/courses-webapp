@@ -1,11 +1,11 @@
 // 📁 features/favorites/model/hooks/useFavoriteCourses.ts
 import { useFavoriteIds } from './useFavoritesIds'
-import { useCourseStore } from '@/entities/course/model/useCourseStore'
+import { useCourses } from '@/entities/course/useCourses'
 import type { Course } from '@/entities/course/types'
 
 export function useFavoriteCourses(): { favoriteCourses: Course[] } {
   const { favorites } = useFavoriteIds()
-  const courses = useCourseStore(state => state.courses)
+  const {courses} = useCourses()
 
   const favoriteCourses = courses.filter(course => favorites.includes(course.id))
 

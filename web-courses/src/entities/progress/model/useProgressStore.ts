@@ -24,7 +24,6 @@ export const useProgressStore = create<ProgressState & ProgressActions>()((set, 
   isLoading: false,
   error: null,
 
-  // CARGAR TODO EL PROGRESO (Para Métricas de Admin)
   fetchAllProgress: async () => {
     set({ isLoading: true, error: null })
     

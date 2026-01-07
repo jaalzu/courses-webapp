@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { useUserList } from '@/features/admin/model/useUserList'
-import { useCourseStore } from '@/entities/course/model/useCourseStore'
+import { useCourses } from '@/entities/course/useCourses'
 import { useProgressStore } from '@/entities/progress/model/useProgressStore'
 
 import { MetricsSkeleton } from './MetricsSkeleton'
@@ -13,7 +13,7 @@ import { PopularCourses } from './PopularCourses'
 
 export function Metrics() {
   const { users, isLoading: usersLoading, refetch } = useUserList()
-  const { courses, isLoading: coursesLoading, fetchCourses } = useCourseStore()
+  const { courses, isLoading: coursesLoading, fetchCourses } = useCourses()
   const { progress, isLoading: progressLoading, fetchAllProgress } = useProgressStore()
 
   useEffect(() => {
