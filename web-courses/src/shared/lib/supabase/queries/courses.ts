@@ -6,7 +6,7 @@ const formatCourse = (dbCourse: any) => ({
   ...dbCourse,
   image: dbCourse.thumbnail_url ? getCourseImage(dbCourse.thumbnail_url) : '',
   level: dbCourse.difficulty || 'beginner',
-  keyPoints: dbCourse.key_points || [], // ✅ Este sí
+  keyPoints: dbCourse.key_points || [], 
   lessons: (dbCourse.lessons || []).map((l: any) => ({
     ...l,
     duration: String(l.duration || '0'),

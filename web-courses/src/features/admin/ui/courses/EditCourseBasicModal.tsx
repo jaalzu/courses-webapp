@@ -58,30 +58,33 @@ export default function EditCourseBasicModal({ course, isOpen, onClose, onNext }
         </div>
 
         <form onSubmit={handleSaveAndNext}>
-          <CourseFormField
-            label="Título"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            placeholder="Ej: Curso de React Avanzado"
-          />
+        <CourseFormField
+    label="Título"
+    name="title"
+    value={formData.title}
+    onChange={handleChange}
+    placeholder="Ej: Curso de React Avanzado"
+    maxLength={60} // 👈 Agregalo acá
+  />
 
-          <CourseFormField
-            label="Descripción"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            type="textarea"
-            placeholder="Describe el contenido del curso..."
-          />
+         <CourseFormField
+    label="Descripción"
+    name="description"
+    value={formData.description}
+    onChange={handleChange}
+    type="textarea"
+    placeholder="Describe el contenido del curso..."
+    maxLength={500} // 👈 Agregalo acá
+  />
 
-          <CourseFormField
-            label="Instructor"
-            name="instructor"
-            value={formData.instructor}
-            onChange={handleChange}
-            placeholder="Nombre del instructor"
-          />
+         <CourseFormField
+    label="Instructor"
+    name="instructor"
+    value={formData.instructor}
+    onChange={handleChange}
+    placeholder="Nombre del instructor"
+    maxLength={40} // 👈 Agregalo acá
+  />
 
           <CourseFormField
             label="Imagen (URL)"
@@ -92,12 +95,13 @@ export default function EditCourseBasicModal({ course, isOpen, onClose, onNext }
           />
 
           <CourseFormField
-            label="Duración total"
-            name="duration"
-            value={formData.duration}
-            onChange={handleChange}
-            placeholder="Ej: 10 horas"
-          />
+    label="Duración total"
+    name="duration"
+    value={formData.duration}
+    onChange={handleChange}
+    placeholder="Ej: 10 horas"
+    maxLength={20} // 👈 Agregalo acá
+  />
 
           <CourseFormField
             label="Nivel"

@@ -5,6 +5,7 @@ import EditCourseContentModal from "@/features/admin/ui/courses/EditCourseLesson
 import { useCourseStore } from "@/entities/course/model/useCourseStore"
 import { CourseFormField } from "@/features/admin/ui/courses/CourseFormField"
 import { XMarkIcon, ArrowRightIcon } from "@heroicons/react/24/outline"
+import { toast } from "sonner"
 
 interface CreateCourseModalProps {
   open: boolean
@@ -34,47 +35,58 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  const handleNext = async () => {
-  if (!form.title.trim() || !form.description.trim()) {
-    alert("Por favor completa al menos el título y la descripción")
-    return
-  }
-
-  setIsCreating(true)
-
-  try {
-    // Crear el curso con los nombres que espera la interfaz Course
-    const newCourse = {
-      title: form.title,
-      description: form.description,
-      image: form.image || '', // Nombre frontend
-      duration: form.duration || '',
-      instructor: form.instructor || '',
-      level: form.level, // Nombre frontend
-      keyPoints: [], // Nombre frontend
-      lessons: [], // Requerido por Course
-      video: '', // Requerido por Course
+ const handleNext = async () => {
+    // 1. Validaciones de presencia
+    if (!form.title.trim() || !form.description.trim()) {
+      toast.error("El título y la descripción son obligatorios")
+      return
     }
-    
-    await addCourse(newCourse)
-    
-    // Obtener el curso recién creado
-    const courses = useCourseStore.getState().courses
-    const lastCourse = courses[0] // addCourse lo agrega al inicio
-    
-    if (lastCourse?.id) {
-      setTempCourseId(lastCourse.id)
-      setStep('content')
-    } else {
-      alert("Error: No se pudo crear el curso")
+
+    // 2. Validaciones de LÍMITES (Doble check de seguridad)
+    if (form.title.length > 60) {
+      toast.warning("El título no puede tener más de 60 caracteres")
+      return
     }
-  } catch (error) {
-    console.error("Error creando curso:", error)
-    alert("Error al crear el curso")
-  } finally {
-    setIsCreating(false)
+
+    if (form.description.length > 500) {
+      toast.warning("La descripción es demasiado larga (máx. 500)")
+      return
+    }
+
+    setIsCreating(true)
+
+    try {
+      const newCourse = {
+        title: form.title,
+        description: form.description,
+        image: form.image || '',
+        duration: form.duration || '',
+        instructor: form.instructor || '',
+        level: form.level,
+        keyPoints: [],
+        lessons: [],
+        video: '',
+      }
+      
+      await addCourse(newCourse)
+      
+      const courses = useCourseStore.getState().courses
+      const lastCourse = courses[0]
+      
+      if (lastCourse?.id) {
+        setTempCourseId(lastCourse.id)
+        setStep('content')
+        toast.success("Información básica guardada. ¡Ahora las lecciones!")
+      } else {
+        toast.error("No se pudo obtener el ID del curso creado")
+      }
+    } catch (error) {
+      console.error("Error creando curso:", error)
+      toast.error("Hubo un error al crear el curso en la base de datos")
+    } finally {
+      setIsCreating(false)
+    }
   }
-}
 
   const handleContentClose = () => {
     setForm({
@@ -124,30 +136,33 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
 
             {/* Form */}
             <div className="space-y-4">
-              <CourseFormField
-                label="Título *"
-                name="title"
-                value={form.title}
-                onChange={handleChange}
-                placeholder="Ej: Curso de React Avanzado"
-              />
+            <CourseFormField
+    label="Título *"
+    name="title"
+    value={form.title}
+    onChange={handleChange}
+    placeholder="Ej: Curso de React Avanzado"
+    maxLength={60} 
+  />
 
-              <CourseFormField
-                type="textarea"
-                label="Descripción *"
-                name="description"
-                value={form.description}
-                onChange={handleChange}
-                placeholder="Describe el contenido del curso..."
-              />
+             <CourseFormField
+    type="textarea"
+    label="Descripción *"
+    name="description"
+    value={form.description}
+    onChange={handleChange}
+    placeholder="Describe el contenido del curso..."
+    maxLength={500} 
+  />
 
-              <CourseFormField
-                label="Instructor"
-                name="instructor"
-                value={form.instructor}
-                onChange={handleChange}
-                placeholder="Nombre del instructor"
-              />
+             <CourseFormField
+    label="Instructor"
+    name="instructor"
+    value={form.instructor}
+    onChange={handleChange}
+    placeholder="Nombre del instructor"
+    maxLength={40} 
+  />
 
               <CourseFormField
                 label="Imagen (URL)"
@@ -158,13 +173,14 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
               />
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <CourseFormField
-                  label="Duración total"
-                  name="duration"
-                  value={form.duration}
-                  onChange={handleChange}
-                  placeholder="Ej: 10 horas"
-                />
+               <CourseFormField
+      label="Duración total"
+      name="duration"
+      value={form.duration}
+      onChange={handleChange}
+      placeholder="Ej: 10 horas"
+      maxLength={20} // 👈 Agregado: Límite para duración
+    />
 
                 <CourseFormField
                   type="select"

@@ -32,22 +32,32 @@ export const useCourseStore = create<CourseStore>((set, get) => ({
     }
   },
 
-  addCourse: async (newCourse) => {
-    set({ isLoading: true, error: null })
+// useCourseStore.ts
+
+addCourse: async (newCourse) => {
+  // 1. Validación de límite de caracteres
+  const MAX_TITLE_LENGTH = 60;
+  
+  if (newCourse.title.length > MAX_TITLE_LENGTH) {
+    set({ error: `El título es demasiado largo (máximo ${MAX_TITLE_LENGTH} caracteres)` });
+    return; // Frenamos la ejecución acá
+  }
+
+  set({ isLoading: true, error: null });
+  
+  try {
+    const { data, error } = await courseQueries.create(newCourse);
+    if (error) throw new Error(error.message);
+    if (!data) throw new Error('No se pudo crear el curso');
     
-    try {
-      const { data, error } = await courseQueries.create(newCourse)
-      if (error) throw new Error(error.message)
-      if (!data) throw new Error('No se pudo crear el curso')
-      
-      set((state) => ({ 
-        courses: [data, ...state.courses], 
-        isLoading: false 
-      }))
-    } catch (err: any) {
-      set({ error: err.message, isLoading: false })
-    }
-  },
+    set((state) => ({ 
+      courses: [data, ...state.courses], 
+      isLoading: false 
+    }));
+  } catch (err: any) {
+    set({ error: err.message, isLoading: false });
+  }
+},
 
 updateCourse: async (courseId, updates) => {
   set({ isLoading: true, error: null })
@@ -59,9 +69,8 @@ updateCourse: async (courseId, updates) => {
     if (updates.description !== undefined) dbUpdates.description = updates.description
     if (updates.duration !== undefined) dbUpdates.duration = String(updates.duration)
     if (updates.instructor !== undefined) dbUpdates.instructor = updates.instructor
-    if (updates.keyPoints !== undefined) dbUpdates.key_points = updates.keyPoints // ✅ Este sí
-    // if (updates.extraInfo !== undefined) dbUpdates.extra_info = updates.extraInfo // ❌ Este no
-    
+    if (updates.keyPoints !== undefined) dbUpdates.key_points = updates.keyPoints  
+
     if (updates.image !== undefined) {
       dbUpdates.thumbnail_url = updates.image.includes('supabase.co/storage') 
         ? updates.image.split('/').pop() 

@@ -6,7 +6,6 @@ import { DeleteButton } from "@/features/admin/ui/shared/DeleteButton"
 import { EditButton } from "@/features/admin/ui/shared/EditButton"
 import { FavoriteButton } from "@/features/favorites/ui/favoriteButton"
 import { useFavoriteIds } from "@/features/favorites/model/hooks/useFavoritesIds"
-import { localStorageFavorites } from "@/features/favorites/lib/favoriteStorage"
 
 // ui
 import { Button } from "@/shared/ui/button"
@@ -40,7 +39,6 @@ interface CardProps {
 }
 
 export default function Card({
-  userId,
   courseData,
   enableEdit = false,
   courseId,
@@ -54,7 +52,7 @@ export default function Card({
   // 1. Auth & Roles
   const currentUser = useAuthStore(state => state.currentUser)
   const actualUserId = currentUser?.id || "user-default"
-  const isAdmin = currentUser?.role === 'admin' // ✅ Chequeo de admin real
+  const isAdmin = currentUser?.role === 'admin' // 
 
   // 2. Favoritos
 const { isFavorite, toggleFavorite } = useFavoriteIds()
