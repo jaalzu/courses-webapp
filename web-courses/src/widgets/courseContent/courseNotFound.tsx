@@ -1,4 +1,3 @@
-// 📁 components/course/courseNotFound.tsx
 import Link from "next/link"
 
 export default function CourseNotFound() {
@@ -9,7 +8,7 @@ export default function CourseNotFound() {
           Opa, este curso no existe .
         </h2>
         <p className="text-lg text-gray-600 dark:text-gray-400 max-w-md mx-auto">
-          Parece que te perdiste en el camino, crack. Este curso no está en nuestra base de datos (o escribiste mal la URL, no pasa nada, nos pasa a todos).
+          Parece que te perdiste en el camino crack. Este curso no está en nuestra base de datos (o escribiste mal la URL. no pasa nada, nos pasa a todos).
         </p>
         <Link 
           href="/"

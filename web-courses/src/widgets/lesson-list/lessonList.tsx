@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from "react"
 import styles from "./lessonList.module.css"
 import type { Lesson } from "@/entities/lesson/types"
 
@@ -20,12 +19,12 @@ import {
 } from "@/shared/ui"
 
 import { cn } from "@/shared/lib/utils"
-import { useProgress} from "@/entities/progress/model/useProgress"
+import { useProgress } from "@/entities/progress/model/useProgress"
 import { isLessonCompleted } from "@/entities/progress"
 
 interface LessonListProps {
   lessons: Lesson[]
-  currentLessonId: string | number;
+  currentLessonId: string | number
   courseId: string
   userId: string
   onLessonSelect: (lesson: Lesson) => void
@@ -38,17 +37,8 @@ export function LessonList({
   userId,
   onLessonSelect,
 }: LessonListProps) {
+  const { progress, markLessonCompleted } = useProgress()
 
-  const {progress,markLessonCompleted,fetchUserProgress} = useProgress()
-
-  // Cargar progreso del usuario
-  useEffect(() => {
-    if (userId) {
-      fetchUserProgress(userId)
-    }
-  }, [userId, fetchUserProgress])
-
-  // Métricas
   const completedCount = lessons.filter(lesson =>
     isLessonCompleted(progress, userId, courseId, lesson.id)
   ).length
@@ -59,14 +49,13 @@ export function LessonList({
       ? Math.round((completedCount / totalLessons) * 100)
       : 0
 
-  // Handler async para marcar completada
   const handleMarkComplete = async (lessonId: string) => {
     await markLessonCompleted(userId, courseId, lessonId)
   }
 
   return (
     <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm overflow-hidden">
-      {/* HEADER */}
+      {/* HEADER - Tus estilos originales intactos */}
       <div className="p-6 border-b border-gray-100 dark:border-gray-700">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -90,7 +79,7 @@ export function LessonList({
         </div>
       </div>
 
-      {/* LISTA */}
+      {/* LISTA - Mantengo toda tu lógica de Accordion y Badge */}
       <ScrollArea className="h-full">
         <Accordion type="single" collapsible className="px-2 py-2">
           {lessons.map(lesson => {
@@ -167,17 +156,15 @@ export function LessonList({
                     </button>
 
                     {!completed ? (
-                     <button
-onClick={() => handleMarkComplete(lesson.id)}
-
-  className="w-full bg-green-500 hover:bg-green-400 text-white font-medium py-2 rounded-lg"
->
-  Marcar como finalizada
-</button>
-
+                      <button
+                        onClick={() => handleMarkComplete(lesson.id)}
+                        className="w-full bg-green-500 hover:bg-green-400 text-white font-medium py-2 rounded-lg transition-colors"
+                      >
+                        Marcar como finalizada
+                      </button>
                     ) : (
                       <div className="w-full bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300 font-medium py-2 rounded-lg text-center">
-                        Lección completada ✅
+                        Lección completada 
                       </div>
                     )}
                   </div>

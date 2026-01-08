@@ -1,30 +1,23 @@
 'use client'
 
-import { useEffect } from "react" 
-import { DeleteButton } from "@/features/admin/ui/shared/DeleteButton"
-import { EditButton } from "@/features/admin/ui/shared/EditButton"
 import { FavoriteButton } from "@/features/favorites/ui/favoriteButton"
 import { useFavoriteIds } from "@/features/favorites/model/hooks/useFavoritesIds"
-import { useCourses } from "@/entities/course/model/useCourses"
+import { AdminCardActions } from "@/features/admin/ui/AdminCardActions"
 
 import { Button } from "@/shared/ui/button"
-import { Progress } from "@/shared/ui"
-import { Badge } from "@/shared/ui"
-
+import { Progress, Badge } from "@/shared/ui"
 import Image from "next/image"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 
 import { CheckCircleIcon } from "@heroicons/react/24/solid"
 
 import { getLevelConfig } from "@/entities/course/model/helpers"
 import type { Course } from "@/entities/course/types"
-import { useProgress } from "@/entities/progress/model/useProgress" // ← CAMBIO
-import { getCourseStats } from "@/entities/progress" // ← getCourseStats sigue siendo helper
+import { useProgress } from "@/entities/progress/model/useProgress"
+import { getCourseStats } from "@/entities/progress"
 import { useAuthStore } from '@/features/auth/model/useAuthStore'
 
 interface CardProps {
-  userId?: string 
   courseId: string
   href: string
   className?: string
@@ -43,54 +36,25 @@ export default function Card({
   level,
   onEdit,
 }: CardProps) {
-  const router = useRouter()
-
+  // 1. Auth & Permissions
   const currentUser = useAuthStore(state => state.currentUser)
-  const actualUserId = currentUser?.id || "user-default"
   const isAdmin = currentUser?.role === 'admin'
+  const userId = currentUser?.id || "user-default"
 
+  // 2. Favorites & Progress
   const { isFavorite, toggleFavorite } = useFavoriteIds()
+  const { progress } = useProgress() 
+  
   const levelConfig = level ? getLevelConfig(level) : null
-
-  const { deleteCourse } = useCourses()
-  const { progress, fetchUserProgress } = useProgress() 
-  
-  // 5. Calcular stats
-  const stats = getCourseStats(courseData, progress, actualUserId)
-
-  useEffect(() => {
-    if (actualUserId && actualUserId !== "user-default") {
-      fetchUserProgress(actualUserId)
-    }
-  }, [actualUserId, fetchUserProgress])
-  
-  // Handlers
-  const handleEditClick = () => onEdit?.()
-
-  const handleDeleteClick = () => {
-    if (!confirm("¿Seguro que querés eliminar este curso? Esta acción no se puede deshacer.")) {
-      return
-    }
-    deleteCourse(courseId)
-  }
-
-  const handleEnterCourse = async (e: React.MouseEvent) => {
-    e.preventDefault()
-    await router.prefetch(href)
-    router.push(href)
-  }
+  const stats = getCourseStats(courseData, progress, userId)
 
   return (
     <div className={`relative ${className} flex flex-col h-full`}>
       
-      {/* --- BOTONES DE ACCIÓN (Admin & User) --- */}
+      {/* --- BOTONES DE ACCIÓN --- */}
       <div className="absolute top-2 right-2 z-10 flex gap-2">
-        {/* Solo si la prop lo permite Y el usuario logueado es admin */}
         {enableEdit && isAdmin && (
-          <>
-            {onEdit && <EditButton onEdit={handleEditClick} />}
-            <DeleteButton onDelete={handleDeleteClick} />
-          </>
+          <AdminCardActions courseId={courseId} onEdit={onEdit} />
         )}
         
         <FavoriteButton
@@ -101,13 +65,12 @@ export default function Card({
 
       <Link
         href={href}
-        onClick={handleEnterCourse}
         className="bg-white dark:bg-gray-900 rounded-md overflow-hidden flex flex-col h-full transition-shadow shadow-sm hover:shadow-md border"
       >
         <Image
           src={courseData.image || "/curso1.webp"}
-        alt={courseData.title || "Imagen del curso"}
-            width={400}
+          alt={courseData.title || "Imagen del curso"}
+          width={400}
           height={200}
           className="w-full h-40 object-cover"
           unoptimized 
@@ -115,14 +78,10 @@ export default function Card({
 
         <div className="p-4 flex flex-col flex-1 justify-between">
           <div>
-            <h3 className="text-lg font-semibold mb-2">
-              {courseData.title}
-            </h3>
+            <h3 className="text-lg font-semibold mb-2">{courseData.title}</h3>
 
             {levelConfig && (
-              <Badge variant={levelConfig.variant}>
-                {levelConfig.label}
-              </Badge>
+              <Badge variant={levelConfig.variant}>{levelConfig.label}</Badge>
             )}
 
             <p className="text-sm text-dark dark:text-gray-300 mt-5 line-clamp-5">
@@ -138,9 +97,7 @@ export default function Card({
             {stats.isCompleted ? (
               <div className="flex items-center gap-1 text-green-600">
                 <CheckCircleIcon className="w-5 h-5" />
-                <span className="text-sm font-semibold">
-                  ¡Completado!
-                </span>
+                <span className="text-sm font-semibold">¡Completado!</span>
               </div>
             ) : (
               <span className="text-sm font-medium">

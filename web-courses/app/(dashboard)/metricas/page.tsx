@@ -1,6 +1,6 @@
 // app/metrics/page.tsx
 import { Metrics } from '@/features/metrics'
-import { AdminGuard } from '@/features/admin/ui/AdminGuard' // Importás el que creamos
+import { AdminGuard } from '@/features/admin/AdminGuard' // Importás el que creamos
 
 export const dynamic = 'force-dynamic'
 

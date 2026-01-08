@@ -2,11 +2,11 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useRouter } from "next/navigation" // ← AGREGAR
+import { useRouter } from "next/navigation" 
 import { Button } from "@/shared/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/index"
 import { SidebarTrigger } from "@/widgets/sidebar/sidebar"
-import { useAuthStore } from '@/features/auth/model/useAuthStore' // ← AGREGAR
+import { useAuthStore } from '@/features/auth/model/useAuthStore' 
 import {
   DropdownMenu,
   DropdownMenuContent,

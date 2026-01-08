@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 import { ForumSection } from '@/features/forum/ui/ForumSection'
 import { useCourseNavigation } from "@/features/course-navigation/useCourseNavigation"
 import CourseContent from "@/widgets/courseContent/courseContent"
@@ -9,49 +9,52 @@ import InstructorCard from "@/widgets/courseContent/instructorCard"
 import { CourseSwitcher } from "@/widgets/courseContent/courseSwitcher"
 import type { Lesson } from "@/entities/lesson/types"
 import { useAuthStore } from '@/features/auth/model/useAuthStore'
-
+import { useProgress } from "@/entities/progress/model/useProgress" // ← Importado
 
 interface CoursePageContentProps {
   courseId: string
 }
 
 export default function CoursePageContent({ courseId }: CoursePageContentProps) {
-  const [currentVideoUrl, setCurrentVideoUrl] = useState<string | undefined>()
+  // 1. Auth & Global Hooks
+  const currentUser = useAuthStore(state => state.currentUser)
+  const userId = currentUser?.id || "user-default"
+  const { fetchUserProgress } = useProgress() // ← Hook de progreso
 
-const currentUser = useAuthStore(state => state.currentUser) // ✅
-  const userId = useAuthStore(state => state.currentUser?.id) || "user-default"
-
+  // 2. Navigation Hook
   const { course, currentLesson, selectLesson } = useCourseNavigation(courseId)
 
+  // 3. Cargar progreso una sola vez al entrar a la página
   useEffect(() => {
-    if (currentLesson?.videoUrl) {
-      setCurrentVideoUrl(currentLesson.videoUrl)
+    if (userId && userId !== "user-default") {
+      fetchUserProgress(userId)
     }
-  }, [currentLesson])
+  }, [userId, fetchUserProgress])
+
+  // 4. Derivación de datos
+  const currentVideoUrl = currentLesson?.videoUrl || course?.lessons[0]?.videoUrl
 
   const handleLessonClick = (lesson: Lesson) => {
-    if (lesson.videoUrl) {
-      setCurrentVideoUrl(lesson.videoUrl)
-    } else {
-      setCurrentVideoUrl(undefined)
-    }
-    selectLesson(lesson) // ✅ AHORA SÍ está definido
+    selectLesson(lesson)
   }
 
   if (!course) return null
 
   return (
     <main className="w-full p-4 md:p-8 space-y-5">
+      {/* HEADER */}
       <div className="flex justify-between items-center pb-1">
         <CourseSwitcher currentCourseId={courseId} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-6">
+        {/* LADO IZQUIERDO: VIDEO Y DETALLES */}
         <CourseContent
           course={course}
-          currentVideoUrl={currentVideoUrl} 
+          currentVideoUrl={currentVideoUrl}
         />
 
+        {/* LADO DERECHO: LISTA Y DOCENTE */}
         <div className="flex flex-col gap-6">
           <LessonList
             userId={userId}
@@ -61,23 +64,24 @@ const currentUser = useAuthStore(state => state.currentUser) // ✅
             onLessonSelect={handleLessonClick}
           />
 
-          <InstructorCard
-            name="Juan Pepe"
-            profession="Frontend Developer"
-            image="/avatar.webp"
-            description="Juan es un apasionado del desarrollo web con más de 10 años de experiencia. Ha trabajado en proyectos de todo tipo, desde startups hasta grandes empresas. Le encanta enseñar: disfruta compartir su conocimiento de manera clara y práctica."
-          />
+          {course.instructor && (
+            <InstructorCard
+              name={course.instructor}
+              profession="Instructor"
+              image="/avatar.webp"
+              description={`${course.instructor} te guiará a través de este curso con explicaciones claras y ejemplos prácticos.`}
+            />
+          )}
         </div>
       </div>
 
-      
-
+      {/* SECCIÓN INFERIOR: FORO */}
       <div className="border-t border-gray-200 dark:border-gray-700 pt-8 mt-8">
-              <ForumSection
-        courseId={String(courseId)}
-        currentUserId={userId}
-        currentUserName={currentUser?.name || "Usuario"}
-      />
+        <ForumSection
+          courseId={courseId}
+          currentUserId={userId}
+          currentUserName={currentUser?.name || "Usuario"}
+        />
       </div>
     </main>
   )

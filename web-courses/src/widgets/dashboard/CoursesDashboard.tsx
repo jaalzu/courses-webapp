@@ -2,6 +2,8 @@
 
 import { useEffect } from "react"
 import { useCourses } from "@/entities/course/model/useCourses" 
+import { useProgress } from "@/entities/progress/model/useProgress" 
+import { useAuthStore } from '@/features/auth/model/useAuthStore' 
 import { useEditCourseFlow } from "@/features/admin/hooks/useEditCourseFlow"
 import { NewCourseButton } from "@/features/admin/ui/shared/NewCourseButton"
 import EditCourseManager from "@/features/admin/ui/courses/EditCourseManager"
@@ -12,13 +14,18 @@ import { CoursesGrid } from "./CoursesGrid"
 
 export function CoursesDashboard() {
   const { courses, isLoading, fetchCourses } = useCourses() 
+  const { fetchUserProgress } = useProgress() 
+  const currentUser = useAuthStore(state => state.currentUser)
   const editFlow = useEditCourseFlow()
 
   useEffect(() => {
     fetchCourses()
-  }, [fetchCourses])
+    // Si hay usuario, traemos su progreso una sola vez para todos los cursos
+    if (currentUser?.id) {
+      fetchUserProgress(currentUser.id)
+    }
+  }, [fetchCourses, fetchUserProgress, currentUser?.id])
 
-  // 4. Si está CARGANDO, mostramos Skeleton
   if (isLoading) {
     return (
       <DashboardLayout title="Cursos" action={<NewCourseButton />}>
@@ -27,12 +34,10 @@ export function CoursesDashboard() {
             <CoursesSkeleton key={i} />
           ))}
         </div>
-        
       </DashboardLayout>
     )
   }
 
-  // 5. Si NO está cargando pero NO hay cursos (Vacío real)
   if (!courses || courses.length === 0) {
     return (
       <DashboardLayout title="Cursos" action={<NewCourseButton />}>
@@ -44,9 +49,9 @@ export function CoursesDashboard() {
     )
   }
 
-  // 6. Si hay cursos, mostramos la Grid
   return (
     <DashboardLayout title="Cursos" action={<NewCourseButton />}>
+      {/* La Grid ahora recibirá los cursos y el progreso ya estará en el store */}
       <CoursesGrid courses={courses} onEdit={editFlow.open} />
       <EditCourseManager flow={editFlow} />
     </DashboardLayout>
