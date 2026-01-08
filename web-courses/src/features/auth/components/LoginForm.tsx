@@ -9,7 +9,7 @@ import Image from 'next/image'
 import { useAuthStore } from "@/features/auth/model/useAuthStore"
 
 // 3. Shared (UI & Libs)
-import { Button, Input } from "@/shared/ui" // Asumiendo index.ts exporta ambos
+import { Button, Input } from "@/shared/ui" 
 import { LockIcon, EnvelopeIcon } from "./icons/icons"
 import { getAuthErrorMessage } from '@/shared/lib/supabase/errorHandler'
 
@@ -17,7 +17,6 @@ export function LoginForm() {
   const router = useRouter()
   const { login, loginWithGoogle, isLoading } = useAuthStore()
   
-  // State agrupado por formulario (opcional, pero más limpio si crece)
   const [formData, setFormData] = useState({ email: "", password: "" })
   const [errors, setErrors] = useState({ form: "", email: "" })
 

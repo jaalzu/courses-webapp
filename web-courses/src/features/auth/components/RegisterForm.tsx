@@ -102,7 +102,7 @@ export function RegisterForm() {
         {/* Campo: Username */}
         <div className="space-y-1">
           <div className="relative">
-            {/* Cambiamos el icono por un @ para que se entienda que es un ID de usuario */}
+            
             <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm select-none">#</span>
             <Input 
               placeholder="nombre_usuario" 
