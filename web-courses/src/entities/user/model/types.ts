@@ -1,5 +1,3 @@
-// entities/user/model/types.ts
-
 export type UserRole = 'student'  | 'admin'
 
 export interface User {

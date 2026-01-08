@@ -1,5 +1,6 @@
 // shared/api/courses.ts
 import { courseQueries } from '@/shared/lib/supabase/queries/courses'
+import { lessonQueries } from '@/shared/lib/supabase/queries/lessons'
 import type { Course } from '@/entities/course/types'
 
 export const coursesApi = {
@@ -17,11 +18,26 @@ export const coursesApi = {
   },
   
   async update(courseId: string, updates: Partial<Course>) {
-    // Mapeo DB aquí
+    // 1. Actualizar datos del curso (sin lecciones)
     const dbUpdates = mapCourseToDb(updates)
-    const { data, error } = await courseQueries.update(courseId, dbUpdates)
-    if (error) throw new Error(error.message)
-    return data
+    
+    let courseData = null
+    if (Object.keys(dbUpdates).length > 0) {
+      const { data, error } = await courseQueries.update(courseId, dbUpdates)
+      if (error) throw new Error(error.message)
+      courseData = data
+    }
+    
+    // 2. Sincronizar lecciones si las hay
+    if (updates.lessons) {
+      const { data: lessonsData, error: lessonsError } = await lessonQueries.syncLessons(
+        courseId,
+        updates.lessons
+      )
+      if (lessonsError) throw new Error(lessonsError.message)
+    }
+    
+    return courseData
   },
   
   async delete(courseId: string) {
@@ -33,9 +49,21 @@ export const coursesApi = {
 // Helper privado para mapeo
 function mapCourseToDb(updates: Partial<Course>) {
   const dbUpdates: any = {}
-  if (updates.title) dbUpdates.title = updates.title
-  if (updates.keyPoints) dbUpdates.key_points = updates.keyPoints
-  if (updates.level) dbUpdates.difficulty = updates.level
-  // ...
+  
+  if (updates.title !== undefined) dbUpdates.title = updates.title
+  if (updates.description !== undefined) dbUpdates.description = updates.description
+  if (updates.duration !== undefined) dbUpdates.duration = String(updates.duration)
+  if (updates.instructor !== undefined) dbUpdates.instructor = updates.instructor
+  if (updates.keyPoints !== undefined) dbUpdates.key_points = updates.keyPoints
+  if (updates.level !== undefined) dbUpdates.difficulty = updates.level
+  
+  if (updates.image !== undefined) {
+    dbUpdates.thumbnail_url = updates.image.includes('supabase.co/storage')
+      ? updates.image.split('/').pop()
+      : updates.image
+  }
+  
+  // NO incluir lessons aquí, se manejan por separado
+  
   return dbUpdates
 }

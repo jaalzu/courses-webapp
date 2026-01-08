@@ -20,7 +20,6 @@ export const progressQueries = {
     return { data, error };
   },
 
-  // ✅ FIX: Cambiar onConflict
   updateLessonProgress: async (
     userId: string,
     courseId: string,
@@ -37,14 +36,13 @@ export const progressQueries = {
           status,
           updated_at: new Date().toISOString(),
         }, 
-        { onConflict: 'user_id,course_id,lesson_id' } // ← CAMBIO AQUÍ
+        { onConflict: 'user_id,lesson_id' } // ← De vuelta al original
       )
       .select();
     
     return { data, error };
   },
 
-  // ✅ FIX: Cambiar onConflict
   markLessonComplete: async (userId: string, courseId: string, lessonId: string) => {
     const { data, error } = await supabase
       .from('user_progress')
@@ -57,7 +55,7 @@ export const progressQueries = {
           completed_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         },
-        { onConflict: 'user_id,course_id,lesson_id' } // ← CAMBIO AQUÍ
+        { onConflict: 'user_id,lesson_id' } // ← De vuelta al original
       )
       .select();
     
