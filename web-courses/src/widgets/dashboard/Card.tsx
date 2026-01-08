@@ -1,21 +1,25 @@
 'use client'
 
-import { FavoriteButton } from "@/features/favorites/ui/favoriteButton"
-import { useFavoriteIds } from "@/features/favorites/model/hooks/useFavoritesIds"
-import { AdminCardActions } from "@/features/admin/ui/AdminCardActions"
-
-import { Button } from "@/shared/ui/button"
-import { Progress, Badge } from "@/shared/ui"
+// 1. React & Next
 import Image from "next/image"
 import Link from "next/link"
 
-import { CheckCircleIcon } from "@heroicons/react/24/solid"
+// 2. Features (Lógica de negocio e interacción)
+import { FavoriteButton } from "@/features/favorites/ui/favoriteButton"
+import { useFavoriteIds } from "@/features/favorites/model/hooks/useFavoritesIds"
+import { AdminCardActions } from "@/features/admin/ui/AdminCardActions"
+import { useAuthStore } from '@/features/auth/model/useAuthStore'
 
-import { getLevelConfig } from "@/entities/course/model/helpers"
-import type { Course } from "@/entities/course/types"
+// 3. Entities (Modelos de datos y estado específico)
 import { useProgress } from "@/entities/progress/model/useProgress"
 import { getCourseStats } from "@/entities/progress"
-import { useAuthStore } from '@/features/auth/model/useAuthStore'
+import { getLevelConfig } from "@/entities/course/model/helpers"
+import type { Course } from "@/entities/course/types"
+
+// 4. Shared (UI Components & Libs)
+import { Button } from "@/shared/ui/button"
+import { Progress, Badge } from "@/shared/ui"
+import { CheckCircleIcon } from "@heroicons/react/24/solid"
 
 interface CardProps {
   courseId: string

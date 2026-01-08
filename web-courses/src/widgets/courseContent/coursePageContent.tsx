@@ -1,15 +1,22 @@
 'use client'
 
+// 1. React & Next
 import { useEffect } from "react"
+
+// 2. Features (Lógica de negocio/interacción)
 import { ForumSection } from '@/features/forum/ui/ForumSection'
 import { useCourseNavigation } from "@/features/course-navigation/useCourseNavigation"
+import { useAuthStore } from '@/features/auth/model/useAuthStore'
+import { useProgress } from "@/entities/progress/model/useProgress" 
+
+// 3. Widgets (Piezas grandes de UI)
 import CourseContent from "@/widgets/courseContent/courseContent"
 import { LessonList } from "@/widgets/lesson-list/lessonList"
 import InstructorCard from "@/widgets/courseContent/instructorCard"
 import { CourseSwitcher } from "@/widgets/courseContent/courseSwitcher"
+
+// 4. Types
 import type { Lesson } from "@/entities/lesson/types"
-import { useAuthStore } from '@/features/auth/model/useAuthStore'
-import { useProgress } from "@/entities/progress/model/useProgress" // ← Importado
 
 interface CoursePageContentProps {
   courseId: string

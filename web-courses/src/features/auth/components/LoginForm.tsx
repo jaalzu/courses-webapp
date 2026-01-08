@@ -1,48 +1,47 @@
 "use client"
 
+// 1. React & Next.js
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Button } from "@/shared/ui/index"
-import { Input } from "@/shared/ui/index"
-import { LockIcon, EnvelopeIcon } from "./icons/icons"
 import Image from 'next/image'
+
+// 2. Features & Models
 import { useAuthStore } from "@/features/auth/model/useAuthStore"
+
+// 3. Shared (UI & Libs)
+import { Button, Input } from "@/shared/ui" // Asumiendo index.ts exporta ambos
+import { LockIcon, EnvelopeIcon } from "./icons/icons"
 import { getAuthErrorMessage } from '@/shared/lib/supabase/errorHandler'
 
 export function LoginForm() {
   const router = useRouter()
   const { login, loginWithGoogle, isLoading } = useAuthStore()
   
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
-  const [emailError, setEmailError] = useState("") // ⭐ Nuevo
+  // State agrupado por formulario (opcional, pero más limpio si crece)
+  const [formData, setFormData] = useState({ email: "", password: "" })
+  const [errors, setErrors] = useState({ form: "", email: "" })
 
-  // ⭐ Validación básica de email
-  const validateEmail = (value: string) => {
+  const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(value)) {
-      setEmailError("Email inválido")
+    if (!emailRegex.test(email)) {
+      setErrors(prev => ({ ...prev, email: "Introduce un email válido" }))
       return false
     }
-    setEmailError("")
+    setErrors(prev => ({ ...prev, email: "" }))
     return true
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError("")
+    setErrors({ form: "", email: "" })
 
-    // ⭐ Validar antes de enviar
-    if (!validateEmail(email)) {
-      return
-    }
+    if (!validateEmail(formData.email)) return
 
     try {
-      await login(email, password)
+      await login(formData.email, formData.password)
       router.push("/dashboard")
     } catch (err: any) {
-      setError(getAuthErrorMessage(err))
+      setErrors(prev => ({ ...prev, form: getAuthErrorMessage(err) }))
     }
   }
 
@@ -50,106 +49,104 @@ export function LoginForm() {
     try {
       await loginWithGoogle()
     } catch (err: any) {
-      setError(getAuthErrorMessage(err))
+      setErrors(prev => ({ ...prev, form: getAuthErrorMessage(err) }))
     }
   }
 
   return (
-    <div className="w-full max-w-sm space-y-6">
-      <div className="text-center">
-        <h1 className="text-2xl font-semibold">Iniciar sesión en</h1>
-        <p className="text-muted-foreground">Gastronomy Mentor</p>
-      </div>
+    <div className="w-full max-w-sm space-y-6 animate-in fade-in duration-500">
+      <header className="text-center space-y-1">
+        <h1 className="text-2xl font-bold tracking-tight">Iniciar sesión</h1>
+        <p className="text-sm text-muted-foreground italic">JavaCourses</p>
+      </header>
 
+      {/* Social Login */}
       <Button 
-        variant="default" 
+        variant="outline" 
         size="lg" 
-        className="w-full flex items-center justify-center gap-2"
+        className="w-full flex items-center justify-center gap-3 transition-all hover:bg-gray-50"
         onClick={handleGoogleLogin}
         disabled={isLoading}
       >
-        <Image
-          src="/icons/svg/google-icon.svg"
-          alt="Google"
-          width={20}
-          height={20}
-        />
-        Iniciar sesión con Google
+        <Image src="/icons/svg/google-icon.svg" alt="Google" width={18} height={18} />
+        <span className="text-sm font-medium">Continuar con Google</span>
       </Button>
 
       <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">o</span>
+        <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
+        <div className="relative flex justify-center text-[10px] uppercase">
+          <span className="bg-background px-4 text-muted-foreground">o con email</span>
         </div>
       </div>
 
-      {error && (
-        <div className="bg-red-50 text-red-600 px-4 py-2 rounded-md text-sm">
-          {error}
+      {/* Error General */}
+      {errors.form && (
+        <div className="bg-red-50 border border-red-100 text-red-600 px-4 py-2.5 rounded-xl text-xs font-medium animate-shake">
+          {errors.form}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-3">
-        <div className="relative w-full">
-          <EnvelopeIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
-          <Input
-            type="email"
-            placeholder="javieralzuu@gmail.com"
-            className={`pl-10 w-full ${emailError ? 'border-red-500' : ''}`}
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value)
-              if (emailError) validateEmail(e.target.value) // ⭐ Validar mientras escribe si hubo error
-            }}
-            onBlur={() => validateEmail(email)} // ⭐ Validar al salir del input
-            required
-            disabled={isLoading}
-          />
-          {emailError && (
-            <span className="text-red-500 text-xs mt-1">{emailError}</span>
-          )}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Email Field */}
+        <div className="space-y-1.5">
+          <div className="relative">
+            <EnvelopeIcon className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${errors.email ? 'text-red-500' : 'text-gray-400'}`} />
+            <Input
+              type="email"
+              placeholder="chef@gastronomy.com"
+              className={`pl-10 h-11 rounded-xl transition-all ${errors.email ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+              value={formData.email}
+              onChange={(e) => {
+                setFormData({ ...formData, email: e.target.value })
+                if (errors.email) validateEmail(e.target.value)
+              }}
+              onBlur={() => validateEmail(formData.email)}
+              required
+              disabled={isLoading}
+            />
+          </div>
+          {errors.email && <p className="text-[11px] text-red-500 ml-1 font-medium">{errors.email}</p>}
         </div>
 
-        <div className="relative w-full mt-3">
-          <LockIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
+        {/* Password Field */}
+        <div className="relative">
+          <LockIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <Input
             type="password"
             placeholder="Contraseña"
-            className="pl-10 w-full"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            className="pl-10 h-11 rounded-xl"
+            value={formData.password}
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             required
-            minLength={6} // ⭐ Mínimo 6 caracteres
+            minLength={6}
             disabled={isLoading}
           />
         </div>
 
         <Button
           type="submit"
-          variant="secondary"
+          variant="default"
           size="lg"
-          className="w-full font-bold hover:shadow-lg border border-gray-300 shadow-sm transition-shadow"
+          className="w-full h-11 font-bold rounded-xl bg-black hover:bg-gray-800 transition-all active:scale-[0.98]"
           disabled={isLoading}
         >
-          {isLoading ? "Iniciando sesión..." : "Iniciar sesión"}
+          {isLoading ? "Validando credenciales..." : "Iniciar Sesion"}
         </Button>
       </form>
 
-      <div className="text-center text-sm mb-3">
-        <a href="#" className="text-black underline">
-          ¿Olvidaste tu contraseña?
-        </a>
-      </div>
-
-      <div className="text-center text-sm">
-        ¿No tienes una cuenta?{" "}
-        <a href="/register" className="text-primary font-semibold underline">
-          Regístrate
-        </a>
-      </div>
+      <footer className="space-y-4 pt-2">
+        <div className="text-center">
+          <a href="#" className="text-xs text-muted-foreground hover:text-black transition-colors underline-offset-4 hover:underline">
+            ¿Olvidaste tu contraseña?
+          </a>
+        </div>
+        <div className="text-center text-sm text-muted-foreground">
+          ¿Nuevo en la academia?{" "}
+          <a href="/register" className="text-black font-bold hover:underline underline-offset-4">
+            Crea una cuenta
+          </a>
+        </div>
+      </footer>
     </div>
   )
 }

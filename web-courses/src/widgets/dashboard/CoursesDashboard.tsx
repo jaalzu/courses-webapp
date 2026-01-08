@@ -1,16 +1,26 @@
 'use client'
 
+// 1. React & Next
 import { useEffect } from "react"
-import { useCourses } from "@/entities/course/model/useCourses" 
-import { useProgress } from "@/entities/progress/model/useProgress" 
+
+// 2. Features (Lógica de negocio y flujos)
 import { useAuthStore } from '@/features/auth/model/useAuthStore' 
 import { useEditCourseFlow } from "@/features/admin/hooks/useEditCourseFlow"
 import { NewCourseButton } from "@/features/admin/ui/shared/NewCourseButton"
 import EditCourseManager from "@/features/admin/ui/courses/EditCourseManager"
 
+// 3. Entities (Modelos de datos y estado)
+import { useCourses } from "@/entities/course/model/useCourses" 
+import { useProgress } from "@/entities/progress/model/useProgress" 
+
+// 4. UI Local (Componentes específicos de este dashboard)
 import CoursesSkeleton from "./coursesSkeleton"
 import { DashboardLayout } from "./DashboardLayout"
 import { CoursesGrid } from "./CoursesGrid"
+
+
+
+
 
 export function CoursesDashboard() {
   const { courses, isLoading, fetchCourses } = useCourses() 

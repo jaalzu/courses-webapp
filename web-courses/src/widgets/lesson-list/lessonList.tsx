@@ -1,8 +1,13 @@
 'use client'
 
+// 1. React & Styles
 import styles from "./lessonList.module.css"
-import type { Lesson } from "@/entities/lesson/types"
 
+// 2. Features & Business Logic (Progreso y estados)
+import { useProgress } from "@/entities/progress/model/useProgress"
+import { isLessonCompleted } from "@/entities/progress"
+
+// 3. Shared Components & UI
 import {
   PlayIcon,
   ClockIcon,
@@ -19,8 +24,9 @@ import {
 } from "@/shared/ui"
 
 import { cn } from "@/shared/lib/utils"
-import { useProgress } from "@/entities/progress/model/useProgress"
-import { isLessonCompleted } from "@/entities/progress"
+
+// 4. Types
+import type { Lesson } from "@/entities/lesson/types"
 
 interface LessonListProps {
   lessons: Lesson[]

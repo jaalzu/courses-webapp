@@ -1,12 +1,19 @@
 'use client'
 
+// 1. React & Next.js
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation" 
+
+// 2. Features (Lógica de autenticación/estado global)
+import { useAuthStore } from '@/features/auth/model/useAuthStore' 
+
+// 3. Widgets (Componentes complejos de la UI)
+import { SidebarTrigger } from "@/widgets/sidebar/sidebar"
+
+// 4. Shared UI (Componentes base/atómicos)
 import { Button } from "@/shared/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/index"
-import { SidebarTrigger } from "@/widgets/sidebar/sidebar"
-import { useAuthStore } from '@/features/auth/model/useAuthStore' 
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +21,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu"
-
 import {
   Tooltip,
   TooltipContent,
@@ -22,6 +28,7 @@ import {
   TooltipTrigger,
 } from "@/shared/ui/tooltip"
 
+// 5. Icons & Assets
 import {
   MoonIcon,
   SunIcon,
@@ -36,41 +43,50 @@ export function Navbar({
   onToggleTheme: () => void
   isDark: boolean
 }) {
-  const router = useRouter() 
-  const { logout, currentUser } = useAuthStore() 
+
+  
+const { logout, currentUser } = useAuthStore() 
 
   const handleLogout = async () => {
     await logout()
-    router.push('/login')
+    // Hard reload para limpiar Zustand y memoria al 100%
+    window.location.href = '/login'
   }
 
   return (
-    <nav className="bg-white dark:bg-gray-900 shadow-sm sticky top-0 z-50 border-b border-gray-100 dark:border-gray-800">
+    <nav className="bg-white dark:bg-gray-900 shadow-sm sticky top-0 z-50 border-b border-gray-100 dark:border-gray-800 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-13 items-center">
-          <div className="md:hidden">
-            <SidebarTrigger />
+          
+          {/* LADO IZQUIERDO: Mobile Trigger & Logo */}
+          <div className="flex items-center gap-4">
+            <div className="md:hidden">
+              <SidebarTrigger />
+            </div>
+
+            <Link
+              href="/"
+              className="flex items-center gap-2 group"
+            >
+              <div className="relative h-8 w-8 transition-transform group-hover:scale-110">
+                <Image
+                  src="/icons/svg/logo1.svg"
+                  alt="javacourses logo"
+                  fill
+                  priority
+                  className="object-contain"
+                />
+              </div>
+              <span className="font-bold text-lg text-gray-900 dark:text-white tracking-tight">
+                javacourses
+              </span>
+            </Link>
           </div>
 
-          <Link
-            href="/"
-            className="md:flex-1 flex items-center justify-center md:justify-start gap-2"
-          >
-            <div className="relative h-8 w-8">
-              <Image
-                src="/icons/svg/logo1.svg"
-                alt="javacourses logo"
-                fill
-                priority
-                className="object-contain"
-              />
-            </div>
-            <span className="font-bold text-lg text-gray-900 dark:text-white tracking-tight">
-              javacourses
-            </span>
-          </Link>
-
+          {/* LADO DERECHO: Acciones & Usuario */}
           <div className="flex items-center gap-2 md:gap-3">
+            
+            {/* TEMA (Light/Dark) */}
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -81,9 +97,9 @@ export function Navbar({
                     className="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                   >
                     {isDark ? (
-                      <SunIcon className="!w-5.5 !h-5.5 text-gray-600 dark:text-gray-100" />
+                      <SunIcon className="!w-5.5 !h-5.5 text-yellow-500" />
                     ) : (
-                      <MoonIcon className="!w-5.5 !h-5.5 text-gray-600 dark:text-gray-100" />
+                      <MoonIcon className="!w-5.5 !h-5.5 text-gray-600" />
                     )}
                   </Button>
                 </TooltipTrigger>
@@ -93,30 +109,28 @@ export function Navbar({
               </Tooltip>
             </TooltipProvider>
 
+            {/* USER MENU */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
                   className="relative h-10 w-10 rounded-full p-0 cursor-pointer 
-                             hover:scale-105 transition-transform duration-200 
-                             focus-visible:ring-0 focus-visible:ring-offset-0 
-                             focus:outline-none"
+                             hover:ring-2 hover:ring-gray-200 dark:hover:ring-gray-700
+                             transition-all duration-200 focus-visible:ring-0"
                 >
                   <Avatar className="h-10 w-10">
                     <AvatarImage src={currentUser?.avatar || "/avatar.webp"} alt="Usuario" />
-                    <AvatarFallback className="bg-primary text-white dark:text-black dark:bg-white">
-                      {currentUser?.name?.charAt(0).toUpperCase() || 'U'}
+                    <AvatarFallback className="bg-primary text-white dark:text-black dark:bg-white text-xs">
+                      {currentUser?.name?.substring(0, 2).toUpperCase() || 'U'}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
 
-              <DropdownMenuContent align="end" className="w-56">
-                <div className="flex items-center justify-start gap-2 p-2">
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium">{currentUser?.name || 'Usuario'}</p>
-                    <p className="text-xs text-gray-500">{currentUser?.email || ''}</p>
-                  </div>
+              <DropdownMenuContent align="end" className="w-56 mt-2">
+                <div className="flex flex-col space-y-1 p-2">
+                  <p className="text-sm font-semibold leading-none">{currentUser?.name || 'Usuario'}</p>
+                  <p className="text-xs text-gray-500 truncate leading-none">{currentUser?.email || ''}</p>
                 </div>
 
                 <DropdownMenuSeparator />
@@ -124,18 +138,18 @@ export function Navbar({
                 <Link href="/perfil">
                   <DropdownMenuItem className="cursor-pointer">
                     <UserIcon className="mr-2 h-4 w-4" />
-                    Perfil
+                    <span>Perfil</span>
                   </DropdownMenuItem>
                 </Link>
 
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem 
-                  className="cursor-pointer text-red-600"
+                  className="cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50 dark:focus:bg-red-900/10"
                   onClick={handleLogout}
                 >
                   <ArrowRightStartOnRectangleIcon className="mr-2 h-4 w-4" />
-                  Cerrar sesión
+                  <span>Cerrar sesión</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

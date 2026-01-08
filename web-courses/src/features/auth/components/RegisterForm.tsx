@@ -2,258 +2,182 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Button } from "@/shared/ui/index"
-import { Input } from "@/shared/ui/index"
-import { UserIcon, LockIcon, EnvelopeIcon } from "./icons/icons"
 import Image from 'next/image'
 import { useAuthStore } from "@/features/auth/model/useAuthStore"
 import { getAuthErrorMessage } from '@/shared/lib/supabase/errorHandler'
-import { validateName } from '@/shared/lib/supabase/queries/profiles'
+import { Button, Input } from "@/shared/ui"
+import { LockIcon, EnvelopeIcon } from "./icons/icons"
 
 export function RegisterForm() {
   const router = useRouter()
   const { register, loginWithGoogle, isLoading } = useAuthStore()
   
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-  const [error, setError] = useState("")
-  
-  // Estados de validación por campo
-  const [nameError, setNameError] = useState("")
-  const [emailError, setEmailError] = useState("")
-  const [passwordError, setPasswordError] = useState("")
-  const [confirmPasswordError, setConfirmPasswordError] = useState("")
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: ""
+  })
 
-  // Validación de email
-  const validateEmail = (value: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(value)) {
-      setEmailError("Email inválido")
-      return false
-    }
-    setEmailError("")
-    return true
-  }
+  const [errors, setErrors] = useState<Record<string, string>>({})
 
-  // Validación de contraseña
-  const validatePassword = (value: string) => {
-    if (value.length < 6) {
-      setPasswordError("Mínimo 6 caracteres")
-      return false
-    }
-    if (value.length > 72) {
-      setPasswordError("Máximo 72 caracteres")
-      return false
-    }
-    setPasswordError("")
-    return true
-  }
-
-  // Validación de confirmar contraseña
-  const validateConfirmPassword = (value: string) => {
-    if (value !== password) {
-      setConfirmPasswordError("Las contraseñas no coinciden")
-      return false
-    }
-    setConfirmPasswordError("")
-    return true
-  }
-
-  // Validación del nombre al escribir
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setName(value)
+  const handleChange = (field: keyof typeof formData, value: string) => {
+    const sanitizedValue = field === 'name' ? value.replace(/\s/g, '') : value;
     
-    // Solo validar si ya hay error o si el usuario dejó de escribir
-    if (nameError || value.length >= 3) {
-      const validation = validateName(value)
-      setNameError(validation.valid ? "" : validation.error || "")
+    setFormData(prev => ({ ...prev, [field]: sanitizedValue }))
+    if (errors[field]) setErrors(prev => ({ ...prev, [field]: "" }))
+  }
+
+  const validate = () => {
+    const newErrors: Record<string, string> = {}
+    
+    const usernameRegex = /^[a-zA-Z0-9._]+$/
+    
+    if (!formData.name) {
+      newErrors.name = "El nombre de usuario es obligatorio"
+    } else if (!usernameRegex.test(formData.name)) {
+      newErrors.name = "Solo letras, números, '.' o '_'"
     }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Email inválido"
+    }
+
+    if (formData.password.length < 6) {
+      newErrors.password = "Mínimo 6 caracteres"
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "No coinciden"
+    }
+
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError("")
-
-    // Validar todos los campos
-    const nameValidation = validateName(name)
-    const isEmailValid = validateEmail(email)
-    const isPasswordValid = validatePassword(password)
-    const isConfirmPasswordValid = validateConfirmPassword(confirmPassword)
-
-    // Mostrar errores específicos
-    if (!nameValidation.valid) {
-      setNameError(nameValidation.error || "")
-      return
-    }
-
-    if (!isEmailValid || !isPasswordValid || !isConfirmPasswordValid) {
-      return
-    }
+    if (!validate()) return
 
     try {
-      await register(email, password, name.trim())
+      await register(formData.email, formData.password, formData.name.toLowerCase())
       router.push("/dashboard")
     } catch (err: any) {
-      setError(getAuthErrorMessage(err))
-    }
-  }
-
-  const handleGoogleLogin = async () => {
-    try {
-      await loginWithGoogle()
-    } catch (err: any) {
-      setError(getAuthErrorMessage(err))
+      setErrors({ form: getAuthErrorMessage(err) })
     }
   }
 
   return (
-    <div className="w-full max-w-sm space-y-6">
-      <div className="text-center">
-        <h1 className="text-2xl font-semibold">Crear cuenta</h1>
-        <p className="text-muted-foreground">Gastronomy Mentor</p>
-      </div>
+    <div className="w-full max-w-sm space-y-6 animate-in fade-in duration-500">
+      <header className="text-center space-y-1">
+        <h1 className="text-2xl font-bold tracking-tight">Crear cuenta</h1>
+        <p className="text-sm text-muted-foreground italic">JavaCourses</p>
+      </header>
 
       <Button 
-        variant="default" 
+        variant="outline" 
         size="lg" 
-        className="w-full flex items-center justify-center gap-2"
-        onClick={handleGoogleLogin}
+        className="w-full flex items-center justify-center gap-3 active:scale-95 transition-transform"
+        onClick={() => loginWithGoogle()}
         disabled={isLoading}
       >
-        <Image
-          src="/icons/svg/google-icon.svg"
-          alt="Google"
-          width={20}
-          height={20}
-        />
-        Registrarse con Google
+        <Image src="/icons/svg/google-icon.svg" alt="Google" width={18} height={18} />
+        <span className="text-sm font-medium text-gray-700">Registrarse con Google</span>
       </Button>
 
       <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">o</span>
+        <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
+        <div className="relative flex justify-center text-[10px] uppercase">
+          <span className="bg-background px-4 text-muted-foreground font-bold tracking-widest text-gray-400">o</span>
         </div>
       </div>
 
-      {error && (
-        <div className="bg-red-50 text-red-600 px-4 py-2 rounded-md text-sm">
-          {error}
+      {errors.form && (
+        <div className="bg-red-50 border border-red-100 text-red-600 px-4 py-2.5 rounded-xl text-xs font-medium text-center">
+          {errors.form}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-3">
-        {/* Nombre */}
-        <div className="relative w-full">
-          <UserIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
-          <Input 
-            type="text" 
-            placeholder="Nombre completo" 
-            className={`pl-10 w-full ${nameError ? 'border-red-500' : ''}`}
-            value={name}
-            onChange={handleNameChange}
-            onBlur={() => {
-              const validation = validateName(name)
-              setNameError(validation.valid ? "" : validation.error || "")
-            }}
-            maxLength={50}
-            required
-            disabled={isLoading}
-          />
-          {nameError && (
-            <span className="text-red-500 text-xs mt-1 block">{nameError}</span>
-          )}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Campo: Username */}
+        <div className="space-y-1">
+          <div className="relative">
+            {/* Cambiamos el icono por un @ para que se entienda que es un ID de usuario */}
+            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm select-none">#</span>
+            <Input 
+              placeholder="nombre_usuario" 
+              className={`pl-8 rounded-xl h-11 transition-all ${errors.name ? 'border-red-500 ring-red-100' : 'focus:border-black'}`}
+              value={formData.name}
+              onChange={(e) => handleChange('name', e.target.value)}
+              disabled={isLoading}
+            />
+          </div>
+          {errors.name && <p className="text-[10px] text-red-500 font-bold ml-2">{errors.name}</p>}
         </div>
 
-        {/* Email */}
-        <div className="relative w-full">
-          <EnvelopeIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
-          <Input 
-            type="email" 
-            placeholder="Correo electrónico" 
-            className={`pl-10 w-full ${emailError ? 'border-red-500' : ''}`}
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value)
-              if (emailError) validateEmail(e.target.value)
-            }}
-            onBlur={() => validateEmail(email)}
-            required
-            disabled={isLoading}
-          />
-          {emailError && (
-            <span className="text-red-500 text-xs mt-1 block">{emailError}</span>
-          )}
+        {/* Campo: Email */}
+        <div className="space-y-1">
+          <div className="relative">
+            <EnvelopeIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Input 
+              type="email"
+              placeholder="tu@email.com" 
+              className={`pl-10 rounded-xl h-11 transition-all ${errors.email ? 'border-red-500' : 'focus:border-black'}`}
+              value={formData.email}
+              onChange={(e) => handleChange('email', e.target.value)}
+              disabled={isLoading}
+            />
+          </div>
+          {errors.email && <p className="text-[10px] text-red-500 font-bold ml-2">{errors.email}</p>}
         </div>
 
-        {/* Contraseña */}
-        <div className="relative w-full">
-          <LockIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
-          <Input 
-            type="password" 
-            placeholder="Contraseña (mínimo 6 caracteres)" 
-            className={`pl-10 w-full ${passwordError ? 'border-red-500' : ''}`}
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value)
-              if (passwordError) validatePassword(e.target.value)
-              // Revalidar confirmación si ya hay algo escrito
-              if (confirmPassword) validateConfirmPassword(confirmPassword)
-            }}
-            onBlur={() => validatePassword(password)}
-            minLength={6}
-            maxLength={72}
-            required
-            disabled={isLoading}
-          />
-          {passwordError && (
-            <span className="text-red-500 text-xs mt-1 block">{passwordError}</span>
-          )}
-        </div>
+        {/* Campo: Passwords */}
+        <div className="grid grid-cols-2 gap-2">
+          <div className="space-y-1">
+             <div className="relative">
+               <LockIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+               <Input 
+                 type="password"
+                 placeholder="Clave" 
+                 className={`pl-9 rounded-xl h-11 text-xs ${errors.password ? 'border-red-500' : 'focus:border-black'}`}
+                 value={formData.password}
+                 onChange={(e) => handleChange('password', e.target.value)}
+                 disabled={isLoading}
+               />
+             </div>
+             {errors.password && <p className="text-[10px] text-red-500 font-bold ml-2">{errors.password}</p>}
+          </div>
 
-        {/* Confirmar contraseña */}
-        <div className="relative w-full">
-          <LockIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
-          <Input 
-            type="password" 
-            placeholder="Confirmar contraseña" 
-            className={`pl-10 w-full ${confirmPasswordError ? 'border-red-500' : ''}`}
-            value={confirmPassword}
-            onChange={(e) => {
-              setConfirmPassword(e.target.value)
-              if (confirmPasswordError) validateConfirmPassword(e.target.value)
-            }}
-            onBlur={() => validateConfirmPassword(confirmPassword)}
-            required
-            disabled={isLoading}
-          />
-          {confirmPasswordError && (
-            <span className="text-red-500 text-xs mt-1 block">{confirmPasswordError}</span>
-          )}
+          <div className="space-y-1">
+             <div className="relative">
+               <Input 
+                 type="password"
+                 placeholder="Repetir" 
+                 className={`pl-4 rounded-xl h-11 text-xs ${errors.confirmPassword ? 'border-red-500' : 'focus:border-black'}`}
+                 value={formData.confirmPassword}
+                 onChange={(e) => handleChange('confirmPassword', e.target.value)}
+                 disabled={isLoading}
+               />
+             </div>
+             {errors.confirmPassword && <p className="text-[10px] text-red-500 font-bold ml-2">{errors.confirmPassword}</p>}
+          </div>
         </div>
 
         <Button
           type="submit"
-          variant="secondary"
-          size="lg"
-          className="w-full font-bold hover:shadow-lg border border-gray-300 shadow-sm transition-shadow"
+          className="w-full h-12 bg-black text-white font-black rounded-xl hover:bg-gray-800 transition-all active:scale-[0.98] shadow-md hover:shadow-lg"
           disabled={isLoading}
         >
-          {isLoading ? "Creando cuenta..." : "Registrarse"}
+          {isLoading ? "Creando perfil..." : "Unirse ahora"}
         </Button>
       </form>
 
-      <div className="text-center text-sm">
-        ¿Ya tienes una cuenta?{" "}
-        <a href="/login" className="text-primary font-semibold underline">
+      <footer className="text-center text-sm">
+        <span className="text-muted-foreground">¿Ya eres parte?</span>{" "}
+        <a href="/login" className="font-bold text-black hover:underline underline-offset-4">
           Inicia sesión
         </a>
-      </div>
+      </footer>
     </div>
   )
 }

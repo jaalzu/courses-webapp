@@ -10,67 +10,75 @@ interface DeriveMetricsInput {
 }
 
 export function deriveMetrics({ users, courses, progress }: DeriveMetricsInput) {
-  // Stats básicas
+  // 1. INDEXACIÓN (Optimización clave)
+  // Agrupamos el progreso por userId de una sola vez para evitar .filter() constantes
+  const progressByUser: Record<string, LessonProgress[]> = {}
+  progress.forEach(p => {
+    if (!progressByUser[p.userId]) progressByUser[p.userId] = []
+    progressByUser[p.userId].push(p)
+  })
+
+  // 2. STATS BÁSICAS
   const totalUsers = users.length
   const admins = users.filter(u => u.role === 'admin').length
-const students = users.filter(u => u.role === 'student').length
+  const students = totalUsers - admins
   const totalCourses = courses.length
-  
-  // Usuarios con progreso detallado
+
+  // 3. MAPEO DE USUARIOS CON PROGRESO
   const usersWithProgress = users.map(user => {
-    const userProgress = progress.filter(p => p.userId === user.id)
+    const userProgress = progressByUser[user.id] || []
     
-    // Cursos completados: un curso está completo si todas sus lecciones están completadas
+    // Creamos un Set de IDs completados para búsqueda O(1)
+    const completedIds = new Set(
+      userProgress.filter(p => p.completed).map(p => p.lessonId)
+    )
+
     const completedCourses = courses.filter(course => {
-      const courseLessonIds = course.lessons.map(l => l.id)
-      const completedLessonIds = userProgress
-        .filter(p => p.courseId === course.id && p.completed)
-        .map(p => p.lessonId)
-      
-      return courseLessonIds.length > 0 && 
-             courseLessonIds.every(id => completedLessonIds.includes(id))
+      if (course.lessons.length === 0) return false
+      return course.lessons.every(lesson => completedIds.has(lesson.id))
     })
-    
+
     return {
       id: user.id,
       name: user.name,
       email: user.email,
       role: user.role,
       createdAt: user.createdAt,
-      completedCourses: completedCourses,
-      totalLessonsCompleted: userProgress.filter(p => p.completed).length,
+      completedCoursesCount: completedCourses.length, // Solo guardamos el número para no saturar memoria
+      totalLessonsCompleted: completedIds.size,
       totalLessonsInProgress: userProgress.length
     }
   })
+
+  // 4. CURSOS POPULARES (Reutilizamos la lógica eficiente)
+  // Contamos cuántas veces aparece cada curso como completado
+  const courseCompletionMap: Record<string, number> = {}
   
-  // Cursos más populares
-  const popularCourses = courses
-    .map(course => {
-      const completionCount = users.filter(user => {
-        const userProgress = progress.filter(p => p.userId === user.id && p.courseId === course.id)
-        const courseLessonIds = course.lessons.map(l => l.id)
-        const completedLessonIds = userProgress
-          .filter(p => p.completed)
-          .map(p => p.lessonId)
-        
-        return courseLessonIds.length > 0 && 
-               courseLessonIds.every(id => completedLessonIds.includes(id))
-      }).length
-      
-      return {
-        id: course.id.toString(),
-        title: course.title,
-        completionCount
+  // En lugar de otro bucle triple, usamos los datos que ya procesamos arriba
+  users.forEach(user => {
+    const userProgress = progressByUser[user.id] || []
+    const completedIds = new Set(userProgress.filter(p => p.completed).map(p => p.lessonId))
+    
+    courses.forEach(course => {
+      if (course.lessons.length > 0 && course.lessons.every(l => completedIds.has(l.id))) {
+        courseCompletionMap[course.id] = (courseCompletionMap[course.id] || 0) + 1
       }
     })
+  })
+
+  const popularCourses = courses
+    .map(course => ({
+      id: course.id.toString(),
+      title: course.title,
+      completionCount: courseCompletionMap[course.id] || 0
+    }))
     .sort((a, b) => b.completionCount - a.completionCount)
-  
-  // Total de cursos completados
+
   const totalCoursesCompleted = usersWithProgress.reduce(
-    (sum, user) => sum + user.completedCourses.length, 
+    (sum, user) => sum + user.completedCoursesCount, 
     0
   )
-  
+
   return {
     totalUsers,
     admins,
