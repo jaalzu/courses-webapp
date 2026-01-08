@@ -1,8 +1,5 @@
-// features/metrics/ui/UserProgressTable.tsx
 'use client'
 
-import { useState } from 'react'
-import { useUserActions } from '@/features/admin/model/useUserActions'
 
 interface UserWithProgress {
   id: string;

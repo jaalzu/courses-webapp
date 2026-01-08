@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useCourseStore } from '@/entities/course/model/useCourseStore'
 import { coursesApi } from '@/shared/api/courses'
-import type { Course } from './types'
+import type { Course } from '../types'
 
 const MAX_TITLE_LENGTH = 60
 

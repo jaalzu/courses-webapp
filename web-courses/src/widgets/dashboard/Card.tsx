@@ -5,7 +5,7 @@ import { DeleteButton } from "@/features/admin/ui/shared/DeleteButton"
 import { EditButton } from "@/features/admin/ui/shared/EditButton"
 import { FavoriteButton } from "@/features/favorites/ui/favoriteButton"
 import { useFavoriteIds } from "@/features/favorites/model/hooks/useFavoritesIds"
-import { useCourses } from "@/entities/course/useCourses"
+import { useCourses } from "@/entities/course/model/useCourses"
 
 import { Button } from "@/shared/ui/button"
 import { Progress } from "@/shared/ui"

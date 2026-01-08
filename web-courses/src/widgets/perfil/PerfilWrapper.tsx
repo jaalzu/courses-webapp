@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useAuthStore } from '@/features/auth/model/useAuthStore'
-import { useCourses } from "@/entities/course/useCourses"
+import { useCourses } from "@/entities/course/model/useCourses"
 import { useProgress } from "@/entities/progress/model/useProgress"
 
 import { getUserProgress } from "@/entities/progress/lib/getUserProgress"

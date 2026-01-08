@@ -1,5 +1,5 @@
 'use client'
-import { useCourses } from '@/entities/course/useCourses'
+import { useCourses } from '@/entities/course/model/useCourses'
 
 import { Button } from "@/shared/ui/index"
 import { XMarkIcon, ArrowRightIcon } from "@heroicons/react/24/outline"

@@ -4,7 +4,7 @@ import { useEffect } from "react"
 import { useParams } from "next/navigation"
 import CourseNotFound from "@/widgets/courseContent/courseNotFound"
 import CoursePageContent from "@/widgets/courseContent/coursePageContent"
-import { useCourses } from "@/entities/course/useCourses" 
+import { useCourses } from "@/entities/course/model/useCourses" 
 
 export const dynamic = 'force-dynamic'
 

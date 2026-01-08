@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from "react"
-import { useCourses } from "@/entities/course/useCourses" 
+import { useCourses } from "@/entities/course/model/useCourses" 
 import { useEditCourseFlow } from "@/features/admin/hooks/useEditCourseFlow"
 import { NewCourseButton } from "@/features/admin/ui/shared/NewCourseButton"
 import EditCourseManager from "@/features/admin/ui/courses/EditCourseManager"

@@ -1,6 +1,6 @@
 // 📁 features/favorites/model/hooks/useFavoriteCourses.ts
 import { useFavoriteIds } from './useFavoritesIds'
-import { useCourses } from '@/entities/course/useCourses'
+import { useCourses } from '@/entities/course/model/useCourses'
 import type { Course } from '@/entities/course/types'
 
 export function useFavoriteCourses(): { favoriteCourses: Course[] } {
