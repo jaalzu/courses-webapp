@@ -1,7 +1,6 @@
 import { supabase } from '../client';
 
 export const progressQueries = {
-  // Obtener progreso del usuario
   getUserProgress: async (userId: string) => {
     const { data, error } = await supabase
       .from('user_progress')
@@ -11,7 +10,6 @@ export const progressQueries = {
     return { data, error };
   },
 
-  // Obtener progreso de un curso específico
   getCourseProgress: async (userId: string, courseId: string) => {
     const { data, error } = await supabase
       .from('user_progress')
@@ -22,7 +20,7 @@ export const progressQueries = {
     return { data, error };
   },
 
-  // Actualizar progreso de una lección (NECESITA course_id)
+  // ✅ FIX: Cambiar onConflict
   updateLessonProgress: async (
     userId: string,
     courseId: string,
@@ -39,14 +37,14 @@ export const progressQueries = {
           status,
           updated_at: new Date().toISOString(),
         }, 
-        { onConflict: 'user_id,lesson_id' } 
+        { onConflict: 'user_id,course_id,lesson_id' } // ← CAMBIO AQUÍ
       )
       .select();
     
     return { data, error };
   },
 
-  // Marcar lección como completada (NECESITA course_id)
+  // ✅ FIX: Cambiar onConflict
   markLessonComplete: async (userId: string, courseId: string, lessonId: string) => {
     const { data, error } = await supabase
       .from('user_progress')
@@ -59,14 +57,13 @@ export const progressQueries = {
           completed_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         },
-        { onConflict: 'user_id,lesson_id' } 
+        { onConflict: 'user_id,course_id,lesson_id' } // ← CAMBIO AQUÍ
       )
       .select();
     
     return { data, error };
   },
 
-  // Obtener progreso de una lección específica
   getLessonProgress: async (userId: string, lessonId: string) => {
     const { data, error } = await supabase
       .from('user_progress')
@@ -78,7 +75,6 @@ export const progressQueries = {
     return { data, error };
   },
 
-  // Obtener estadísticas de progreso
   getProgressStats: async (userId: string) => {
     const { data, error } = await supabase
       .from('course_progress_stats')

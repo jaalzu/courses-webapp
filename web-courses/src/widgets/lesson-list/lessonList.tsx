@@ -20,7 +20,8 @@ import {
 } from "@/shared/ui"
 
 import { cn } from "@/shared/lib/utils"
-import { useProgressStore, isLessonCompleted } from "@/entities/progress"
+import { useProgress} from "@/entities/progress/model/useProgress"
+import { isLessonCompleted } from "@/entities/progress"
 
 interface LessonListProps {
   lessons: Lesson[]
@@ -38,9 +39,7 @@ export function LessonList({
   onLessonSelect,
 }: LessonListProps) {
 
-  const progress = useProgressStore(state => state.progress)
-  const markLessonCompleted = useProgressStore(state => state.markLessonCompleted)
-  const fetchUserProgress = useProgressStore(state => state.fetchUserProgress)
+  const {progress,markLessonCompleted,fetchUserProgress} = useProgress()
 
   // Cargar progreso del usuario
   useEffect(() => {

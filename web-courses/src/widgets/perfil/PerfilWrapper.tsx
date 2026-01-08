@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react"
 import { useAuthStore } from '@/features/auth/model/useAuthStore'
 import { useCourses } from "@/entities/course/useCourses"
-import { useProgressStore } from "@/entities/progress/model/useProgressStore"
+import { useProgress } from "@/entities/progress/model/useProgress"
+
 import { getUserProgress } from "@/entities/progress/lib/getUserProgress"
 import { getUserProfileStats } from "@/features/profile/getUserProfileStats"
 import { validateName } from '@/shared/lib/supabase/queries/profiles'
@@ -227,8 +228,8 @@ export function PerfilWrapper() {
   const isLoadingAuth = useAuthStore(state => state.isLoading)
   
 const { courses } = useCourses() 
-  const progress = useProgressStore(state => state.progress)
-  const fetchUserProgress = useProgressStore(state => state.fetchUserProgress) 
+
+const { progress, fetchUserProgress } = useProgress() 
 
   useEffect(() => {
     if (!currentUser) checkAuth()

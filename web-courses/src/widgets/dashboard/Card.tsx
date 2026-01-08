@@ -5,7 +5,7 @@ import { DeleteButton } from "@/features/admin/ui/shared/DeleteButton"
 import { EditButton } from "@/features/admin/ui/shared/EditButton"
 import { FavoriteButton } from "@/features/favorites/ui/favoriteButton"
 import { useFavoriteIds } from "@/features/favorites/model/hooks/useFavoritesIds"
-import { useCourses } from "@/entities/course/useCourses" // ← FIX: añade /model
+import { useCourses } from "@/entities/course/useCourses"
 
 import { Button } from "@/shared/ui/button"
 import { Progress } from "@/shared/ui"
@@ -19,7 +19,8 @@ import { CheckCircleIcon } from "@heroicons/react/24/solid"
 
 import { getLevelConfig } from "@/entities/course/model/helpers"
 import type { Course } from "@/entities/course/types"
-import { useProgressStore, getCourseStats } from "@/entities/progress"
+import { useProgress } from "@/entities/progress/model/useProgress" // ← CAMBIO
+import { getCourseStats } from "@/entities/progress" // ← getCourseStats sigue siendo helper
 import { useAuthStore } from '@/features/auth/model/useAuthStore'
 
 interface CardProps {
@@ -51,9 +52,8 @@ export default function Card({
   const { isFavorite, toggleFavorite } = useFavoriteIds()
   const levelConfig = level ? getLevelConfig(level) : null
 
-  const { deleteCourse } = useCourses() // ← CAMBIA ESTO
-  const progress = useProgressStore(state => state.progress)
-  const fetchUserProgress = useProgressStore(state => state.fetchUserProgress)
+  const { deleteCourse } = useCourses()
+  const { progress, fetchUserProgress } = useProgress() 
   
   // 5. Calcular stats
   const stats = getCourseStats(courseData, progress, actualUserId)
