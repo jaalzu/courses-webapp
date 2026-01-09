@@ -42,7 +42,7 @@ export function LoginFormView({
         disabled={isLoading}
       >
         <Image src="/icons/svg/google-icon.svg" alt="Google" width={18} height={18} />
-        <span className="text-sm font-medium">Continuar con Google</span>
+        <span className="text-lg font-medium">Continuar con Google</span>
       </Button>
 
       <div className="relative">

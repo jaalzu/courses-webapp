@@ -43,7 +43,7 @@ export function RegisterFormView({
         disabled={isLoading}
       >
         <Image src="/icons/svg/google-icon.svg" alt="Google" width={18} height={18} />
-        <span className="text-sm font-medium">Registrarse con Google</span>
+        <span className="text-lg font-medium">Registrarse con Google</span>
       </Button>
 
       <div className="relative">
