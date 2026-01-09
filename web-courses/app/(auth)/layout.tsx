@@ -35,7 +35,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           priority 
           sizes="50vw" 
           quality={80}
-          className="object-cover" // Recomendado para que no se deforme al usar 'fill'
+          className="object-cover" 
         />
       </div>
     </div>

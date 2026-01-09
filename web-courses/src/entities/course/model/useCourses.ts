@@ -8,10 +8,8 @@ export function useCourses() {
     queryFn: coursesApi.getAll,
   })
   
-  // 2. UI state (Zustand)
   const { filterLevel, searchQuery, viewMode } = useCourseStore()
   
-  // 3. Filtrado en cliente
   const filteredCourses = courses?.filter(course => {
     const matchesLevel = !filterLevel || course.level === filterLevel
     const matchesSearch = !searchQuery || 
@@ -21,11 +19,11 @@ export function useCourses() {
   
   return {
     courses: filteredCourses,
-    allCourses: courses || [], // Aseguramos que siempre sea un array para las métricas
+    allCourses: courses || [], 
     isLoading,
     error,
     viewMode, 
-    refetchCourses: refetch, // ✨ AGREGAMOS ESTO para que Metrics.tsx funcione
+    refetchCourses: refetch, 
   }
 }
 

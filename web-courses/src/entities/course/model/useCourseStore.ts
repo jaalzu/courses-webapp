@@ -2,7 +2,6 @@ import { create } from 'zustand'
 import type { CourseLevel } from '../types'
 
 interface CourseStore {
-  // ✅ SOLO UI state, NO datos de servidor
   selectedCourseId: string | null
   filterLevel: CourseLevel | null
   searchQuery: string

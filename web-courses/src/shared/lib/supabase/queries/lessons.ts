@@ -3,7 +3,6 @@ import { supabase } from '../client';
 
 export const lessonQueries = {
   syncLessons: async (courseId: string, lessons: any[]) => {
-    // 1. PRIMERO: Eliminar todas las lecciones existentes del curso
     const { error: deleteError } = await supabase
       .from('lessons')
       .delete()
@@ -11,7 +10,6 @@ export const lessonQueries = {
     
     if (deleteError) throw deleteError;
 
-    // 2. SEGUNDO: Si hay lecciones nuevas, insertarlas
     if (lessons.length > 0) {
       const lessonsToInsert = lessons.map((l, index) => ({
         course_id: courseId,
@@ -28,7 +26,6 @@ export const lessonQueries = {
       
       if (error) throw error;
 
-      // Mapeamos los campos de la DB al formato de tu interfaz Lesson
       const formattedLessons = (data || []).map(l => ({
         ...l,
         duration: String(l.duration || '0'),

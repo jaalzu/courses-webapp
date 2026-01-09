@@ -17,21 +17,19 @@ export const authService = {
     return data;
   },
 
-  /**
-   * Iniciar sesión con email/password
-   */
-  signIn: async (email: string, password: string) => {
-    // 1. Autenticar con Supabase
+  
+ signIn: async (email: string, password: string) => {
     const { data: authData, error: authError } = await authQueries.signIn(email, password);
     if (authError) throw authError;
     if (!authData.user) throw new Error('No user returned from auth');
 
-    // 2. Obtener perfil completo
+    // 🔥 Espera a que Supabase guarde las cookies
+    await new Promise(resolve => setTimeout(resolve, 100));
+
     const { data: profile, error: profileError } = await profileQueries.getById(authData.user.id);
     if (profileError) throw profileError;
     if (!profile) throw new Error('Profile not found');
 
-    // 3. Retornar sesión + usuario mapeado
     return {
       session: authData.session,
       user: mapProfileToUser(profile),

@@ -1,3 +1,5 @@
+// Resumen de callback/route.ts: Es el puente que recibe un código temporal de Supabase (cuando el usuario viene de un email o de Google) y lo transforma en una sesión real (cookies) para que el navegador recuerde quién es el usuario.
+
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
@@ -20,10 +22,9 @@ export async function GET(request: Request) {
           setAll(cookiesToSet) {
             try {
               cookiesToSet.forEach(({ name, value, options }) => {
-                cookieStore.set(name, value, options) // ← FIX: así es la sintaxis correcta
+                cookieStore.set(name, value, options)
               })
             } catch (error) {
-              // En algunos casos Next.js no permite set en route handlers
               console.error('Error setting cookies:', error)
             }
           },

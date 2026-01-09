@@ -30,7 +30,7 @@ export function useLoginForm() {
     setFormData(prev => ({ ...prev, password }))
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+ const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setErrors({ form: "", email: "" })
 
@@ -38,7 +38,7 @@ export function useLoginForm() {
 
     try {
       await login(formData.email, formData.password)
-      router.push("/dashboard")
+      window.location.href = '/dashboard' // 🔥 Cambia esto
     } catch (err: any) {
       setErrors(prev => ({ ...prev, form: getAuthErrorMessage(err) }))
     }
