@@ -18,23 +18,17 @@ import CoursesSkeleton from "./coursesSkeleton"
 import { DashboardLayout } from "./DashboardLayout"
 import { CoursesGrid } from "./CoursesGrid"
 
-
-
-
-
 export function CoursesDashboard() {
-  const { courses, isLoading, fetchCourses } = useCourses() 
+  const { courses, isLoading } = useCourses() 
   const { fetchUserProgress } = useProgress() 
   const currentUser = useAuthStore(state => state.currentUser)
   const editFlow = useEditCourseFlow()
 
   useEffect(() => {
-    fetchCourses()
-    // Si hay usuario, traemos su progreso una sola vez para todos los cursos
     if (currentUser?.id) {
       fetchUserProgress(currentUser.id)
     }
-  }, [fetchCourses, fetchUserProgress, currentUser?.id])
+  }, [currentUser?.id, fetchUserProgress])
 
   if (isLoading) {
     return (
@@ -61,7 +55,6 @@ export function CoursesDashboard() {
 
   return (
     <DashboardLayout title="Cursos" action={<NewCourseButton />}>
-      {/* La Grid ahora recibirá los cursos y el progreso ya estará en el store */}
       <CoursesGrid courses={courses} onEdit={editFlow.open} />
       <EditCourseManager flow={editFlow} />
     </DashboardLayout>

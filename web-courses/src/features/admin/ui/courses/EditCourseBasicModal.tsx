@@ -1,6 +1,5 @@
 'use client'
-import { useCourses } from '@/entities/course/model/useCourses'
-
+import { useUpdateCourse } from '@/entities/course/model/useCourseMutations' // ✨ CAMBIO
 import { Button } from "@/shared/ui/index"
 import { XMarkIcon, ArrowRightIcon } from "@heroicons/react/24/outline"
 import { useEditCourseForm } from "../../hooks/useEditCourseForm"
@@ -15,29 +14,31 @@ interface Props {
 }
 
 export default function EditCourseBasicModal({ course, isOpen, onClose, onNext }: Props) {
-  const {updateCourse} = useCourses()
-  const { formData, handleChange, isSaving, setIsSaving } = useEditCourseForm(course, isOpen)
+  const updateMutation = useUpdateCourse() // ✨ CAMBIO
+  const { formData, handleChange } = useEditCourseForm(course, isOpen) // ✨ Elimina isSaving, setIsSaving
 
   const handleSaveAndNext = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSaving(true)
     try {
-      updateCourse(course.id, formData)
-      await new Promise(r => setTimeout(r, 300))
+      await updateMutation.mutateAsync({ // ✨ CAMBIO
+        courseId: course.id, 
+        updates: formData 
+      })
       onNext()
-    } finally {
-      setIsSaving(false)
+    } catch (error) {
+      // El error ya se maneja en useUpdateCourse
     }
   }
 
   const handleSaveAndClose = async () => {
-    setIsSaving(true)
     try {
-      updateCourse(course.id, formData)
-      await new Promise(r => setTimeout(r, 300))
+      await updateMutation.mutateAsync({ // ✨ CAMBIO
+        courseId: course.id, 
+        updates: formData 
+      })
       onClose()
-    } finally {
-      setIsSaving(false)
+    } catch (error) {
+      // El error ya se maneja en useUpdateCourse
     }
   }
 
@@ -121,7 +122,7 @@ export default function EditCourseBasicModal({ course, isOpen, onClose, onNext }
             <Button 
               type="button" 
               onClick={onClose} 
-              disabled={isSaving}
+              disabled={updateMutation.isPending}
               className="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
             >
               Cancelar
@@ -131,18 +132,18 @@ export default function EditCourseBasicModal({ course, isOpen, onClose, onNext }
               <Button 
                 type="button" 
                 onClick={handleSaveAndClose} 
-                disabled={isSaving}
+                disabled={updateMutation.isPending}
                 className="bg-blue-600 hover:bg-blue-700"
               >
-                {isSaving ? "Guardando..." : "Guardar"}
+                {updateMutation.isPending ? "Guardando..." : "Guardar"}
               </Button>
               
               <Button 
                 type="submit" 
-                disabled={isSaving}
+                disabled={updateMutation.isPending}
                 className="bg-green-600 hover:bg-green-700 flex items-center gap-2"
               >
-                {isSaving ? "Guardando..." : "Siguiente"}
+                {updateMutation.isPending ? "Guardando..." : "Siguiente"}
                 <ArrowRightIcon className="w-4 h-4" />
               </Button>
             </div>

@@ -13,7 +13,9 @@ interface IconButtonProps {
   children: React.ReactNode
   className?: string
   noBorder?: boolean
-  tooltip?: string // 👈 Esta línea debe estar
+  tooltip?: string 
+    disabled?: boolean 
+
 }
 
 export function IconButton({ 
@@ -21,7 +23,8 @@ export function IconButton({
   children, 
   className = "", 
   noBorder = false,
-  tooltip // 👈 Destructurar
+  tooltip,
+  disabled 
 }: IconButtonProps) {
   const button = (
     <button
@@ -30,6 +33,7 @@ export function IconButton({
         e.stopPropagation()
         onClick(e)
       }}
+      disabled={disabled}
       className={`
         relative z-10 
         backdrop-blur-xl 

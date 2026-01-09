@@ -1,90 +1,43 @@
-import { useCallback } from 'react'
-import { useCourseStore } from '@/entities/course/model/useCourseStore'
+import { useQuery } from '@tanstack/react-query'
 import { coursesApi } from '@/shared/api/courses'
-import type { Course } from '../types'
-
-const MAX_TITLE_LENGTH = 60
+import { useCourseStore } from './useCourseStore'
 
 export function useCourses() {
-  const courses = useCourseStore(s => s.courses)
-  const isLoading = useCourseStore(s => s.isLoading)
-  const error = useCourseStore(s => s.error)
+  // Datos del servidor (TanStack Query)
+  const { data: courses, isLoading, error } = useQuery({
+    queryKey: ['courses'],
+    queryFn: coursesApi.getAll,
+  })
   
-  const setCourses = useCourseStore(s => s.setCourses)
-  const addCourseToState = useCourseStore(s => s.addCourseToState)
-  const updateCourseInState = useCourseStore(s => s.updateCourseInState)
-  const removeCourseFromState = useCourseStore(s => s.removeCourseFromState)
-  const setLoading = useCourseStore(s => s.setLoading)
-  const setError = useCourseStore(s => s.setError)
+  // UI state (Zustand)
+  const { filterLevel, searchQuery, viewMode } = useCourseStore()
   
-  const fetchCourses = useCallback(async () => {
-    setLoading(true)
-    setError(null)
-    
-    try {
-      const data = await coursesApi.getAll()
-      setCourses(data)
-    } catch (err: any) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
-  }, [setCourses, setLoading, setError])
-  
-  const addCourse = useCallback(async (newCourse: Omit<Course, 'id'>) => {
-    if (newCourse.title.length > MAX_TITLE_LENGTH) {
-      setError(`El título es demasiado largo (máximo ${MAX_TITLE_LENGTH} caracteres)`)
-      return
-    }
-    
-    setLoading(true)
-    setError(null)
-    
-    try {
-      const data = await coursesApi.create(newCourse)
-      addCourseToState(data)
-    } catch (err: any) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
-  }, [addCourseToState, setLoading, setError])
-  
-  const updateCourse = useCallback(async (courseId: string, updates: Partial<Course>) => {
-    setLoading(true)
-    setError(null)
-    
-    try {
-      await coursesApi.update(courseId, updates)
-      updateCourseInState(courseId, updates)
-    } catch (err: any) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
-  }, [updateCourseInState, setLoading, setError])
-  
-  const deleteCourse = useCallback(async (courseId: string) => {
-    setLoading(true)
-    setError(null)
-    
-    try {
-      await coursesApi.delete(courseId)
-      removeCourseFromState(courseId)
-    } catch (err: any) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
-  }, [removeCourseFromState, setLoading, setError])
+  // Filtrado en cliente (opcional)
+  const filteredCourses = courses?.filter(course => {
+    const matchesLevel = !filterLevel || course.level === filterLevel
+    const matchesSearch = !searchQuery || 
+      course.title.toLowerCase().includes(searchQuery.toLowerCase())
+    return matchesLevel && matchesSearch
+  })
   
   return {
-    courses,
+    courses: filteredCourses,
+    allCourses: courses, 
     isLoading,
     error,
-    fetchCourses,
-    addCourse,
-    updateCourse,
-    deleteCourse
+    viewMode, 
+  }
+}
+
+// Query para un curso individual
+export function useCourse(courseId: string) {
+  const { data: courses } = useQuery({
+    queryKey: ['courses'],
+    queryFn: coursesApi.getAll,
+  })
+  
+  return {
+    data: courses?.find(c => c.id === courseId),
+    isLoading: !courses,
   }
 }

@@ -1,42 +1,29 @@
-// entities/course/model/useCourseStore.ts
 import { create } from 'zustand'
-import type { Course } from '../types'
+import type { CourseLevel } from '../types'
 
 interface CourseStore {
-  courses: Course[]
-  isLoading: boolean
-  error: string | null
+  // ✅ SOLO UI state, NO datos de servidor
+  selectedCourseId: string | null
+  filterLevel: CourseLevel | null
+  searchQuery: string
+  viewMode: 'grid' | 'list'
   
-  setCourses: (courses: Course[]) => void
-  addCourseToState: (course: Course) => void
-  updateCourseInState: (courseId: string, updates: Partial<Course>) => void
-  removeCourseFromState: (courseId: string) => void
-  setLoading: (loading: boolean) => void
-  setError: (error: string | null) => void
+  setSelectedCourse: (id: string | null) => void
+  setFilterLevel: (level: CourseLevel | null) => void
+  setSearchQuery: (query: string) => void
+  setViewMode: (mode: 'grid' | 'list') => void
+  clearFilters: () => void
 }
 
 export const useCourseStore = create<CourseStore>((set) => ({
-  courses: [],
-  isLoading: false,
-  error: null,
+  selectedCourseId: null,
+  filterLevel: null,
+  searchQuery: '',
+  viewMode: 'grid',
   
-  setCourses: (courses) => set({ courses }),
-  
-  addCourseToState: (course) => 
-    set((state) => ({ courses: [course, ...state.courses] })),
-  
-  updateCourseInState: (courseId, updates) =>
-    set((state) => ({
-      courses: state.courses.map((c) => 
-        c.id === courseId ? { ...c, ...updates } : c
-      )
-    })),
-  
-  removeCourseFromState: (courseId) =>
-    set((state) => ({
-      courses: state.courses.filter((c) => c.id !== courseId)
-    })),
-  
-  setLoading: (isLoading) => set({ isLoading }),
-  setError: (error) => set({ error })
+  setSelectedCourse: (id) => set({ selectedCourseId: id }),
+  setFilterLevel: (level) => set({ filterLevel: level }),
+  setSearchQuery: (query) => set({ searchQuery: query }),
+  setViewMode: (mode) => set({ viewMode: mode }),
+  clearFilters: () => set({ filterLevel: null, searchQuery: '' }),
 }))

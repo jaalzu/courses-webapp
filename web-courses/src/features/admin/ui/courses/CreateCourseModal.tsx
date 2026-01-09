@@ -2,7 +2,8 @@
 
 import { useState } from "react"
 import EditCourseContentModal from "@/features/admin/ui/courses/EditCourseLessonsModal"
-import { useCourses } from '@/entities/course/model/useCourses'
+import { useCreateCourse } from '@/entities/course/model/useCourseMutations' // ✨ CAMBIO
+import { useCourses } from '@/entities/course/model/useCourses' // ✨ CAMBIO
 
 import { CourseFormField } from "@/features/admin/ui/courses/CourseFormField"
 import { XMarkIcon, ArrowRightIcon } from "@heroicons/react/24/outline"
@@ -14,11 +15,11 @@ interface CreateCourseModalProps {
 }
 
 export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
-  const { addCourse, courses } = useCourses() 
+  const createMutation = useCreateCourse() 
+  const { allCourses: courses } = useCourses() 
   
   const [step, setStep] = useState<'basic' | 'content'>('basic')
   const [tempCourseId, setTempCourseId] = useState<string | null>(null)
-  const [isCreating, setIsCreating] = useState(false)
 
   const [form, setForm] = useState({
     title: "",
@@ -51,8 +52,6 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
       return
     }
 
-    setIsCreating(true)
-
     try {
       const newCourse = {
         title: form.title,
@@ -66,25 +65,19 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
         video: '',
       }
       
-      await addCourse(newCourse)
+      // ✨ CAMBIO: usa mutateAsync y guarda el resultado
+      const createdCourse = await createMutation.mutateAsync(newCourse)
       
-      // ❌ ANTES: const courses = useCourses.getState().courses
-      // ✅ AHORA: ya tienes courses arriba
-      const createdCourse = courses[0] // O el último agregado
-      const lastCourse = courses[0]
-      
-      if (lastCourse?.id) {
-        setTempCourseId(lastCourse.id)
+      if (createdCourse?.id) {
+        setTempCourseId(createdCourse.id) // ✨ Usa el ID del curso creado directamente
         setStep('content')
-        toast.success("Información básica guardada. ¡Ahora las lecciones!")
+        // ✨ El toast de éxito ya se muestra en useCreateCourse
       } else {
         toast.error("No se pudo obtener el ID del curso creado")
       }
     } catch (error) {
+      // ✨ El toast de error ya se muestra en useCreateCourse
       console.error("Error creando curso:", error)
-      toast.error("Hubo un error al crear el curso en la base de datos")
-    } finally {
-      setIsCreating(false)
     }
   }
 
@@ -111,7 +104,7 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
     handleContentClose()
   }
 
-const tempCourse = tempCourseId ? courses.find(c => c.id === tempCourseId) : null
+  const tempCourse = tempCourseId ? courses?.find(c => c.id === tempCourseId) : null
 
 
   return (
@@ -128,7 +121,7 @@ const tempCourse = tempCourseId ? courses.find(c => c.id === tempCourseId) : nul
               </div>
               <button 
                 onClick={handleCancel} 
-                disabled={isCreating}
+                disabled={createMutation.isPending}
                 className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 disabled:opacity-50"
               >
                 <XMarkIcon className="w-6 h-6"/>
@@ -202,7 +195,7 @@ const tempCourse = tempCourseId ? courses.find(c => c.id === tempCourseId) : nul
             <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
               <button
                 onClick={handleCancel}
-                disabled={isCreating}
+                disabled={createMutation.isPending}
                 className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 font-medium disabled:opacity-50"
               >
                 Cancelar
@@ -210,11 +203,11 @@ const tempCourse = tempCourseId ? courses.find(c => c.id === tempCourseId) : nul
 
               <button
                 onClick={handleNext}
-                disabled={isCreating}
+                disabled={createMutation.isPending}
                 className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium flex items-center gap-2 disabled:opacity-50"
               >
-                {isCreating ? "Creando..." : "Siguiente"}
-                {!isCreating && <ArrowRightIcon className="w-4 h-4" />}
+                {createMutation.isPending ? "Creando..." : "Siguiente"}
+                {!createMutation.isPending && <ArrowRightIcon className="w-4 h-4" />}
               </button>
             </div>
           </div>

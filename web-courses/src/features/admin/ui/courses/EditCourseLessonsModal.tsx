@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react"
-import { useCourses } from "@/entities/course/model/useCourses" // ← Cambia esto
+import { useUpdateCourse } from "@/entities/course/model/useCourseMutations" // ✨ CAMBIO
 import { Button } from "@/shared/ui/index"
 import { XMarkIcon, ArrowLeftIcon, PlusIcon, TrashIcon, PencilIcon } from "@heroicons/react/24/outline"
 import type { Course } from "@/entities/course/types"
@@ -15,8 +15,7 @@ interface Props {
 }
 
 export default function EditCourseContentModal({ course, isOpen, onClose, onBack, isNewCourse = false}: Props) {
-  const { updateCourse } = useCourses() // ← Usa el hook, no el store
-  const [isSaving, setIsSaving] = useState(false)
+  const updateMutation = useUpdateCourse() // ✨ CAMBIO
 
   // Estado para key points
   const [keyPoints, setKeyPoints] = useState<string[]>(isNewCourse ? [] : (course.keyPoints || []))
@@ -85,21 +84,21 @@ export default function EditCourseContentModal({ course, isOpen, onClose, onBack
   }
 
   const handleSave = async () => {
-    setIsSaving(true)
     try {
-      await updateCourse(course.id, {
-        keyPoints,
-        lessons
+      await updateMutation.mutateAsync({ // ✨ CAMBIO
+        courseId: course.id, 
+        updates: { keyPoints, lessons }
       })
       onClose()
     } catch (error) {
-      alert("Error al guardar")
-    } finally {
-      setIsSaving(false)
+      // El error ya se maneja en useUpdateCourse con toast
     }
   }
 
   if (!isOpen) return null
+
+
+
 return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
@@ -330,7 +329,7 @@ return (
         <div className="flex justify-between gap-2 pt-6 mt-6 border-t border-gray-200 dark:border-gray-700">
           <Button
             onClick={onBack}
-            disabled={isSaving}
+            disabled={updateMutation.isPending}
             className="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 flex items-center gap-2"
           >
             <ArrowLeftIcon className="w-4 h-4" />
@@ -340,7 +339,7 @@ return (
           <div className="flex gap-2">
             <Button
               onClick={onClose}
-              disabled={isSaving}
+              disabled={updateMutation.isPending}
               className="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200"
             >
               Cancelar
@@ -348,10 +347,10 @@ return (
 
             <Button
               onClick={handleSave}
-              disabled={isSaving}
+              disabled={updateMutation.isPending}
               className="bg-green-600 hover:bg-green-700 text-white px-8"
             >
-              {isSaving ? "Guardando..." : "Guardar todo"}
+              {updateMutation.isPending ? "Guardando..." : "Guardar todo"}
             </Button>
           </div>
         </div>
