@@ -1,4 +1,4 @@
-import { LoginForm } from "@/features/auth/components/LoginForm"
+import { LoginForm } from "@/features/auth/login/components/LoginForm"
 
 export const dynamic = 'force-dynamic' 
 
