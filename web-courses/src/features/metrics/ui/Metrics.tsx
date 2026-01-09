@@ -1,7 +1,8 @@
 'use client'
 
 // 1. React & Next.js
-import { useEffect, useMemo } from 'react' // ← AGREGADO useMemo
+import { useMemo } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 
 // 2. Features / Entities
 import { useUsers } from '@/entities/user/model/useUsers'
@@ -18,24 +19,19 @@ import { PopularCourses } from './PopularCourses'
 import { deriveMetrics } from '../lib/deriveMetrics'
 
 export function Metrics() {
+  const queryClient = useQueryClient() // ✨ AGREGAR ESTA LÍNEA
+  
   // --- DATA FETCHING ---
-  const { users, isLoading: usersLoading, fetchUsers } = useUsers()
-  const { courses, isLoading: coursesLoading, fetchCourses } = useCourses()
-  const { progress, isLoading: progressLoading, fetchAllProgress } = useProgress()
-
-  // --- ORQUESTACIÓN DE DATOS ---
-  useEffect(() => {
-    if (users.length === 0) fetchUsers()
-    if (courses.length === 0) fetchCourses()
-    if (progress.length === 0 && fetchAllProgress) fetchAllProgress()
-  }, [fetchUsers, fetchCourses, fetchAllProgress, users.length, courses.length, progress.length])
+  const { users, isLoading: usersLoading } = useUsers()
+  const { courses, isLoading: coursesLoading } = useCourses()
+  const { progress, isLoading: progressLoading } = useProgress()
 
   // --- LÓGICA DE DERIVACIÓN (Con useMemo) ---
   const metrics = useMemo(() => {
     return deriveMetrics({
-      users,
-      courses,
-      progress,
+      users: users || [],
+      courses: courses || [],
+      progress: progress || [],
     })
   }, [users, courses, progress]) 
 
@@ -61,9 +57,9 @@ export function Metrics() {
           </div>
           <button 
             onClick={() => {
-              fetchUsers()
-              fetchCourses()
-              if(fetchAllProgress) fetchAllProgress()
+              queryClient.invalidateQueries({ queryKey: ['users'] })
+              queryClient.invalidateQueries({ queryKey: ['courses'] })
+              queryClient.invalidateQueries({ queryKey: ['progress'] })
             }}
             className="px-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-sm font-semibold text-blue-600 dark:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all shadow-sm active:scale-95"
           >
