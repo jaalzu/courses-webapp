@@ -1,3 +1,4 @@
+// @/entities/progress/model/useProgressMutations.ts
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/shared/lib/supabase/client'
 import type { LessonProgress } from '../types'
@@ -36,35 +37,45 @@ export const useProgressMutations = () => {
       const queryKey = ['progress', 'user', userId]
 
       await queryClient.cancelQueries({ queryKey })
+
       const previousProgress = queryClient.getQueryData<LessonProgress[]>(queryKey)
 
       queryClient.setQueryData<LessonProgress[]>(queryKey, (old = []) => {
         if (currentCompleted) {
           return old.filter(p => p.lessonId !== lessonId)
-        } else {
-          const newItem = { 
-            user_id: userId, 
-            lesson_id: lessonId, 
-            course_id: courseId,
-            status: 'completed'
-          }
-          return [...old, newItem as any]
         }
+        
+        const newItem: LessonProgress = { 
+          userId: userId,     
+    lessonId: lessonId, // 
+    courseId: courseId, 
+    completed: true 
+        }
+        return [...old, newItem]
       })
 
       return { previousProgress }
     },
 
-    onError: (err, variables, context) => {
+    onError: (_err, variables, context) => {
+      // Si la base de datos falló, volvemos todo a como estaba antes
       if (context?.previousProgress) {
-        queryClient.setQueryData(['progress', 'user', variables.userId], context.previousProgress)
+        queryClient.setQueryData(
+          ['progress', 'user', variables.userId], 
+          context.previousProgress
+        )
       }
     },
 
-    onSettled: (data, error, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['progress', 'user', variables.userId] })
+    onSettled: (_data, _error, variables) => {
+      queryClient.invalidateQueries({ 
+        queryKey: ['progress', 'user', variables.userId] 
+      })
     },
   })
 
-  return { toggleLesson, isUpdating: toggleLesson.isPending }
+  return { 
+    toggleLesson, 
+    isUpdating: toggleLesson.isPending 
+  }
 }
