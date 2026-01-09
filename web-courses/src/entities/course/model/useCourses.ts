@@ -3,16 +3,15 @@ import { coursesApi } from '@/shared/api/courses'
 import { useCourseStore } from './useCourseStore'
 
 export function useCourses() {
-  // Datos del servidor (TanStack Query)
-  const { data: courses, isLoading, error } = useQuery({
+  const { data: courses, isLoading, error, refetch } = useQuery({
     queryKey: ['courses'],
     queryFn: coursesApi.getAll,
   })
   
-  // UI state (Zustand)
+  // 2. UI state (Zustand)
   const { filterLevel, searchQuery, viewMode } = useCourseStore()
   
-  // Filtrado en cliente (opcional)
+  // 3. Filtrado en cliente
   const filteredCourses = courses?.filter(course => {
     const matchesLevel = !filterLevel || course.level === filterLevel
     const matchesSearch = !searchQuery || 
@@ -22,10 +21,11 @@ export function useCourses() {
   
   return {
     courses: filteredCourses,
-    allCourses: courses, 
+    allCourses: courses || [], // Aseguramos que siempre sea un array para las métricas
     isLoading,
     error,
     viewMode, 
+    refetchCourses: refetch, // ✨ AGREGAMOS ESTO para que Metrics.tsx funcione
   }
 }
 
