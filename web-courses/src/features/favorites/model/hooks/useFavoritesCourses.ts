@@ -4,10 +4,11 @@ import { useCourses } from '@/entities/course/model/useCourses'
 import type { Course } from '@/entities/course/types'
 
 export function useFavoriteCourses(): { favoriteCourses: Course[] } {
-  const { favorites } = useFavoriteIds()
-  const {courses} = useCourses()
+  const { favorites = [] } = useFavoriteIds() 
+  const { courses = [] } = useCourses()       
 
-  const favoriteCourses = courses.filter(course => favorites.includes(course.id))
-
+const favoriteCourses = courses.filter(course => 
+    favorites.includes(course.id)
+  )
   return { favoriteCourses }
 }

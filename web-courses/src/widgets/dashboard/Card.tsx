@@ -4,19 +4,20 @@
 import Image from "next/image"
 import Link from "next/link"
 
-// 2. Features (Lógica de negocio e interacción)
+// 2. Features
 import { FavoriteButton } from "@/features/favorites/ui/favoriteButton"
 import { useFavoriteIds } from "@/features/favorites/model/hooks/useFavoritesIds"
 import { AdminCardActions } from "@/features/admin/ui/AdminCardActions"
 import { useAuthStore } from '@/features/auth/model/useAuthStore'
 
-// 3. Entities (Modelos de datos y estado específico)
-import { useProgress } from "@/entities/progress/model/useProgress"
+// 3. Entities 
+// CAMBIO: Importamos el hook de Query para el usuario
+import { useUserProgress } from "@/entities/progress/model/useProgressQueries"
 import { getCourseStats } from "@/entities/progress"
 import { getLevelConfig } from "@/entities/course/model/helpers"
 import type { Course } from "@/entities/course/types"
 
-// 4. Shared (UI Components & Libs)
+// 4. Shared
 import { Button } from "@/shared/ui/button"
 import { Progress, Badge } from "@/shared/ui"
 import { CheckCircleIcon } from "@heroicons/react/24/solid"
@@ -40,17 +41,22 @@ export default function Card({
   level,
   onEdit,
 }: CardProps) {
-  // 1. Auth & Permissions
+  // 1. Auth
   const currentUser = useAuthStore(state => state.currentUser)
   const isAdmin = currentUser?.role === 'admin'
-  const userId = currentUser?.id || "user-default"
+  const userId = currentUser?.id
 
-  // 2. Favorites & Progress
+  // 2. Progress & Favorites
   const { isFavorite, toggleFavorite } = useFavoriteIds()
-  const { progress } = useProgress() 
+  
+  // CAMBIO: Usamos el hook de Query. 
+  // Automáticamente traerá el progreso del caché si ya se cargó en otro lado.
+  const { data: progress = [] } = useUserProgress(userId) 
   
   const levelConfig = level ? getLevelConfig(level) : null
-  const stats = getCourseStats(courseData, progress, userId)
+  
+  // Pasamos el progreso obtenido de la Query
+  const stats = getCourseStats(courseData, progress, userId || "user-default")
 
   return (
     <div className={`relative ${className} flex flex-col h-full`}>
@@ -82,13 +88,15 @@ export default function Card({
 
         <div className="p-4 flex flex-col flex-1 justify-between">
           <div>
-            <h3 className="text-lg font-semibold mb-2">{courseData.title}</h3>
+            <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">
+              {courseData.title}
+            </h3>
 
             {levelConfig && (
               <Badge variant={levelConfig.variant}>{levelConfig.label}</Badge>
             )}
 
-            <p className="text-sm text-dark dark:text-gray-300 mt-5 line-clamp-5">
+            <p className="text-sm text-gray-600 dark:text-gray-300 mt-5 line-clamp-5">
               {courseData.description}
             </p>
           </div>

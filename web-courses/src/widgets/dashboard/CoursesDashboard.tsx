@@ -1,34 +1,29 @@
 'use client'
 
-// 1. React & Next
-import { useEffect } from "react"
-
-// 2. Features (Lógica de negocio y flujos)
+// Features
 import { useAuthStore } from '@/features/auth/model/useAuthStore' 
 import { useEditCourseFlow } from "@/features/admin/hooks/useEditCourseFlow"
 import { NewCourseButton } from "@/features/admin/ui/shared/NewCourseButton"
 import EditCourseManager from "@/features/admin/ui/courses/EditCourseManager"
 
-// 3. Entities (Modelos de datos y estado)
+//  Entities
 import { useCourses } from "@/entities/course/model/useCourses" 
-import { useProgress } from "@/entities/progress/model/useProgress" 
+import { useUserProgress } from "@/entities/progress/model/useProgressQueries" 
 
-// 4. UI Local (Componentes específicos de este dashboard)
+//  UI Local
 import CoursesSkeleton from "./coursesSkeleton"
 import { DashboardLayout } from "./DashboardLayout"
 import { CoursesGrid } from "./CoursesGrid"
 
 export function CoursesDashboard() {
-  const { courses, isLoading } = useCourses() 
-  const { fetchUserProgress } = useProgress() 
   const currentUser = useAuthStore(state => state.currentUser)
   const editFlow = useEditCourseFlow()
 
-  useEffect(() => {
-    if (currentUser?.id) {
-      fetchUserProgress(currentUser.id)
-    }
-  }, [currentUser?.id, fetchUserProgress])
+  const { courses, isLoading: coursesLoading } = useCourses() 
+  
+  const { isLoading: progressLoading } = useUserProgress(currentUser?.id) 
+
+  const isLoading = coursesLoading || progressLoading
 
   if (isLoading) {
     return (

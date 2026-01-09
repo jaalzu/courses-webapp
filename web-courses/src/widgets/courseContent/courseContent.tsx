@@ -11,14 +11,16 @@ interface CourseContentProps {
   currentVideoUrl?: string;
 }
 
+ const YouTube = dynamic(() => import("react-youtube"), { 
+    ssr: false, 
+    loading: () => <div className="w-full h-[300px] bg-gray-200 animate-pulse rounded-lg" /> 
+  });
+
 export default function CourseContent({ course, currentVideoUrl }: CourseContentProps) {
   const { isFavorite, toggleFavorite } = useFavoriteIds()
   const videoToPlay = currentVideoUrl || course.lessons?.[0]?.videoUrl || course.video;
 
-  const YouTube = dynamic(() => import("react-youtube"), { 
-    ssr: false, 
-    loading: () => <div className="w-full h-[300px] bg-gray-200 animate-pulse rounded-lg" /> 
-  });
+ 
 
   return (
     <section className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-4 md:p-5 space-y-6 w-full">

@@ -2,7 +2,7 @@
 import { Montserrat } from 'next/font/google'
 import "../src/shared/styles/globals.css"
 import { QueryProvider } from '@/shared/providers/QueryProvider'
-import { Toaster } from 'sonner' // ⭐ Import
+import { Toaster } from 'sonner' 
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -28,7 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <QueryProvider>
           {children}
         </QueryProvider>
-        <Toaster position="top-right" richColors expand={true} /> {/* ⭐ Agregar */}
+        <Toaster position="top-right" richColors expand={true} /> 
       </body>
     </html>
   )

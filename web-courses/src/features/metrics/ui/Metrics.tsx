@@ -1,64 +1,64 @@
 'use client'
 
-// 1. React & Next.js
 import { useMemo } from 'react'
 
-// 2. Features / Entities
+// Entidades
 import { useUsers } from '@/entities/user/model/useUsers'
 import { useCourses } from '@/entities/course/model/useCourses'
-import { useProgress } from '@/entities/progress/model/useProgress'
+import { useAllProgress } from '@/entities/progress/model/useProgressQueries'
 
-// 3. Components
+// Componentes
 import { MetricsSkeleton } from './MetricsSkeleton'
 import { StatsCard } from './StatsCard'
 import { UserProgressTable } from './UserProgressTable'
 import { PopularCourses } from './PopularCourses'
 
-// 4. Lib / Helpers
+// Helpers
 import { deriveMetrics } from '../lib/deriveMetrics'
 
 export function Metrics() {
-  // --- DATA FETCHING ---
-  // Pasamos 'true' para que los useEffect que agregamos disparen la carga al montar
+  
   const { users, fetchUsers, isLoading: usersLoading } = useUsers(true)
-  const { progress, fetchAllProgress, isLoading: progressLoading } = useProgress(true)
-  const { allCourses, refetchCourses, isLoading: coursesLoading } = useCourses()
+  
+  const { 
+    data: progress = [], 
+    isLoading: progressLoading, 
+    refetch: refetchProgress 
+  } = useAllProgress()
+  
+  const { 
+    allCourses, 
+    refetchCourses, 
+    isLoading: coursesLoading 
+  } = useCourses()
 
-  // --- LÓGICA DE DERIVACIÓN ---
   const metrics = useMemo(() => {
-    // Protección: si no hay data aún, devolvemos valores por defecto para evitar errores
     if (!users || !allCourses || !progress) {
       return { 
-        totalUsers: 0, 
-        admins: 0, 
-        students: 0, 
-        popularCourses: [], 
-        usersWithProgress: [] 
+        totalUsers: 0, admins: 0, students: 0, 
+        popularCourses: [], usersWithProgress: [] 
       }
     }
 
     return deriveMetrics({
-      users: users,
+      users,
       courses: allCourses,
-      progress: progress,
+      progress,
     })
   }, [users, allCourses, progress])
 
-  // Estado de carga unificado
-  const isLoading = usersLoading || coursesLoading || progressLoading
+  const isLoading = usersLoading || progressLoading || coursesLoading
 
-  // Función de actualización manual
+  // Función de actualización manual mejoradaaaa
   const handleRefresh = async () => {
     await Promise.all([
       fetchUsers(),
-      fetchAllProgress(),
+      refetchProgress(), 
       refetchCourses()
     ])
   }
 
-  // --- RENDERING ---
-  // Si está cargando o no tenemos métricas calculadas aún
-  if (isLoading || !metrics) return <MetricsSkeleton />
+  if (isLoading) return <MetricsSkeleton />
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 px-4 py-6 sm:px-6">

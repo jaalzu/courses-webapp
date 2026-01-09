@@ -1,0 +1,70 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { supabase } from '@/shared/lib/supabase/client'
+import type { LessonProgress } from '../types'
+
+export const useProgressMutations = () => {
+  const queryClient = useQueryClient()
+
+  const toggleLesson = useMutation({
+    mutationFn: async ({ userId, courseId, lessonId, currentCompleted }: { 
+      userId: string, courseId: string, lessonId: string, currentCompleted: boolean 
+    }) => {
+      if (currentCompleted) {
+        const { error } = await supabase
+          .from('user_progress')
+          .delete()
+          .match({ user_id: userId, lesson_id: lessonId }) 
+        
+        if (error) throw error
+      } else {
+        const { error } = await supabase
+          .from('user_progress')
+          .insert({ 
+            user_id: userId, 
+            course_id: courseId, 
+            lesson_id: lessonId,
+            status: 'completed',
+            completed_at: new Date().toISOString()
+          })
+        
+        if (error) throw error
+      }
+    },
+
+    onMutate: async (variables) => {
+      const { userId, lessonId, currentCompleted, courseId } = variables
+      const queryKey = ['progress', 'user', userId]
+
+      await queryClient.cancelQueries({ queryKey })
+      const previousProgress = queryClient.getQueryData<LessonProgress[]>(queryKey)
+
+      queryClient.setQueryData<LessonProgress[]>(queryKey, (old = []) => {
+        if (currentCompleted) {
+          return old.filter(p => p.lessonId !== lessonId)
+        } else {
+          const newItem = { 
+            user_id: userId, 
+            lesson_id: lessonId, 
+            course_id: courseId,
+            status: 'completed'
+          }
+          return [...old, newItem as any]
+        }
+      })
+
+      return { previousProgress }
+    },
+
+    onError: (err, variables, context) => {
+      if (context?.previousProgress) {
+        queryClient.setQueryData(['progress', 'user', variables.userId], context.previousProgress)
+      }
+    },
+
+    onSettled: (data, error, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['progress', 'user', variables.userId] })
+    },
+  })
+
+  return { toggleLesson, isUpdating: toggleLesson.isPending }
+}
