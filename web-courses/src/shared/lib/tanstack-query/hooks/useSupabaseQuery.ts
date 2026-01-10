@@ -10,7 +10,6 @@ export function useSupabaseQuery<TData = unknown>({
 }: SupabaseQueryOptions<TData>) {
   return useQuery<TData, PostgrestError>({
     ...options,
-    // El enabled es clave: si es false, React Query ni lo intenta
     enabled: options.enabled !== false, 
     queryFn: async () => {
       const { data, error } = await queryFn();
@@ -21,8 +20,6 @@ export function useSupabaseQuery<TData = unknown>({
       }
       
       if (data === null) {
-        // En lugar de tirar error seco, podrías retornar null 
-        // o manejarlo según tu lógica de negocio
         throw new Error('No data returned');
       }
       

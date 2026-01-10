@@ -23,7 +23,6 @@ export const authService = {
     if (authError) throw authError;
     if (!authData.user) throw new Error('No user returned from auth');
 
-    // 🔥 Espera a que Supabase guarde las cookies
     await new Promise(resolve => setTimeout(resolve, 100));
 
     const { data: profile, error: profileError } = await profileQueries.getById(authData.user.id);

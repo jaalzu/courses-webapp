@@ -1,11 +1,9 @@
 // features/auth/hooks/useLoginForm.ts
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import { useAuthStore } from "@/features/auth/model/useAuthStore"
 import { getAuthErrorMessage } from '@/shared/lib/supabase/errorHandler'
 
 export function useLoginForm() {
-  const router = useRouter()
   const { login, loginWithGoogle, isLoading } = useAuthStore()
   
   const [formData, setFormData] = useState({ email: "", password: "" })
@@ -38,7 +36,7 @@ export function useLoginForm() {
 
     try {
       await login(formData.email, formData.password)
-      window.location.href = '/dashboard' // 🔥 Cambia esto
+      window.location.href = '/dashboard' 
     } catch (err: any) {
       setErrors(prev => ({ ...prev, form: getAuthErrorMessage(err) }))
     }
