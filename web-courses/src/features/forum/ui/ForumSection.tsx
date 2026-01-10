@@ -61,7 +61,7 @@ export const ForumSection = ({
         {/* Header con estilo moderno */}
         <div className="p-6 border-b border-gray-100 dark:border-gray-800 bg-gradient-to-br from-blue-50/50 to-transparent dark:from-blue-900/10">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-600 rounded-xl shadow-lg shadow-blue-200 dark:shadow-none">
+            <div className="p-2 bg-blue-600 rounded-lg   dark:shadow-none">
               <ChatBubbleOvalLeftIcon className="w-6 h-6 text-white" />
             </div>
             <div>
@@ -99,7 +99,7 @@ export const ForumSection = ({
               <button
                 type="submit"
                 disabled={!newPostContent.trim() || isSubmitting}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl text-sm font-bold disabled:opacity-50 transition-all shadow-md shadow-blue-200 dark:shadow-none flex items-center gap-2"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl text-sm font-bold disabled:opacity-50 transition-all  flex items-center gap-2"
               >
                 {isSubmitting ? 'Publicando...' : 'Publicar consulta'}
               </button>

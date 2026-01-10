@@ -1,12 +1,17 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
 import { ArrowRightIcon, ShareIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { ForumPost, ForumComment } from '@/entities/forum-post'
 import { formatDate } from '../model/forumHelpers'
 import { Avatar, AvatarFallback } from "@/shared/ui/index"
 import { getAvatarColor, getInitials } from "@/shared/lib/utils/avatar"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/shared/ui/tooltip"
 
 interface Props {
   post: ForumPost
@@ -46,26 +51,20 @@ export const CommentsSection = ({
         return (
           <div key={comment.id} className="flex gap-4 group/comment relative">
             
-            {/* COLUMNA DEL HILO (Ancho fijo w-10 para alinear con el post de arriba) */}
             <div className="flex flex-col items-center shrink-0 w-10">
-              {/* La línea que viene desde arriba (el comentario anterior o el post) */}
               <div className="w-0.5 h-4 bg-gray-200 dark:bg-gray-800" />
               
-             
-                <Avatar className="w-8 h-8 border-1 border-white dark:border-gray-900 z-10 shadow-sm shrink-0">
-  <AvatarFallback className={`${getAvatarColor(comment.userName)} text-white text-xs`}>
-    {getInitials(comment.userName)}
-  </AvatarFallback>
-</Avatar>
+              <Avatar className="w-8 h-8 border-1 border-white dark:border-gray-900 z-10 shadow-sm shrink-0">
+                <AvatarFallback className={`${getAvatarColor(comment.userName)} text-white text-xs`}>
+                  {getInitials(comment.userName)}
+                </AvatarFallback>
+              </Avatar>
 
-
-              {/* La línea que sigue hacia abajo (no se muestra en el último si no hay input) */}
               {!isLast && (
                 <div className="w-0.5 flex-1 bg-gray-200 dark:bg-gray-800" />
               )}
             </div>
 
-            {/* CONTENIDO DEL COMENTARIO */}
             <div className="flex-1 min-w-0 pb-4">
               <div className="bg-gray-50 dark:bg-gray-800/40 rounded-2xl p-3 border border-transparent hover:border-blue-100 dark:hover:border-blue-900/30 transition-all">
                 <div className="flex justify-between items-center mb-1">
@@ -78,16 +77,33 @@ export const CommentsSection = ({
                     </span>
                   </div>
 
-                  <div className="flex gap-2 opacity-0 group-hover/comment:opacity-100 transition-opacity">
-                    {canDelete && (
-                      <button onClick={() => onDeleteComment(post.id, comment.id)} className="p-1 text-gray-400 hover:text-red-500">
-                        <TrashIcon className="w-3.5 h-3.5" />
-                      </button>
-                    )}
-                    <button onClick={() => onShareComment(comment, post)} className="p-1 text-gray-400 hover:text-blue-500">
-                      <ShareIcon className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
+                  <TooltipProvider>
+                    <div className="flex gap-2 opacity-0 group-hover/comment:opacity-100 transition-opacity">
+                      {canDelete && (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <button onClick={() => onDeleteComment(post.id, comment.id)} className="p-1 text-gray-400 hover:text-red-500">
+                              <TrashIcon className="w-3.5 h-3.5" />
+                            </button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Eliminar comentario</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      )}
+                      
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button onClick={() => onShareComment(comment, post)} className="p-1 text-gray-400 hover:text-blue-500">
+                            <ShareIcon className="w-3.5 h-3.5" />
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Compartir comentario</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                  </TooltipProvider>
                 </div>
                 <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                   {comment.content}
@@ -98,7 +114,7 @@ export const CommentsSection = ({
         )
       })}
 
-      {/* INPUT DE RESPUESTA (También alineado) */}
+      {/* INPUT DE RESPUESTA */}
       <div className="flex gap-4 items-start pt-2">
         <div className="flex flex-col items-center shrink-0 w-10">
           <div className="w-0.5 h-4 bg-gray-200 dark:bg-gray-800" />

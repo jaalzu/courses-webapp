@@ -9,7 +9,7 @@ interface FavoriteButtonProps {
   onToggle: () => void
   className?: string
   noBorder?: boolean
-  tooltip?: string // 👈 Nueva prop
+  tooltip?: string
 }
 
 export function FavoriteButton({
@@ -17,7 +17,7 @@ export function FavoriteButton({
   onToggle,
   className = "",
   noBorder = false,
-  tooltip, // 👈 Destructurar (sin default porque es dinámico)
+  tooltip,
 }: FavoriteButtonProps) {
   return (
     <IconButton

@@ -9,9 +9,10 @@ interface ImageUploadFieldProps {
   onChange: (file: File | null) => void
   preview?: string
   error?: string
+  required?: boolean
 }
 
-export function ImageUploadField({ value, onChange, preview, error }: ImageUploadFieldProps) {
+export function ImageUploadField({ value, onChange, preview, error, required = true }: ImageUploadFieldProps) {
   const [dragActive, setDragActive] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -53,7 +54,7 @@ export function ImageUploadField({ value, onChange, preview, error }: ImageUploa
   return (
     <div className="space-y-2">
       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-        Imagen del curso *
+        Imagen del curso {required ? '*' : '(opcional)'}
       </label>
 
       <div
@@ -127,12 +128,12 @@ export function ImageUploadField({ value, onChange, preview, error }: ImageUploa
 
       {error && (
         <p className="text-sm text-red-500 flex items-center gap-1">
-           {error}
+          ⚠️ {error}
         </p>
       )}
 
       <p className="text-xs text-gray-500 dark:text-gray-400">
-         Recomendado: 1200x675px (16:9) para mejor visualización
+        💡 Recomendado: 1200x675px (16:9) para mejor visualización
       </p>
     </div>
   )

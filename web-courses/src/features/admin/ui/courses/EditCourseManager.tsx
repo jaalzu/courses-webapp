@@ -1,8 +1,6 @@
 'use client'
-import { useEditCourseFlow } from "../../hooks/useEditCourseFlow"
 import EditCourseBasicModal from "./EditCourseBasicModal"
-import EditCourseLessonsModal from "./EditCourseLessonsModal"
-
+import { useEditCourseFlow } from "../../hooks/useEditCourseFlow"
 
 interface Props {
   flow: ReturnType<typeof useEditCourseFlow>
@@ -12,20 +10,10 @@ export default function EditCourseManager({ flow }: Props) {
   if (!flow.course) return null
 
   return (
-    <>
-      <EditCourseBasicModal
-        course={flow.course}
-        isOpen={flow.isBasicOpen}
-        onClose={flow.close}
-        onNext={flow.goToLessons}
-      />
-
-      <EditCourseLessonsModal
-        course={flow.course}
-        isOpen={flow.isLessonsOpen}
-        onClose={flow.close}
-        onBack={flow.goToBasic}
-      />
-    </>
+    <EditCourseBasicModal
+      course={flow.course}
+      isOpen={flow.step !== 'closed'}
+      onClose={flow.close}
+    />
   )
 }

@@ -3,6 +3,12 @@
 import { TrashIcon } from '@heroicons/react/24/outline'
 import { ForumPost } from '@/entities/forum-post'
 import { formatDate } from '../model/forumHelpers'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/shared/ui/tooltip"
 
 interface Props {
   post: ForumPost
@@ -27,12 +33,21 @@ export const PostHeader = ({ post, currentUserName, isCurrentUserAdmin, onDelete
         </div>
 
         {canDelete && (
-          <button
-            onClick={() => onDeletePost(post.id)}
-            className="text-gray-400 hover:text-red-500 transition-colors p-1.5 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md"
-          >
-            <TrashIcon className="w-4 h-4" />
-          </button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => onDeletePost(post.id)}
+                  className="text-gray-400 hover:text-red-500 transition-colors p-1.5 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md"
+                >
+                  <TrashIcon className="w-4 h-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Eliminar publicación</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         )}
       </div>
 
