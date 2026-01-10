@@ -1,9 +1,14 @@
 'use client'
-import { useUpdateCourse } from '@/entities/course/model/useCourseMutations' // ✨ CAMBIO
+
+import { useState } from 'react'
+import { useUpdateCourse } from '@/entities/course/model/useCourseMutations' 
 import { Button } from "@/shared/ui/index"
 import { XMarkIcon, ArrowRightIcon } from "@heroicons/react/24/outline"
 import { useEditCourseForm } from "../../hooks/useEditCourseForm"
 import { CourseFormField } from "../courses/CourseFormField"
+import { ImageUploadField } from "../courses/ImageUploadField"
+import { uploadCourseImage, validateImage } from "@/shared/lib/supabase/imageUpload"
+import { toast } from 'sonner'
 import type { Course } from "@/entities/course/types"
 
 interface Props {
@@ -14,35 +19,100 @@ interface Props {
 }
 
 export default function EditCourseBasicModal({ course, isOpen, onClose, onNext }: Props) {
-  const updateMutation = useUpdateCourse() // ✨ CAMBIO
-  const { formData, handleChange } = useEditCourseForm(course, isOpen) // ✨ Elimina isSaving, setIsSaving
+  const updateMutation = useUpdateCourse() 
+  const { formData, handleChange } = useEditCourseForm(course, isOpen)
+  
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string>(formData.image)
+  const [imageError, setImageError] = useState<string>("")
+  const [isUploading, setIsUploading] = useState(false)
+
+  const handleImageChange = (file: File | null) => {
+    if (!file) {
+      setImageFile(null)
+      setImagePreview(formData.image) // Volver a la imagen original
+      setImageError("")
+      return
+    }
+
+    const validation = validateImage(file)
+    if (!validation.valid) {
+      setImageError(validation.error || "Imagen inválida")
+      setImageFile(null)
+      setImagePreview(formData.image)
+      return
+    }
+
+    setImageFile(file)
+    setImagePreview(URL.createObjectURL(file))
+    setImageError("")
+  }
 
   const handleSaveAndNext = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    setIsUploading(true)
+    
     try {
-      await updateMutation.mutateAsync({ // ✨ CAMBIO
+      let imageUrl = formData.image
+
+      // Si hay una nueva imagen, subirla primero
+      if (imageFile) {
+        const uploadResult = await uploadCourseImage(imageFile, course.id)
+        if (!uploadResult.success) {
+          toast.error(uploadResult.error || "Error al subir la imagen")
+          setIsUploading(false)
+          return
+        }
+        imageUrl = uploadResult.url || formData.image
+      }
+
+      await updateMutation.mutateAsync({ 
         courseId: course.id, 
-        updates: formData 
+        updates: { ...formData, image: imageUrl }
       })
+      
       onNext()
     } catch (error) {
-      // El error ya se maneja en useUpdateCourse
+      console.error("Error al guardar:", error)
+    } finally {
+      setIsUploading(false)
     }
   }
 
   const handleSaveAndClose = async () => {
+    setIsUploading(true)
+    
     try {
-      await updateMutation.mutateAsync({ // ✨ CAMBIO
+      let imageUrl = formData.image
+
+      // Si hay una nueva imagen, subirla primero
+      if (imageFile) {
+        const uploadResult = await uploadCourseImage(imageFile, course.id)
+        if (!uploadResult.success) {
+          toast.error(uploadResult.error || "Error al subir la imagen")
+          setIsUploading(false)
+          return
+        }
+        imageUrl = uploadResult.url || formData.image
+      }
+
+      await updateMutation.mutateAsync({ 
         courseId: course.id, 
-        updates: formData 
+        updates: { ...formData, image: imageUrl }
       })
+      
       onClose()
     } catch (error) {
-      // El error ya se maneja en useUpdateCourse
+      console.error("Error al guardar:", error)
+    } finally {
+      setIsUploading(false)
     }
   }
 
   if (!isOpen) return null
+
+  const isSaving = updateMutation.isPending || isUploading
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -59,51 +129,50 @@ export default function EditCourseBasicModal({ course, isOpen, onClose, onNext }
           </button>
         </div>
 
-        <form onSubmit={handleSaveAndNext}>
-        <CourseFormField
-    label="Título"
-    name="title"
-    value={formData.title}
-    onChange={handleChange}
-    placeholder="Ej: Curso de React Avanzado"
-    maxLength={60} 
-  />
-
-         <CourseFormField
-    label="Descripción"
-    name="description"
-    value={formData.description}
-    onChange={handleChange}
-    type="textarea"
-    placeholder="Describe el contenido del curso..."
-    maxLength={500} 
-  />
-
-         <CourseFormField
-    label="Instructor"
-    name="instructor"
-    value={formData.instructor}
-    onChange={handleChange}
-    placeholder="Nombre del instructor"
-    maxLength={40} 
-  />
-
+        <form onSubmit={handleSaveAndNext} className="space-y-4">
           <CourseFormField
-            label="Imagen (URL)"
-            name="image"
-            value={formData.image}
+            label="Título"
+            name="title"
+            value={formData.title}
             onChange={handleChange}
-                placeholder="/public/curso1.webp"
+            placeholder="Ej: Curso de React Avanzado"
+            maxLength={60} 
           />
 
           <CourseFormField
-    label="Duración total"
-    name="duration"
-    value={formData.duration}
-    onChange={handleChange}
-    placeholder="Ej: 10 horas"
-    maxLength={20} 
-  />
+            label="Descripción"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            type="textarea"
+            placeholder="Describe el contenido del curso..."
+            maxLength={500} 
+          />
+
+          <CourseFormField
+            label="Instructor"
+            name="instructor"
+            value={formData.instructor}
+            onChange={handleChange}
+            placeholder="Nombre del instructor"
+            maxLength={40} 
+          />
+
+          <ImageUploadField
+            value={imageFile}
+            onChange={handleImageChange}
+            preview={imagePreview}
+            error={imageError}
+          />
+
+          <CourseFormField
+            label="Duración total"
+            name="duration"
+            value={formData.duration}
+            onChange={handleChange}
+            placeholder="Ej: 10 horas"
+            maxLength={20} 
+          />
 
           <CourseFormField
             label="Nivel"
@@ -122,7 +191,7 @@ export default function EditCourseBasicModal({ course, isOpen, onClose, onNext }
             <Button 
               type="button" 
               onClick={onClose} 
-              disabled={updateMutation.isPending}
+              disabled={isSaving}
               className="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
             >
               Cancelar
@@ -132,18 +201,18 @@ export default function EditCourseBasicModal({ course, isOpen, onClose, onNext }
               <Button 
                 type="button" 
                 onClick={handleSaveAndClose} 
-                disabled={updateMutation.isPending}
+                disabled={isSaving}
                 className="bg-blue-600 hover:bg-blue-700"
               >
-                {updateMutation.isPending ? "Guardando..." : "Guardar"}
+                {isSaving ? "Guardando..." : "Guardar"}
               </Button>
               
               <Button 
                 type="submit" 
-                disabled={updateMutation.isPending}
+                disabled={isSaving}
                 className="bg-green-600 hover:bg-green-700 flex items-center gap-2"
               >
-                {updateMutation.isPending ? "Guardando..." : "Siguiente"}
+                {isSaving ? "Guardando..." : "Siguiente"}
                 <ArrowRightIcon className="w-4 h-4" />
               </Button>
             </div>

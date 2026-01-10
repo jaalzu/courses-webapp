@@ -1,7 +1,5 @@
-// shared/lib/supabase/queries/profiles.ts
 import { supabase } from '../client';
 
-// Función de validación de nombre
 const validateName = (name: string): { valid: boolean; error?: string } => {
   const trimmed = name.trim()
   
@@ -11,15 +9,14 @@ const validateName = (name: string): { valid: boolean; error?: string } => {
   if (trimmed.length > 50) {
     return { valid: false, error: 'El nombre no puede tener más de 50 caracteres' }
   }
-  if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(trimmed)) {
-    return { valid: false, error: 'El nombre solo puede contener letras y espacios' }
-  }
+ if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$/.test(trimmed)) {
+  return { valid: false, error: 'El nombre solo puede contener letras' }
+}
   
   return { valid: true }
 }
 
 export const profileQueries = {
-  // Obtener perfil por ID
   getById: async (userId: string) => {
     const { data, error } = await supabase
       .from('profiles')
@@ -45,7 +42,7 @@ export const profileQueries = {
           error: { message: validation.error } as any
         }
       }
-      profile.name = profile.name.trim() // Siempre trimear
+      profile.name = profile.name.trim() 
     }
 
     const { data, error } = await supabase
@@ -73,7 +70,7 @@ export const profileQueries = {
           error: { message: validation.error } as any
         }
       }
-      updates.name = updates.name.trim() // Siempre trimear
+      updates.name = updates.name.trim() 
     }
 
     const { data, error } = await supabase
@@ -86,7 +83,7 @@ export const profileQueries = {
     return { data, error };
   },
 
-  // Buscar perfiles (para después, si necesitás)
+  // Buscar perfiles
   search: async (query: string) => {
     const { data, error } = await supabase
       .from('profiles')
@@ -96,7 +93,7 @@ export const profileQueries = {
     return { data, error };
   },
 
-  // Eliminar perfil (por si lo necesitás)
+  // Eliminar perfil
   delete: async (userId: string) => {
     const { error } = await supabase
       .from('profiles')
@@ -107,5 +104,4 @@ export const profileQueries = {
   },
 };
 
-// Exportar también la función de validación para usarla en UI
 export { validateName };

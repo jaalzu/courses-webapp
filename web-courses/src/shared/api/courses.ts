@@ -63,7 +63,5 @@ function mapCourseToDb(updates: Partial<Course>) {
       : updates.image
   }
   
-  // NO incluir lessons aquí, se manejan por separado
-  
   return dbUpdates
 }

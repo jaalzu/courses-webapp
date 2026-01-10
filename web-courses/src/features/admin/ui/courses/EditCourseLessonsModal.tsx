@@ -15,7 +15,7 @@ interface Props {
 }
 
 export default function EditCourseContentModal({ course, isOpen, onClose, onBack, isNewCourse = false}: Props) {
-  const updateMutation = useUpdateCourse() // ✨ CAMBIO
+  const updateMutation = useUpdateCourse() 
 
   // Estado para key points
   const [keyPoints, setKeyPoints] = useState<string[]>(isNewCourse ? [] : (course.keyPoints || []))

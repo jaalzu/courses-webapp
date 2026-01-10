@@ -2,10 +2,11 @@
 
 import { useState } from "react"
 import EditCourseContentModal from "@/features/admin/ui/courses/EditCourseLessonsModal"
-import { useCreateCourse } from '@/entities/course/model/useCourseMutations' // ✨ CAMBIO
-import { useCourses } from '@/entities/course/model/useCourses' // ✨ CAMBIO
-
+import { useCreateCourse, useUpdateCourse } from '@/entities/course/model/useCourseMutations' // 🔥 AGREGAR useUpdateCourse
+import { useCourses } from '@/entities/course/model/useCourses'
 import { CourseFormField } from "@/features/admin/ui/courses/CourseFormField"
+import { ImageUploadField } from "@/features/admin/ui/courses/ImageUploadField"
+import { uploadCourseImage, validateImage } from "@/shared/lib/supabase/imageUpload"
 import { XMarkIcon, ArrowRightIcon } from "@heroicons/react/24/outline"
 import { toast } from "sonner"
 
@@ -16,19 +17,24 @@ interface CreateCourseModalProps {
 
 export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
   const createMutation = useCreateCourse() 
+  const updateMutation = useUpdateCourse() // 🔥 AGREGAR ESTO
   const { allCourses: courses } = useCourses() 
   
   const [step, setStep] = useState<'basic' | 'content'>('basic')
   const [tempCourseId, setTempCourseId] = useState<string | null>(null)
+  const [isUploading, setIsUploading] = useState(false)
 
   const [form, setForm] = useState({
     title: "",
     description: "",
-    image: "",
     duration: "",
     instructor: "",
     level: "beginner" as const,
   })
+
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string>("")
+  const [imageError, setImageError] = useState<string>("")
 
   if (!open) return null
 
@@ -36,7 +42,31 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
+  const handleImageChange = (file: File | null) => {
+    if (!file) {
+      setImageFile(null)
+      setImagePreview("")
+      setImageError("")
+      return
+    }
+
+    // Validar imagen
+    const validation = validateImage(file)
+    if (!validation.valid) {
+      setImageError(validation.error || "Imagen inválida")
+      setImageFile(null)
+      setImagePreview("")
+      return
+    }
+
+    // Todo OK
+    setImageFile(file)
+    setImagePreview(URL.createObjectURL(file))
+    setImageError("")
+  }
+
   const handleNext = async () => {
+    // Validaciones de texto
     if (!form.title.trim() || !form.description.trim()) {
       toast.error("El título y la descripción son obligatorios")
       return
@@ -52,11 +82,20 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
       return
     }
 
+    // Validar que haya imagen
+    if (!imageFile) {
+      toast.error("Debes seleccionar una imagen para el curso")
+      return
+    }
+
+    setIsUploading(true)
+
     try {
+      // 1. Crear el curso primero (sin imagen)
       const newCourse = {
         title: form.title,
         description: form.description,
-        image: form.image || '',
+        image: '', // Vacío por ahora
         duration: form.duration || '',
         instructor: form.instructor || '',
         level: form.level,
@@ -65,19 +104,37 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
         video: '',
       }
       
-      // ✨ CAMBIO: usa mutateAsync y guarda el resultado
       const createdCourse = await createMutation.mutateAsync(newCourse)
       
-      if (createdCourse?.id) {
-        setTempCourseId(createdCourse.id) // ✨ Usa el ID del curso creado directamente
-        setStep('content')
-        // ✨ El toast de éxito ya se muestra en useCreateCourse
-      } else {
-        toast.error("No se pudo obtener el ID del curso creado")
+      if (!createdCourse?.id) {
+        toast.error("No se pudo crear el curso")
+        setIsUploading(false)
+        return
       }
+
+      // 2. Subir la imagen con el ID del curso
+      const uploadResult = await uploadCourseImage(imageFile, createdCourse.id)
+      
+      if (!uploadResult.success) {
+        toast.error(uploadResult.error || "Error al subir la imagen")
+        setIsUploading(false)
+        return
+      }
+
+      // 3. Actualizar el curso con la URL de la imagen 🔥 ESTO FALTABA
+      await updateMutation.mutateAsync({
+        courseId: createdCourse.id,
+        updates: { image: uploadResult.url }
+      })
+      
+      toast.success("Curso creado exitosamente")
+      setTempCourseId(createdCourse.id)
+      setStep('content')
     } catch (error) {
-      // ✨ El toast de error ya se muestra en useCreateCourse
       console.error("Error creando curso:", error)
+      toast.error("Error al crear el curso")
+    } finally {
+      setIsUploading(false)
     }
   }
 
@@ -85,11 +142,13 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
     setForm({
       title: "",
       description: "",
-      image: "",
       duration: "",
       instructor: "",
       level: "beginner",
     })
+    setImageFile(null)
+    setImagePreview("")
+    setImageError("")
     setStep('basic')
     setTempCourseId(null)
     onClose()
@@ -106,10 +165,8 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
 
   const tempCourse = tempCourseId ? courses?.find(c => c.id === tempCourseId) : null
 
-
   return (
     <>
-      {/*  Modal de información básica */}
       {step === 'basic' && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999]">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl w-[95%] max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -121,7 +178,7 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
               </div>
               <button 
                 onClick={handleCancel} 
-                disabled={createMutation.isPending}
+                disabled={isUploading}
                 className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 disabled:opacity-50"
               >
                 <XMarkIcon className="w-6 h-6"/>
@@ -130,51 +187,51 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
 
             {/* Form */}
             <div className="space-y-4">
-            <CourseFormField
-    label="Título *"
-    name="title"
-    value={form.title}
-    onChange={handleChange}
-    placeholder="Ej: Curso de React Avanzado"
-    maxLength={60} 
-  />
-
-             <CourseFormField
-    type="textarea"
-    label="Descripción *"
-    name="description"
-    value={form.description}
-    onChange={handleChange}
-    placeholder="Describe el contenido del curso..."
-    maxLength={500} 
-  />
-
-             <CourseFormField
-    label="Instructor"
-    name="instructor"
-    value={form.instructor}
-    onChange={handleChange}
-    placeholder="Nombre del instructor"
-    maxLength={40} 
-  />
+              <CourseFormField
+                label="Título *"
+                name="title"
+                value={form.title}
+                onChange={handleChange}
+                placeholder="Ej: Curso de React Avanzado"
+                maxLength={60} 
+              />
 
               <CourseFormField
-                label="Imagen (URL)"
-                name="image"
-                value={form.image}
+                type="textarea"
+                label="Descripción *"
+                name="description"
+                value={form.description}
                 onChange={handleChange}
-                placeholder="/public/curso1.webp"
+                placeholder="Describe el contenido del curso..."
+                maxLength={500} 
+              />
+
+              <CourseFormField
+                label="Instructor"
+                name="instructor"
+                value={form.instructor}
+                onChange={handleChange}
+                placeholder="Nombre del instructor"
+                maxLength={40} 
+              />
+
+              {/* Campo de upload de imagen */}
+              <ImageUploadField
+                value={imageFile}
+                onChange={handleImageChange}
+                preview={imagePreview}
+                error={imageError}
               />
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-               <CourseFormField
-      label="Duración total"
-      name="duration"
-      value={form.duration}
-      onChange={handleChange}
-      placeholder="Ej: 10 horas"
-      maxLength={20} 
-    />
+                <CourseFormField
+                  label="Duración total"
+                  name="duration"
+                  value={form.duration}
+                  onChange={handleChange}
+                  placeholder="Ej: 10 horas"
+                  maxLength={20} 
+                />
 
                 <CourseFormField
                   type="select"
@@ -195,7 +252,7 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
             <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
               <button
                 onClick={handleCancel}
-                disabled={createMutation.isPending}
+                disabled={isUploading}
                 className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 font-medium disabled:opacity-50"
               >
                 Cancelar
@@ -203,26 +260,25 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
 
               <button
                 onClick={handleNext}
-                disabled={createMutation.isPending}
+                disabled={isUploading || !imageFile}
                 className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium flex items-center gap-2 disabled:opacity-50"
               >
-                {createMutation.isPending ? "Creando..." : "Siguiente"}
-                {!createMutation.isPending && <ArrowRightIcon className="w-4 h-4" />}
+                {isUploading ? "Subiendo imagen..." : "Siguiente"}
+                {!isUploading && <ArrowRightIcon className="w-4 h-4" />}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/*Reutilizar EditCourseContentModal */}
       {step === 'content' && tempCourse && (
-       <EditCourseContentModal
-    course={tempCourse}
-    isOpen={true}
-    onClose={handleContentClose}
-    onBack={() => setStep('basic')}
-    isNewCourse={true} // 
-  />
+        <EditCourseContentModal
+          course={tempCourse}
+          isOpen={true}
+          onClose={handleContentClose}
+          onBack={() => setStep('basic')}
+          isNewCourse={true}
+        />
       )}
     </>
   )
