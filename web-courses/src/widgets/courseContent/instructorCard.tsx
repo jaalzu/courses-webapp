@@ -1,27 +1,25 @@
 'use client'
 
-import { Avatar, AvatarImage, AvatarFallback } from "@/shared/ui/index"
+import { Avatar, AvatarFallback } from "@/shared/ui/index"
+import { getAvatarColor, getInitials } from "@/shared/lib/utils/avatar"
 
 interface InstructorCardProps {
   name: string
   profession: string
-  image?: string
   description: string
 }
 
 export default function InstructorCard({
   name,
   profession,
-  image,
   description,
 }: InstructorCardProps) {
   return (
     <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-4 space-y-3">
       <div className="flex items-center gap-3">
         <Avatar className="w-16 h-16">
-          <AvatarImage src={image} alt={name} />
-          <AvatarFallback>
-            {name.charAt(0).toUpperCase()}
+          <AvatarFallback className={`${getAvatarColor(name)} text-white`}>
+            {getInitials(name)}
           </AvatarFallback>
         </Avatar>
 

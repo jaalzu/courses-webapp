@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
 import { ForumPost, ForumComment } from '@/entities/forum-post'
+import { Avatar, AvatarFallback } from "@/shared/ui/index"
+import { getAvatarColor, getInitials } from "@/shared/lib/utils/avatar"
 import { PostHeader } from './PostHeader'
 import { PostActions } from './PostActions'
 import { CommentsSection } from './CommentsSection'
@@ -25,14 +26,11 @@ export const PostCard = (props: Props) => {
     <div className="p-6 flex gap-4 relative group">
       {/* COLUMNA DEL HILO */}
       <div className="flex flex-col items-center shrink-0">
-        <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-white dark:border-gray-800 z-10 shadow-sm">
-          <Image
-            src={post.userAvatar || '/avatar.webp'}
-            alt={post.userName}
-            fill
-            className="object-cover"
-          />
-        </div>
+            <Avatar className="w-10 h-10 border-2 border-white dark:border-gray-800 z-10 shadow-sm">
+          <AvatarFallback className={`${getAvatarColor(post.userName)} text-white text-sm`}>
+            {getInitials(post.userName)}
+          </AvatarFallback>
+        </Avatar>
         {/* La línea solo aparece si los comentarios están abiertos */}
         {showComments && (
           <div className="w-0.5 flex-1 bg-gray-200 dark:bg-gray-800 mt-2 rounded-full" />

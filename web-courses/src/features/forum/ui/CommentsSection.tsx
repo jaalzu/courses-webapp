@@ -5,6 +5,8 @@ import Image from 'next/image'
 import { ArrowRightIcon, ShareIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { ForumPost, ForumComment } from '@/entities/forum-post'
 import { formatDate } from '../model/forumHelpers'
+import { Avatar, AvatarFallback } from "@/shared/ui/index"
+import { getAvatarColor, getInitials } from "@/shared/lib/utils/avatar"
 
 interface Props {
   post: ForumPost
@@ -49,14 +51,13 @@ export const CommentsSection = ({
               {/* La línea que viene desde arriba (el comentario anterior o el post) */}
               <div className="w-0.5 h-4 bg-gray-200 dark:bg-gray-800" />
               
-              <div className="relative w-7 h-7 rounded-full overflow-hidden border-2 border-white dark:border-gray-900 z-10 shadow-sm shrink-0">
-                <Image
-                  src={comment.userAvatar || '/avatar.webp'}
-                  alt={comment.userName}
-                  fill
-                  className="object-cover"
-                />
-              </div>
+             
+                <Avatar className="w-8 h-8 border-1 border-white dark:border-gray-900 z-10 shadow-sm shrink-0">
+  <AvatarFallback className={`${getAvatarColor(comment.userName)} text-white text-xs`}>
+    {getInitials(comment.userName)}
+  </AvatarFallback>
+</Avatar>
+
 
               {/* La línea que sigue hacia abajo (no se muestra en el último si no hay input) */}
               {!isLast && (

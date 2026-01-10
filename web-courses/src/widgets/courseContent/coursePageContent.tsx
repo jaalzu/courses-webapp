@@ -64,7 +64,6 @@ export default function CoursePageContent({ courseId }: CoursePageContentProps) 
             <InstructorCard
               name={course.instructor}
               profession="Instructor"
-              image="/avatar.webp"
               description={`${course.instructor} te guiará a través de este curso.`}
             />
           )}

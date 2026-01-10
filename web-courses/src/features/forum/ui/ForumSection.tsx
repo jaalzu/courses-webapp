@@ -2,13 +2,14 @@
 
 // 1. React & Next.js
 import { useState } from 'react';
-import Image from 'next/image';
 
 // 2. Features & Hooks
 import { useForum } from '../model/useForum';
 import { PostCard } from './PostCard';
 
 // 3. Shared & Services
+import { Avatar, AvatarFallback } from "@/shared/ui/index"
+import { getAvatarColor, getInitials } from "@/shared/lib/utils/avatar"
 import { toast } from 'sonner'; 
 import { ChatBubbleOvalLeftIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import { 
@@ -16,8 +17,6 @@ import {
   handleShareComment as shareCommentService 
 } from '../services/forumShare';
 
-// 4. Types
-import type { ForumPost, ForumComment } from '@/entities/forum-post';
 
 interface Props {
   courseId: string;
@@ -78,14 +77,11 @@ export const ForumSection = ({
         <div className="p-6">
           <form onSubmit={handleCreatePost} className="space-y-4">
             <div className="flex gap-4">
-              <div className="relative w-10 h-10 rounded-full overflow-hidden shrink-0 border border-gray-100 dark:border-gray-700">
-                <Image
-                  src="/avatar.webp"
-                  alt={currentUserName}
-                  fill
-                  className="object-cover"
-                />
-              </div>
+                <Avatar className="w-10 h-10 shrink-0 border border-gray-100 dark:border-gray-700">
+    <AvatarFallback className={`${getAvatarColor(currentUserName)} text-white text-sm`}>
+      {getInitials(currentUserName)}
+    </AvatarFallback>
+  </Avatar>
               <div className="flex-1 group">
                 <textarea
                   value={newPostContent}

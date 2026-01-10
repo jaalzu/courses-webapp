@@ -174,7 +174,6 @@ export function PerfilWrapper() {
   const isLoadingAuth = useAuthStore(state => state.isLoading)
   
   const { courses } = useCourses() 
-  // CAMBIO: Invocamos la Query. No necesita useEffect.
   const { data: progress = [], isLoading: progressLoading } = useUserProgress(currentUser?.id) 
 
   useEffect(() => {
@@ -194,7 +193,6 @@ export function PerfilWrapper() {
     )
   }
 
-  // Ya no filtramos manualmente con getUserProgress porque la Query ya trae lo del usuario
   const stats = getUserProfileStats({
     user: {
       id: currentUser.id,

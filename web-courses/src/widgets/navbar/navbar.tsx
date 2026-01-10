@@ -3,7 +3,7 @@
 // 1. React & Next.js
 import Image from "next/image"
 import Link from "next/link"
-import { useRouter } from "next/navigation" 
+
 
 // 2. Features (Lógica de autenticación/estado global)
 import { useAuthStore } from '@/features/auth/model/useAuthStore' 
@@ -13,6 +13,7 @@ import { SidebarTrigger } from "@/widgets/sidebar/sidebar"
 
 // 4. Shared UI (Componentes base/atómicos)
 import { Button } from "@/shared/ui/button"
+import { getAvatarColor, getInitials } from "@/shared/lib/utils/avatar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/index"
 import {
   DropdownMenu,
@@ -119,11 +120,10 @@ const { logout, currentUser } = useAuthStore()
                              transition-all duration-200 focus-visible:ring-0"
                 >
                   <Avatar className="h-10 w-10">
-                    <AvatarImage src={currentUser?.avatar || "/avatar.webp"} alt="Usuario" />
-                    <AvatarFallback className="bg-primary text-white dark:text-black dark:bg-white text-xs">
-                      {currentUser?.name?.substring(0, 2).toUpperCase() || 'U'}
-                    </AvatarFallback>
-                  </Avatar>
+  <AvatarFallback className={`${getAvatarColor(currentUser?.name || 'User')} text-white text-xs`}>
+    {getInitials(currentUser?.name || 'User')}
+  </AvatarFallback>
+</Avatar>
                 </Button>
               </DropdownMenuTrigger>
 
