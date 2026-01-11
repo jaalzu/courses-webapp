@@ -8,7 +8,6 @@ import { useCourses } from "@/entities/course/model/useCourses"
 export const dynamic = 'force-dynamic'
 
 export default function CoursePage() {
-    throw new Error('Error de prueba en cursos')
 
   const { id } = useParams()
   const courseId = String(id)

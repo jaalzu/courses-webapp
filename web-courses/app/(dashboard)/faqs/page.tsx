@@ -4,6 +4,8 @@ import { FAQWrapper } from '@/widgets/faqs/FAQWrapper'
 export const dynamic = 'force-dynamic' 
 
 export default function FAQPage() {
+
+
   return (
     <main className="min-h-screen p-5 pt-12 md:p-12">
       <div className="max-w-4xl mx-auto text-center">
