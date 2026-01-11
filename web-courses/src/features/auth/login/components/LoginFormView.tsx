@@ -3,7 +3,8 @@
 
 import Image from 'next/image'
 import { Button, Input } from "@/shared/ui"
-import { LockIcon, EnvelopeIcon } from "../../shared/icons/icons"
+import { LockIcon, EnvelopeIcon } from "../../shared/icons/Icons"
+
 
 interface LoginFormUIProps {
   formData: { email: string; password: string }

@@ -5,7 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 
 // 2. Features
-import { FavoriteButton } from "@/features/favorites/ui/favoriteButton"
+import { FavoriteButton } from "@/features/favorites/ui/FavoriteButton"
 import { useFavoriteIds } from "@/features/favorites/model/hooks/useFavoritesIds"
 import { AdminCardActions } from "@/features/admin/ui/AdminCardActions"
 import { useAuthStore } from '@/features/auth/model/useAuthStore'

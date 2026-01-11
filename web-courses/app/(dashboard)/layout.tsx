@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic' // ← Agregar
 import { SidebarProvider } from "@/widgets/sidebar/sidebar"
 import { AppSidebar } from "@/widgets/sidebar/app-sidebar"
 
-const Navbar = dynamic(() => import("@/widgets/navbar/navbar").then(mod => ({ default: mod.Navbar })), {
+const Navbar = dynamic(() => import("@/widgets/navbar/Navbar").then(mod => ({ default: mod.Navbar })), {
   ssr: false, 
   loading: () => <div className="h-13" />
 })

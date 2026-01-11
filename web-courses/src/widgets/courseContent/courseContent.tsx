@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import type { Course } from "@/entities/course/types"
-import { FavoriteButton } from "@/features/favorites/ui/favoriteButton";
+import { FavoriteButton } from "@/features/favorites/ui/FavoriteButton";
 import { useFavoriteIds } from "@/features/favorites/model/hooks/useFavoritesIds";
 
 

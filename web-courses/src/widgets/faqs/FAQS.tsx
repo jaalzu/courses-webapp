@@ -1,4 +1,3 @@
-// 📁 components/FAQ.tsx
 'use client'
 
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/shared/ui/index"

@@ -8,10 +8,10 @@ import { useAuthStore } from '@/features/auth/model/useAuthStore'
 import { useUserProgress } from "@/entities/progress/model/useProgressQueries" 
 
 // 3. Widgets
-import CourseContent from "@/widgets/courseContent/courseContent"
-import { LessonList } from "@/widgets/lesson-list/lessonList"
-import InstructorCard from "@/widgets/courseContent/instructorCard"
-import { CourseSwitcher } from "@/widgets/courseContent/courseSwitcher"
+import CourseContent from "@/widgets/courseContent/CourseContent"
+import { LessonList } from "@/widgets/lesson-list/LessonList"
+import InstructorCard from "@/widgets/courseContent/InstructorCard"
+import { CourseSwitcher } from "@/widgets/courseContent/CourseSwitcher"
 
 // 4. Types
 import type { Lesson } from "@/entities/lesson/types"

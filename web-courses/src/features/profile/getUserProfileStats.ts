@@ -18,7 +18,6 @@ export function getUserProfileStats({
   courses,
   progress,
 }: GetUserProfileStatsParams) {
-  // Validación de seguridad
   if (!courses || !Array.isArray(courses)) {
     return { courseStats: [] }
   }

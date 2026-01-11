@@ -1,4 +1,3 @@
-// 📁 widgets/faqs/FAQWrapper.tsx
 'use client'
 
 import { lazy, Suspense } from 'react'

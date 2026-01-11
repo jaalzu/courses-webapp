@@ -1,4 +1,3 @@
-// features/auth/register/components/RegisterForm.tsx
 "use client"
 
 import { useRegisterForm } from "@/features/auth/register/hooks/useRegisterForm"

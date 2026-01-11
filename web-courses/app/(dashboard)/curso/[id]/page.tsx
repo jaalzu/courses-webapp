@@ -1,8 +1,8 @@
 'use client'
 
 import { useParams } from "next/navigation"
-import CourseNotFound from "@/widgets/courseContent/courseNotFound"
-import CoursePageContent from "@/widgets/courseContent/coursePageContent"
+import CourseNotFound from "@/widgets/courseContent/CourseNotFound"
+import CoursePageContent from "@/widgets/courseContent/CoursePageContent"
 import { useCourses } from "@/entities/course/model/useCourses" 
 
 export const dynamic = 'force-dynamic'
