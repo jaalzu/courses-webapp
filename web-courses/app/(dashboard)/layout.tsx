@@ -2,7 +2,7 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import dynamic from 'next/dynamic' // ← Agregar
+import dynamic from 'next/dynamic' 
 import { SidebarProvider } from "@/widgets/sidebar/sidebar"
 import { AppSidebar } from "@/widgets/sidebar/app-sidebar"
 
