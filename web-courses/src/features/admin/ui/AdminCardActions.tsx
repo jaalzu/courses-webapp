@@ -11,11 +11,11 @@ interface AdminCardActionsProps {
 }
 
 export function AdminCardActions({ courseId, onEdit }: AdminCardActionsProps) {
-  const deleteMutation = useDeleteCourse() // ✨ CAMBIO
+  const deleteMutation = useDeleteCourse() 
 
   const handleDelete = () => {
     if (confirm("¿Seguro que querés eliminar este curso?")) {
-      deleteMutation.mutate(courseId) // ✨ CAMBIO
+      deleteMutation.mutate(courseId) 
     }
   }
 
@@ -24,7 +24,7 @@ export function AdminCardActions({ courseId, onEdit }: AdminCardActionsProps) {
       {onEdit && <EditButton onEdit={onEdit} />}
       <DeleteButton 
         onDelete={handleDelete} 
-        disabled={deleteMutation.isPending} // ✨ BONUS: loading state
+        disabled={deleteMutation.isPending} 
       />
     </>
   )

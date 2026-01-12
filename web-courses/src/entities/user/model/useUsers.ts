@@ -31,7 +31,6 @@ export function useUsers(autoFetch = false) {
 
   // --- AUTO-FETCH (Para Metrics) ---
   useEffect(() => {
-    // Si autoFetch es true y no tenemos usuarios, los traemos automáticamente
     if (autoFetch && users.length === 0) {
       fetchUsers()
     }
@@ -44,7 +43,7 @@ export function useUsers(autoFetch = false) {
 
     try {
       await usersApi.updateRole(userId, newRole)
-      // Actualización optimista en el store de Zustand
+      // optimistic updatee en el store de Zustand
       updateUserInState(userId, { role: newRole })
     } catch (err: any) {
       setError(err.message)

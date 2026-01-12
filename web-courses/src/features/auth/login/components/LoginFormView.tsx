@@ -1,32 +1,28 @@
-// features/auth/components/LoginFormUI.tsx
 "use client"
 
 import Image from 'next/image'
 import { Button, Input } from "@/shared/ui"
 import { LockIcon, EnvelopeIcon } from "../../shared/icons/Icons"
+import type { UseFormRegister, FieldErrors } from "react-hook-form"
+import type { LoginFormData } from "@/features/auth/lib/schemas"
 
-
-interface LoginFormUIProps {
-  formData: { email: string; password: string }
-  errors: { form: string; email: string }
+interface LoginFormViewProps {
+  register: UseFormRegister<LoginFormData>
+  errors: FieldErrors<LoginFormData>
+  serverError?: string
   isLoading: boolean
-  onEmailChange: (email: string) => void
-  onPasswordChange: (password: string) => void
   onSubmit: (e: React.FormEvent) => void
   onGoogleLogin: () => void
-  onEmailBlur: (email: string) => void
 }
 
 export function LoginFormView({
-  formData,
+  register,
   errors,
+  serverError,
   isLoading,
-  onEmailChange,
-  onPasswordChange,
   onSubmit,
   onGoogleLogin,
-  onEmailBlur,
-}: LoginFormUIProps) {
+}: LoginFormViewProps) {
   return (
     <div className="w-full max-w-sm space-y-6 animate-in fade-in duration-500">
       <header className="text-center space-y-1">
@@ -41,6 +37,7 @@ export function LoginFormView({
         className="w-full flex items-center justify-center gap-3 bg-black text-white hover:bg-gray-800 hover:text-white border-black transition-all"
         onClick={onGoogleLogin}
         disabled={isLoading}
+        type="button"
       >
         <Image src="/icons/svg/google-icon.svg" alt="Google" width={18} height={18} />
         <span className="text-lg font-medium">Continuar con Google</span>
@@ -55,10 +52,10 @@ export function LoginFormView({
         </div>
       </div>
 
-      {/* Error General */}
-      {errors.form && (
+      {/* Error General del servidor */}
+      {serverError && (
         <div className="bg-red-50 border border-red-100 text-red-600 px-4 py-2.5 rounded-xl text-xs font-medium animate-shake">
-          {errors.form}
+          {serverError}
         </div>
       )}
 
@@ -77,33 +74,34 @@ export function LoginFormView({
               className={`pl-10 h-11 rounded-xl transition-all ${
                 errors.email ? 'border-red-500 focus-visible:ring-red-500' : ''
               }`}
-              value={formData.email}
-              onChange={(e) => onEmailChange(e.target.value)}
-              onBlur={() => onEmailBlur(formData.email)}
-              required
               disabled={isLoading}
+              {...register("email")}
             />
           </div>
           {errors.email && (
             <p className="text-[11px] text-red-500 ml-1 font-medium">
-              {errors.email}
+              {errors.email.message}
             </p>
           )}
         </div>
 
         {/* Password Field */}
-        <div className="relative">
-          <LockIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <Input
-            type="password"
-            placeholder="Contraseña"
-            className="pl-10 h-11 rounded-xl"
-            value={formData.password}
-            onChange={(e) => onPasswordChange(e.target.value)}
-            required
-            minLength={6}
-            disabled={isLoading}
-          />
+        <div className="space-y-1.5">
+          <div className="relative">
+            <LockIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Input
+              type="password"
+              placeholder="Contraseña"
+              className="pl-10 h-11 rounded-xl"
+              disabled={isLoading}
+              {...register("password")}
+            />
+          </div>
+          {errors.password && (
+            <p className="text-[11px] text-red-500 ml-1 font-medium">
+              {errors.password.message}
+            </p>
+          )}
         </div>
 
         <Button

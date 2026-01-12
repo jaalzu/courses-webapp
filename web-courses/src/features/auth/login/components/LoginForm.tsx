@@ -1,4 +1,3 @@
-// features/auth/components/LoginForm.tsx
 "use client"
 
 import { useLoginForm } from "@/features/auth/login/hooks/useLoginForm"
@@ -6,26 +5,22 @@ import { LoginFormView } from "./LoginFormView"
 
 export function LoginForm() {
   const {
-    formData,
-    errors,
-    isLoading,
-    handleEmailChange,
-    handlePasswordChange,
+    register,
     handleSubmit,
+    errors,
+    serverError,
+    isLoading,
     handleGoogleLogin,
-    validateEmail,
   } = useLoginForm()
 
   return (
     <LoginFormView
-      formData={formData}
+      register={register}
       errors={errors}
+      serverError={serverError}
       isLoading={isLoading}
-      onEmailChange={handleEmailChange}
-      onPasswordChange={handlePasswordChange}
       onSubmit={handleSubmit}
       onGoogleLogin={handleGoogleLogin}
-      onEmailBlur={validateEmail}
     />
   )
 }

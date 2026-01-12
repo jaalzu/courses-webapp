@@ -1,63 +1,61 @@
-// features/auth/hooks/useLoginForm.ts
-import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
 import { useAuthStore } from "@/features/auth/model/useAuthStore"
 import { getAuthErrorMessage } from '@/shared/lib/supabase/errorHandler'
+import { loginSchema, type LoginFormData } from "@/features/auth/lib/schemas"
+import { useState } from "react"
 
 export function useLoginForm() {
+  const router = useRouter()
   const { login, loginWithGoogle, isLoading } = useAuthStore()
-  
-  const [formData, setFormData] = useState({ email: "", password: "" })
-  const [errors, setErrors] = useState({ form: "", email: "" })
+  const [serverError, setServerError] = useState<string>("")
 
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
-      setErrors(prev => ({ ...prev, email: "Introduce un email válido" }))
-      return false
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setError,
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    mode: "onBlur",
+    defaultValues: {
+      email: "",
+      password: "",
     }
-    setErrors(prev => ({ ...prev, email: "" }))
-    return true
-  }
+  })
 
-  const handleEmailChange = (email: string) => {
-    setFormData(prev => ({ ...prev, email }))
-    if (errors.email) validateEmail(email)
-  }
-
-  const handlePasswordChange = (password: string) => {
-    setFormData(prev => ({ ...prev, password }))
-  }
-
- const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setErrors({ form: "", email: "" })
-
-    if (!validateEmail(formData.email)) return
-
+  const onSubmit = async (data: LoginFormData) => {
+    setServerError("")
+    
     try {
-      await login(formData.email, formData.password)
-      window.location.href = '/dashboard' 
+      await login(data.email, data.password)
+      window.location.href = '/dashboard' // Hard reload para que el proxy detecte la sesión
     } catch (err: any) {
-      setErrors(prev => ({ ...prev, form: getAuthErrorMessage(err) }))
+      const errorMsg = getAuthErrorMessage(err)
+      
+      // Si el error es de credenciales incorrectas, no asignarlo a un campo específico
+      // Mostrarlo como error general
+      setServerError(errorMsg)
     }
   }
 
   const handleGoogleLogin = async () => {
+    setServerError("")
+    
     try {
       await loginWithGoogle()
     } catch (err: any) {
-      setErrors(prev => ({ ...prev, form: getAuthErrorMessage(err) }))
+      setServerError(getAuthErrorMessage(err))
     }
   }
 
   return {
-    formData,
+    register,
+    handleSubmit: handleSubmit(onSubmit),
     errors,
-    isLoading,
-    handleEmailChange,
-    handlePasswordChange,
-    handleSubmit,
+    serverError,
+    isLoading: isLoading || isSubmitting,
     handleGoogleLogin,
-    validateEmail,
   }
 }
