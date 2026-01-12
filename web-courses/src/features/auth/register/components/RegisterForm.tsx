@@ -5,20 +5,20 @@ import { RegisterFormView } from "./RegisterFormView"
 
 export function RegisterForm() {
   const {
-    formData,
-    errors,
-    isLoading,
-    handleChange,
+    register,
     handleSubmit,
+    errors,
+    serverError,
+    isLoading,
     handleGoogleRegister,
   } = useRegisterForm()
 
   return (
     <RegisterFormView
-      formData={formData}
+      register={register}
       errors={errors}
+      serverError={serverError}
       isLoading={isLoading}
-      onFieldChange={handleChange}
       onSubmit={handleSubmit}
       onGoogleRegister={handleGoogleRegister}
     />

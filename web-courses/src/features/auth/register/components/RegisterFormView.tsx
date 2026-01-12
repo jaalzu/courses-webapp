@@ -3,30 +3,26 @@
 import Image from 'next/image'
 import { Button, Input } from "@/shared/ui"
 import { LockIcon, EnvelopeIcon } from "../../shared/icons/Icons"
+import type { UseFormRegister, FieldErrors } from "react-hook-form"
+import type { RegisterFormData } from "@/features/auth/lib/schemas"
 
-
-interface RegisterFormUIProps {
-  formData: {
-    name: string
-    email: string
-    password: string
-    confirmPassword: string
-  }
-  errors: Record<string, string>
+interface RegisterFormViewProps {
+  register: UseFormRegister<RegisterFormData>
+  errors: FieldErrors<RegisterFormData>
+  serverError?: string
   isLoading: boolean
-  onFieldChange: (field: keyof RegisterFormUIProps['formData'], value: string) => void
   onSubmit: (e: React.FormEvent) => void
   onGoogleRegister: () => void
 }
 
 export function RegisterFormView({
-  formData,
+  register,
   errors,
+  serverError,
   isLoading,
-  onFieldChange,
   onSubmit,
   onGoogleRegister,
-}: RegisterFormUIProps) {
+}: RegisterFormViewProps) {
   return (
     <div className="w-full max-w-sm space-y-6 animate-in fade-in duration-500">
       <header className="text-center space-y-1">
@@ -40,6 +36,7 @@ export function RegisterFormView({
         className="w-full flex items-center justify-center gap-3 bg-black text-white hover:bg-gray-800 hover:text-white border-black transition-all active:scale-95"
         onClick={onGoogleRegister}
         disabled={isLoading}
+        type="button"
       >
         <Image src="/icons/svg/google-icon.svg" alt="Google" width={18} height={18} />
         <span className="text-lg font-medium">Registrarse con Google</span>
@@ -56,9 +53,9 @@ export function RegisterFormView({
         </div>
       </div>
 
-      {errors.form && (
+      {serverError && (
         <div className="bg-red-50 border border-red-100 text-red-600 px-4 py-2.5 rounded-xl text-xs font-medium text-center">
-          {errors.form}
+          {serverError}
         </div>
       )}
 
@@ -74,14 +71,13 @@ export function RegisterFormView({
               className={`pl-8 rounded-xl h-11 transition-all ${
                 errors.name ? 'border-red-500 ring-red-100' : 'focus:border-black'
               }`}
-              value={formData.name}
-              onChange={(e) => onFieldChange('name', e.target.value)}
               disabled={isLoading}
+              {...register("name")}
             />
           </div>
           {errors.name && (
             <p className="text-[10px] text-red-500 font-bold ml-2">
-              {errors.name}
+              {errors.name.message}
             </p>
           )}
         </div>
@@ -96,14 +92,13 @@ export function RegisterFormView({
               className={`pl-10 rounded-xl h-11 transition-all ${
                 errors.email ? 'border-red-500' : 'focus:border-black'
               }`}
-              value={formData.email}
-              onChange={(e) => onFieldChange('email', e.target.value)}
               disabled={isLoading}
+              {...register("email")}
             />
           </div>
           {errors.email && (
             <p className="text-[10px] text-red-500 font-bold ml-2">
-              {errors.email}
+              {errors.email.message}
             </p>
           )}
         </div>
@@ -119,14 +114,13 @@ export function RegisterFormView({
                 className={`pl-9 rounded-xl h-11 text-xs ${
                   errors.password ? 'border-red-500' : 'focus:border-black'
                 }`}
-                value={formData.password}
-                onChange={(e) => onFieldChange('password', e.target.value)}
                 disabled={isLoading}
+                {...register("password")}
               />
             </div>
             {errors.password && (
               <p className="text-[10px] text-red-500 font-bold ml-2">
-                {errors.password}
+                {errors.password.message}
               </p>
             )}
           </div>
@@ -139,14 +133,13 @@ export function RegisterFormView({
                 className={`pl-4 rounded-xl h-11 text-xs ${
                   errors.confirmPassword ? 'border-red-500' : 'focus:border-black'
                 }`}
-                value={formData.confirmPassword}
-                onChange={(e) => onFieldChange('confirmPassword', e.target.value)}
                 disabled={isLoading}
+                {...register("confirmPassword")}
               />
             </div>
             {errors.confirmPassword && (
               <p className="text-[10px] text-red-500 font-bold ml-2">
-                {errors.confirmPassword}
+                {errors.confirmPassword.message}
               </p>
             )}
           </div>
