@@ -1,8 +1,5 @@
 import type { LessonProgress } from '../types'
 
-/**
- * Verifica si una lección está completada
- */
 export function isLessonCompleted(
   progress: LessonProgress[],
   userId: string,
@@ -18,15 +15,12 @@ export function isLessonCompleted(
   )
 }
 
-/**
- * Obtiene el progreso de un curso específico
- */
+
 export function getCourseProgress(
   progress: LessonProgress[],
   userId: string,
   courseId: string
 ): LessonProgress[] {
-  // 🚩 BORRAMOS el parseInt. Ya no necesitamos normalizar nada.
   return progress.filter(
     p =>
       p.userId === userId &&
@@ -35,9 +29,7 @@ export function getCourseProgress(
   )
 }
 
-/**
- * Cuenta lecciones completadas
- */
+
 export function getCompletedLessonsCount(
   progress: LessonProgress[],
   userId: string,
@@ -48,7 +40,6 @@ export function getCompletedLessonsCount(
   )
 
   if (courseId !== undefined) {
-    //  Comparamos string con string directamente
     return userProgress.filter(p => p.courseId === courseId).length
   }
 

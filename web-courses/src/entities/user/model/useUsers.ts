@@ -10,11 +10,9 @@ export function useUsers(autoFetch = false) {
   const { 
     setUsers, 
     setLoading, 
-    setError, 
-    updateUserInState 
+    setError 
   } = useUserStore()
 
-  // --- FETCH DE USUARIOS ---
   const fetchUsers = useCallback(async () => {
     setLoading(true)
     setError(null)
@@ -29,35 +27,16 @@ export function useUsers(autoFetch = false) {
     }
   }, [setUsers, setLoading, setError])
 
-  // --- AUTO-FETCH (Para Metrics) ---
   useEffect(() => {
     if (autoFetch && users.length === 0) {
       fetchUsers()
     }
   }, [autoFetch, fetchUsers, users.length])
 
-  // --- ACCIONES ---
-  const updateUserRole = useCallback(async (userId: string, newRole: 'admin' | 'student') => {
-    setLoading(true)
-    setError(null)
-
-    try {
-      await usersApi.updateRole(userId, newRole)
-      // optimistic updatee en el store de Zustand
-      updateUserInState(userId, { role: newRole })
-    } catch (err: any) {
-      setError(err.message)
-      throw err
-    } finally {
-      setLoading(false)
-    }
-  }, [updateUserInState, setLoading, setError])
-
   return {
     users,
     isLoading,
     error,
-    fetchUsers,
-    updateUserRole
+    fetchUsers
   }
 }
