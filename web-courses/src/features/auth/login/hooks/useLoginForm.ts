@@ -34,8 +34,6 @@ export function useLoginForm() {
     } catch (err: any) {
       const errorMsg = getAuthErrorMessage(err)
       
-      // Si el error es de credenciales incorrectas, no asignarlo a un campo específico
-      // Mostrarlo como error general
       setServerError(errorMsg)
     }
   }

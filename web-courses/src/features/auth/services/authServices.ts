@@ -47,38 +47,30 @@ export const authService = {
    * Obtener usuario actual
    */
   getCurrentUser: async (): Promise<User | null> => {
-    // 1. Verificar que hay sesión activa
     const { data: authData } = await authQueries.getCurrentUser();
     if (!authData) return null;
 
-    // 2. Obtener perfil completo
     const { data: profile, error } = await profileQueries.getById(authData.id);
     if (error || !profile) return null;
 
-    // 3. Mapear y retornar
     return mapProfileToUser(profile);
   },
 
   /**
    * Actualizar perfil del usuario
    */
-  // authServices.ts
 
 updateProfile: async (userId: string, updates: Partial<User>) => {
-  // 1. Actualiza la tabla profiles (Lo que ya funciona)
   const supabaseUpdates = mapUserToProfileUpdate(updates);
   const { data, error } = await profileQueries.update(userId, supabaseUpdates);
   if (error) throw error;
 
-  // 2. 🔥 ESTO ES LO QUE TE FALTA:
-  // Actualizamos la metadata del AUTH de Supabase para que coincida con la DB
   const { error: authError } = await supabase.auth.updateUser({
     data: { name: updates.name }
   });
 
   if (authError) console.error("Error actualizando sesión:", authError.message);
 
-  // 3. Retornamos el perfil de la DB
   return mapProfileToUser(data);
 },
 

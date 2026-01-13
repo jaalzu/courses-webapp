@@ -1,4 +1,3 @@
-// useEditCourseFlow.ts
 import { useState } from "react"
 import type { Course } from "@/entities/course/types"
 import { useCourses } from '@/entities/course/model/useCourses'
