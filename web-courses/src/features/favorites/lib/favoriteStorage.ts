@@ -1,4 +1,3 @@
-// lib/favoriteStorage.ts
 const STORAGE_KEY = 'favorites';
 const FAVORITES_EVENT = 'favoritesChanged';
 
@@ -28,7 +27,6 @@ const saveToStorage = (favs: string[]): void => {
   window.dispatchEvent(new Event(FAVORITES_EVENT));
 };
 
-//  API pública limpia
 export const localStorageFavorites: FavoritesStorage = {
   get: getFromStorage,
 

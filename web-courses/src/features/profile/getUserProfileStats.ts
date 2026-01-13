@@ -1,4 +1,3 @@
-import type { User } from "@/entities/user/model/types"
 import type { Course } from "@/entities/course/types"
 import type { LessonProgress } from "@/entities/progress/types"
 import { getCourseStats } from "@/entities/progress"
@@ -18,55 +17,53 @@ export function getUserProfileStats({
   courses,
   progress,
 }: GetUserProfileStatsParams) {
-  if (!courses || !Array.isArray(courses)) {
-    return { courseStats: [] }
+  // Guard Clause: Si no hay cursos, evitamos cálculos innecesarios
+  if (!courses || !Array.isArray(courses) || courses.length === 0) {
+    return {
+      userName: user.name,
+      email: user.email,
+      totalCourses: 0,
+      completedCourses: 0,
+      inProgressCourses: 0,
+      completedLessons: 0,
+      totalLessons: 0,
+      progressPercentage: 0,
+    }
   }
 
-  // Calcular stats por cada curso
-  const courseStats = courses.map(course =>
-    getCourseStats(course, progress, user.id)
-  )
+  // Variables acumuladoras (Single Pass)
+  let completedCourses = 0
+  let inProgressCourses = 0
+  let completedLessons = 0
+  let totalLessons = 0
 
-  const totalCourses = courses.length
+  // Recorremos una sola vez para calcular todo
+  courses.forEach(course => {
+    const stat = getCourseStats(course, progress, user.id)
+    
+    completedLessons += stat.completedLessons
+    totalLessons += stat.totalLessons
 
-  const completedCourses = courseStats.filter(
-    stat => stat.isCompleted
-  ).length
+    if (stat.isCompleted) {
+      completedCourses++
+    } else if (stat.completedLessons > 0) {
+      inProgressCourses++
+    }
+  })
 
-  const inProgressCourses = courseStats.filter(
-    stat => !stat.isCompleted && stat.completedLessons > 0
-  ).length
-
-  const completedLessons = courseStats.reduce(
-    (acc, stat) => acc + stat.completedLessons,
-    0
-  )
-
-  const totalLessons = courseStats.reduce(
-    (acc, stat) => acc + stat.totalLessons,
-    0
-  )
-
-  const progressPercentage =
-    totalLessons === 0
-      ? 0
-      : Math.round((completedLessons / totalLessons) * 100)
+  // Cálculo del porcentaje global
+  const progressPercentage = totalLessons === 0
+    ? 0
+    : Math.round((completedLessons / totalLessons) * 100)
 
   return {
-    // info básica
     userName: user.name,
     email: user.email,
-
-    // cursos
-    totalCourses,
+    totalCourses: courses.length,
     completedCourses,
     inProgressCourses,
-
-    // lecciones
     completedLessons,
     totalLessons,
-
-    // progreso global
     progressPercentage,
   }
 }

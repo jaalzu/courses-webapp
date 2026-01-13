@@ -1,9 +1,13 @@
-// lib/supabaseFavorites.ts
 import { supabase } from '@/shared/lib/supabase/client';
 
 // Cache global fuera de la función para que no se resetee al re-renderizar
 let globalCache: string[] = [];
 let isInitialLoaded = false;
+
+export const __resetFavoritesInternalState = () => {
+  globalCache = [];
+  isInitialLoaded = false;
+};
 
 export const supabaseFavorites = (userId: string) => {
   const FAVORITES_EVENT = `supabaseFavoritesChanged_${userId}`;

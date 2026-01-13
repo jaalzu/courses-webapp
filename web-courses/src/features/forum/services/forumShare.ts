@@ -1,5 +1,3 @@
-// forumShare.service.ts
-
 import { ForumPost, ForumComment } from '@/entities/forum-post'
 
 interface SharePayload {
@@ -27,9 +25,7 @@ const share = async ({ title, text }: SharePayload) => {
   }
 }
 
-/**
- * Compartir un post
- */
+
 export const handleSharePost = (post: ForumPost) => {
   return share({
     title: `Publicación de ${post.userName}`,
@@ -37,9 +33,7 @@ export const handleSharePost = (post: ForumPost) => {
   })
 }
 
-/**
- * Compartir un comentario
- */
+
 export const handleShareComment = (
   comment: ForumComment,
   post: ForumPost

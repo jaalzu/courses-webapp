@@ -1,5 +1,3 @@
-// forumHelpers.ts
-
 /**
  * Formatea una fecha en formato relativo:
  * - "Justo ahora"

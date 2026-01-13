@@ -1,4 +1,3 @@
-// @/features/forum/model/useForum.ts
 import { useState, useEffect, useCallback } from 'react';
 import { ForumPost } from '@/entities/forum-post';
 import { forumQueries } from '@/shared/lib/supabase/queries/forum';
@@ -28,7 +27,6 @@ export const useForum = (courseId: string) => {
   }, [loadPosts]);
 
   const createPost = async (content: string, userId: string, notify?: NotifyFn) => {
-    // Rate limiting
     const rateLimitKey = `forum-post:${userId}`;
     const { allowed, retryAfter } = rateLimiter.canProceed(rateLimitKey, RATE_LIMITS.FORUM_POST);
 
@@ -38,35 +36,22 @@ export const useForum = (courseId: string) => {
     }
 
     try {
-      const { data, error } = await forumQueries.createPost(
-        courseId,
-        userId,
-        content
-      );
+      const { data, error } = await forumQueries.createPost(courseId, userId, content);
       
-      if (error) {
-        console.error('Error desde forumQueries.createPost:', error);
-        notify?.(error.message || 'Error al crear publicación', 'error');
+      if (error || !data) {
+        notify?.(error?.message || 'Error al crear publicación', 'error');
         return;
       }
       
-      if (!data) {
-        console.error('No se recibió data de createPost');
-        notify?.('No se pudo crear la publicación', 'error');
-        return;
-      }
-      
-      setPosts([data, ...posts]);
+      setPosts(prevPosts => [data, ...prevPosts]);
       notify?.('Publicación creada exitosamente', 'success');
       
     } catch (error: any) {
-      console.error('Error en createPost (catch):', error);
       notify?.('Error inesperado al crear publicación', 'error');
     }
   };
 
   const addComment = async (postId: string, content: string, userId: string, notify?: NotifyFn) => {
-    // Rate limiting
     const rateLimitKey = `forum-comment:${userId}`;
     const { allowed, retryAfter } = rateLimiter.canProceed(rateLimitKey, RATE_LIMITS.FORUM_COMMENT);
 
@@ -76,32 +61,20 @@ export const useForum = (courseId: string) => {
     }
 
     try {
-      const { data, error } = await forumQueries.createComment(
-        postId,
-        userId,
-        content
-      );
+      const { data, error } = await forumQueries.createComment(postId, userId, content);
 
-      if (error) {
-        console.error('Error desde forumQueries.createComment:', error);
-        notify?.(error.message || 'Error al agregar comentario', 'error');
+      if (error || !data) {
+        notify?.(error?.message || 'Error al agregar comentario', 'error');
         return;
       }
 
-      if (!data) {
-        console.error('No se recibió data de createComment');
-        notify?.('No se pudo crear el comentario', 'error');
-        return;
-      }
-
-      setPosts(posts.map(p =>
+      setPosts(prevPosts => prevPosts.map(p =>
         p.id === postId
           ? { ...p, comments: [...p.comments, data] }
           : p
       ));
       
     } catch (error: any) {
-      console.error('Error en addComment (catch):', error);
       notify?.('Error inesperado al agregar comentario', 'error');
     }
   };
@@ -111,12 +84,11 @@ export const useForum = (courseId: string) => {
       const { error } = await forumQueries.deleteComment(commentId);
       
       if (error) {
-        console.error('Error desde forumQueries.deleteComment:', error);
         notify?.(error.message || 'Error al eliminar comentario', 'error');
         return;
       }
 
-      setPosts(posts.map(p =>
+      setPosts(prevPosts => prevPosts.map(p =>
         p.id === postId
           ? { ...p, comments: p.comments.filter(c => c.id !== commentId) }
           : p
@@ -124,7 +96,6 @@ export const useForum = (courseId: string) => {
       notify?.('Comentario eliminado', 'success');
       
     } catch (error: any) {
-      console.error('Error en deleteComment (catch):', error);
       notify?.('Error inesperado al eliminar comentario', 'error');
     }
   };
@@ -134,26 +105,17 @@ export const useForum = (courseId: string) => {
       const { error } = await forumQueries.deletePost(postId);
       
       if (error) {
-        console.error('Error desde forumQueries.deletePost:', error);
         notify?.(error.message || 'Error al eliminar publicación', 'error');
         return;
       }
 
-      setPosts(posts.filter(p => p.id !== postId));
+      setPosts(prevPosts => prevPosts.filter(p => p.id !== postId));
       notify?.('Publicación eliminada', 'success');
       
     } catch (error: any) {
-      console.error('Error en deletePost (catch):', error);
       notify?.('Error inesperado al eliminar publicación', 'error');
     }
   };
 
-  return {
-    posts,
-    loading,
-    createPost,
-    addComment,
-    deleteComment,
-    deletePost
-  };
+  return { posts, loading, createPost, addComment, deleteComment, deletePost };
 };

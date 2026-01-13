@@ -10,27 +10,23 @@ export function useFavoriteIds() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // 1. Decidir qué storage usar
     const storage = currentUser?.id 
       ? supabaseFavorites(currentUser.id) 
       : localStorageFavorites;
 
-    // 2. Función para sincronizar el estado de React con el "cache" del storage
     const sync = () => {
       setFavorites([...storage.get()]);
       setIsLoading(false);
     };
 
-    // 3. Sincronización inicial
     sync();
 
-    // 4. Suscribirse a cambios (y que el storage se encargue de avisar cuando cargue de la DB)
     const unsubscribe = storage.subscribe(sync);
 
     return () => {
       unsubscribe();
     };
-  }, [currentUser?.id]); // Si el usuario cambia, reiniciamos el flujo
+  }, [currentUser?.id]); 
 
   const toggleFavorite = async (id: string) => {
     const storage = currentUser?.id 

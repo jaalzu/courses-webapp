@@ -1,4 +1,3 @@
-// features/metrics/lib/deriveMetrics.ts
 import type { User } from '@/entities/user/model/types'
 import type { Course } from '@/entities/course/types'
 import type { LessonProgress } from '@/entities/progress/types'
@@ -10,7 +9,6 @@ interface DeriveMetricsInput {
 }
 
 export function deriveMetrics({ users, courses, progress }: DeriveMetricsInput) {
-  // 1. INDEXACIÓN (Optimización clave)
   // Agrupamos el progreso por userId de una sola vez para evitar .filter() constantes
   const progressByUser: Record<string, LessonProgress[]> = {}
   progress.forEach(p => {
@@ -18,13 +16,11 @@ export function deriveMetrics({ users, courses, progress }: DeriveMetricsInput) 
     progressByUser[p.userId].push(p)
   })
 
-  // 2. STATS BÁSICAS
   const totalUsers = users.length
   const admins = users.filter(u => u.role === 'admin').length
   const students = totalUsers - admins
   const totalCourses = courses.length
 
-  // 3. MAPEO DE USUARIOS CON PROGRESO
   const usersWithProgress = users.map(user => {
     const userProgress = progressByUser[user.id] || []
     
@@ -44,13 +40,12 @@ export function deriveMetrics({ users, courses, progress }: DeriveMetricsInput) 
       email: user.email,
       role: user.role,
       createdAt: user.createdAt,
-      completedCoursesCount: completedCourses.length, // Solo guardamos el número para no saturar memoria
+      completedCoursesCount: completedCourses.length, 
       totalLessonsCompleted: completedIds.size,
       totalLessonsInProgress: userProgress.length
     }
   })
 
-  // 4. CURSOS POPULARES (Reutilizamos la lógica eficiente)
   // Contamos cuántas veces aparece cada curso como completado
   const courseCompletionMap: Record<string, number> = {}
   
