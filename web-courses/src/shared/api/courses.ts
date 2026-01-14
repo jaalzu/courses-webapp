@@ -1,4 +1,3 @@
-// shared/api/courses.ts
 import { courseQueries } from '@/shared/lib/supabase/queries/courses'
 import { lessonQueries } from '@/shared/lib/supabase/queries/lessons'
 import type { Course } from '@/entities/course/types'
@@ -65,3 +64,6 @@ function mapCourseToDb(updates: Partial<Course>) {
   
   return dbUpdates
 }
+
+
+// api service layer
