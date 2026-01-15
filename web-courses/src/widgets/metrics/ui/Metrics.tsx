@@ -7,14 +7,14 @@ import { useUsers } from '@/entities/user/model/useUsers'
 import { useCourses } from '@/entities/course/model/useCourses'
 import { useAllProgress } from '@/entities/progress/model/useProgressQueries'
 
-// Componentes
-import { MetricsSkeleton } from './MetricsSkeleton'
-import { StatsCard } from './StatsCard'
-import { UserProgressTable } from './UserProgressTable'
-import { PopularCourses } from './PopularCourses'
+// Features - Componentes de UI
+import { MetricsSkeleton } from '@/features/metrics/ui/MetricsSkeleton'
+import { StatsCard } from '@/features/metrics/ui/StatsCard'
+import { UserProgressTable } from '@/features/metrics/ui/UserProgressTable'
+import { PopularCourses } from '@/features/metrics/ui/PopularCourses'
 
 // Helpers
-import { deriveMetrics } from '../lib/deriveMetrics'
+import { deriveMetrics } from '@/features/metrics/lib/deriveMetrics'
 
 export function Metrics() {
   
@@ -49,7 +49,7 @@ export function Metrics() {
 
   const isLoading = usersLoading || progressLoading || coursesLoading
 
-  // Función de actualización manual mejoradaaaa
+  // Función de actualización manual
   const handleRefresh = async () => {
     await Promise.all([
       fetchUsers(),

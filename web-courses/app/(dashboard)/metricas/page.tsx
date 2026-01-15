@@ -1,5 +1,5 @@
 // app/metrics/page.tsx
-import { Metrics } from '@/features/metrics'
+import { Metrics } from '@/widgets/metrics/ui/Metrics'
 import { AdminGuard } from '@/features/admin/AdminGuard'
 
 export const dynamic = 'force-dynamic'
