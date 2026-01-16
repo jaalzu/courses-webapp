@@ -8,93 +8,52 @@ Este documento describe el modelo de datos inicial de la plataforma **JavaCourse
 ---
 
 
-## Diagrama de Relaciones (Esquema General)
 ## Diagrama de Relaciones (ERD Simplificado)
+erDiagram
+    "auth.users" ||--|| profiles : "id (uuid)"
+    profiles ||--o{ forum_posts : "crea"
+    profiles ||--o{ forum_comments : "comenta"
+    profiles ||--o{ favorites : "marca"
+    profiles ||--o{ user_progress : "registra"
+    
+    courses ||--o{ lessons : "contiene"
+    courses ||--o{ forum_posts : "categoriza"
+    courses ||--o{ favorites : "es marcado"
+    courses ||--o{ user_progress : "seguimiento"
+    
+    lessons ||--o{ user_progress : "completada en"
+    forum_posts ||--o{ forum_comments : "contiene"
 
-┌─────────────────────┐
-│     auth.users      │
-├─────────────────────┤
-│ id (uuid)           │
-│ email               │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│      profiles       │
-├─────────────────────┤
-│ id (uuid, PK/FK)    │
-│ email               │
-│ name                │
-│ avatar_url          │
-│ bio                 │
-│ role                │
-│ created_at          │
-│ updated_at          │
-└───────┬───────┬─────┘
-        │       │
-        │       │
-        │       ▼
-        │   ┌─────────────────────┐
-        │   │    forum_posts      │
-        │   ├─────────────────────┤
-        │   │ id                  │
-        │   │ user_id             │
-        │   │ course_id           │
-        │   │ lesson_id           │
-        │   │ title               │
-        │   │ content             │
-        │   │ is_pinned           │
-        │   │ created_at          │
-        │   │ updated_at          │
-        │   └─────────┬───────────┘
-        │             │
-        │             ▼
-        │   ┌─────────────────────┐
-        │   │  forum_comments     │
-        │   ├─────────────────────┤
-        │   │ id                  │
-        │   │ post_id             │
-        │   │ user_id             │
-        │   │ content             │
-        │   │ created_at          │
-        │   │ updated_at          │
-        │   └─────────────────────┘
-        │
-        │
-        ▼
-┌─────────────────────┐        ┌─────────────────────┐
-│      favorites      │        │    user_progress    │
-├─────────────────────┤        ├─────────────────────┤
-│ id                  │        │ id                  │
-│ user_id             │        │ user_id             │
-│ course_id           │◄───────│ course_id           │
-│ created_at          │        │ lesson_id           │
-└─────────────────────┘        │ status              │
-                               │ completed_at        │
-                               │ created_at          │
-                               │ updated_at          │
-                               └─────────┬───────────┘
-                                         │
-                                         ▼
-┌─────────────────────┐        ┌─────────────────────┐
-│       courses       │        │       lessons       │
-├─────────────────────┤        ├─────────────────────┤
-│ id                  │◄───────│ id                  │
-│ title               │        │ course_id           │
-│ description         │        │ title               │
-│ instructor          │        │ description         │
-│ thumbnail_url       │        │ content             │
-│ difficulty          │        │ video_url           │
-│ duration            │        │ duration            │
-│ category            │        │ order_index         │
-│ tags[]              │        │ is_published        │
-│ key_points[]        │        │ created_at          │
-│ is_published        │        │ updated_at          │
-│ created_at          │        └─────────────────────┘
-│ updated_at          │
-└─────────────────────┘
+    profiles {
+        uuid id PK
+        string email
+        string name
+        string avatar_url
+        string bio
+        string role
+    }
 
+    forum_posts {
+        int id PK
+        uuid user_id FK
+        int course_id FK
+        string title
+        text content
+    }
 
+    courses {
+        int id PK
+        string title
+        string instructor
+        string difficulty
+    }
+
+    lessons {
+        int id PK
+        int course_id FK
+        string title
+        text content
+    }
 ---
 
 ## Visión General
@@ -276,6 +235,12 @@ Comentarios asociados a un post del foro.
 
 ---
 
+## Roles y Permisos
+
+
+
+
+
 ## Consideraciones de Diseño
 
 - El modelo prioriza **acceso controlado al contenido**.
@@ -284,3 +249,6 @@ Comentarios asociados a un post del foro.
 - El uso de UUIDs permite escalabilidad y distribución futura.
 
 ---
+
+
+
