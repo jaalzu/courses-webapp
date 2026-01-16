@@ -90,20 +90,18 @@ export function Metrics() {
         </div>
 
         {/* TABLES & LISTS */}
-        <div className="space-y-8">
-          <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-1 shadow-sm">
-            <PopularCourses courses={metrics.popularCourses} />
-          </div>
+       <div className="space-y-8">
+  <PopularCourses courses={metrics.popularCourses} />
 
-          <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden">
-             <div className="p-6 border-b border-gray-100 dark:border-gray-800">
-               <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">
-                 Progreso Detallado
-               </h2>
-             </div>
-             <UserProgressTable users={metrics.usersWithProgress} />
-          </div>
-        </div>
+  <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden">
+    <div className="p-6 border-b border-gray-100 dark:border-gray-800">
+      <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+        Progreso Detallado
+      </h2>
+    </div>
+    <UserProgressTable users={metrics.usersWithProgress} />
+  </div>
+</div>
 
       </div>
     </div>

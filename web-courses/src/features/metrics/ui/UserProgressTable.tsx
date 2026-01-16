@@ -1,5 +1,7 @@
 'use client'
 
+import { RoleToggleButton } from '@/features/manage-user-role/ui/RoleToggleButton'
+
 // 1. Types
 interface UserWithProgress {
   id: string
@@ -25,8 +27,65 @@ export function UserProgressTable({ users }: UserProgressTableProps) {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
-      <div className="overflow-x-auto">
+    <>
+      {/* VISTA MÓVIL - Cards */}
+      <div className="md:hidden space-y-3 p-4">
+        {users.map(user => (
+          <div 
+            key={user.id} 
+            className="bg-white dark:bg-gray-900 rounded-md overflow-hidden border shadow-sm hover:shadow-md transition-shadow"
+          >
+            <div className="p-4 flex flex-col gap-4">
+              {/* Header con nombre y rol */}
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 truncate">
+                    {user.name}
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 font-mono truncate mt-1">
+                    {user.email}
+                  </p>
+                </div>
+                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase whitespace-nowrap ${getRoleStyles(user.role)}`}>
+                  {user.role}
+                </span>
+              </div>
+
+              {/* Stats Grid */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-gray-50 dark:bg-gray-800 rounded-md p-3 border border-gray-100 dark:border-gray-700">
+                  <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
+                    Cursos Completos
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                    {user.completedCoursesCount}
+                  </p>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-800 rounded-md p-3 border border-gray-100 dark:border-gray-700">
+                  <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
+                    Lecciones Totales
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                    {user.totalLessonsCompleted}
+                  </p>
+                </div>
+              </div>
+
+              {/* Action Button */}
+              <div className="pt-2 border-t border-gray-100 dark:border-gray-800">
+                <RoleToggleButton 
+                  userId={user.id}
+                  userName={user.name}
+                  currentRole={user.role as 'admin' | 'student'}
+                />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* VISTA DESKTOP - Tabla */}
+      <div className="hidden md:block overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead className="bg-gray-50/50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800">
             <tr className="text-gray-500 dark:text-gray-400">
@@ -34,6 +93,7 @@ export function UserProgressTable({ users }: UserProgressTableProps) {
               <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider">Rol</th>
               <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-center">Cursos Completos</th>
               <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-right">Lecciones Totales</th>
+              <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-center">Acciones</th>
             </tr>
           </thead>
           
@@ -64,11 +124,21 @@ export function UserProgressTable({ users }: UserProgressTableProps) {
                     {user.totalLessonsCompleted} lecciones
                   </span>
                 </td>
+
+                <td className="px-6 py-4">
+                  <div className="flex justify-center">
+                    <RoleToggleButton 
+                      userId={user.id}
+                      userName={user.name}
+                      currentRole={user.role as 'admin' | 'student'}
+                    />
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-    </div>
+    </>
   )
 }

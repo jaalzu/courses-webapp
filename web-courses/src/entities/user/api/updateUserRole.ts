@@ -13,10 +13,6 @@ interface UpdateRoleResult {
   error?: string
 }
 
-/**
- * Actualiza el rol de un usuario en Supabase
- * Solo debe ser llamado por usuarios con rol 'admin'
- */
 export async function updateUserRole(
   params: UpdateRoleParams
 ): Promise<UpdateRoleResult> {
@@ -32,7 +28,7 @@ export async function updateUserRole(
 
     // 2. Obtener rol del usuario actual
     const { data: currentUserData, error: userError } = await supabase
-      .from('users')
+      .from('profiles')  // ← CAMBIO AQUÍ
       .select('role')
       .eq('id', currentUser.user.id)
       .single()
@@ -48,7 +44,7 @@ export async function updateUserRole(
 
     // 4. Actualizar el rol del usuario objetivo
     const { error: updateError } = await supabase
-      .from('users')
+      .from('profiles')  // ← CAMBIO AQUÍ
       .update({ role: params.newRole })
       .eq('id', params.userId)
 

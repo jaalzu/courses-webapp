@@ -1,8 +1,7 @@
-// entities/user/model/useUpdateUserRole.ts
 'use client'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { updateUserRole, type UserRole } from '../api/updateUserRole'
+import { type UserRole } from '../api/updateUserRole'
 import { toast } from 'sonner'
 
 interface UpdateRoleVariables {
@@ -15,7 +14,6 @@ export function useUpdateUserRole() {
 
   return useMutation({
     mutationFn: async ({ userId, newRole }: UpdateRoleVariables) => {
-      // Llamar a Server Action
       const response = await fetch('/api/users/update-role', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

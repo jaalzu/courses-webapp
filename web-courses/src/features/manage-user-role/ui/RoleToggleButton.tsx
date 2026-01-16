@@ -1,4 +1,3 @@
-// features/manage-user-role/ui/RoleToggleButton.tsx
 'use client'
 
 import { useState } from 'react'
@@ -18,8 +17,8 @@ export function RoleToggleButton({ userId, userName, currentRole }: RoleToggleBu
   
   const buttonText = currentRole === 'admin' ? 'Cambiar a Estudiante' : 'Promover a Admin'
   const buttonColor = currentRole === 'admin' 
-    ? 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700' 
-    : 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30'
+    ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800' 
+    : 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100'
 
   return (
     <>
