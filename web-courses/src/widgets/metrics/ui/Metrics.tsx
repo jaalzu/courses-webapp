@@ -49,14 +49,7 @@ export function Metrics() {
 
   const isLoading = usersLoading || progressLoading || coursesLoading
 
-  // Función de actualización manual
-  const handleRefresh = async () => {
-    await Promise.all([
-      fetchUsers(),
-      refetchProgress(), 
-      refetchCourses()
-    ])
-  }
+ 
 
   if (isLoading) return <MetricsSkeleton />
 
@@ -74,12 +67,7 @@ export function Metrics() {
               Panel de administración y estadísticas en tiempo real
             </p>
           </div>
-          <button 
-            onClick={handleRefresh}
-            className="px-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-sm font-semibold text-blue-600 dark:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all shadow-sm active:scale-95"
-          >
-            Actualizar datos
-          </button>
+          
         </div>
 
         {/* STATS CARDS GRID */}
@@ -96,7 +84,7 @@ export function Metrics() {
   <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden">
     <div className="p-6 border-b border-gray-100 dark:border-gray-800">
       <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">
-        Progreso Detallado
+        Gestión de Usuarios
       </h2>
     </div>
     <UserProgressTable users={metrics.usersWithProgress} />

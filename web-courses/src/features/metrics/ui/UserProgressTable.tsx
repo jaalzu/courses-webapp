@@ -39,12 +39,18 @@ export function UserProgressTable({ users }: UserProgressTableProps) {
               {/* Header con nombre y rol */}
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 truncate">
-                    {user.name}
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 font-mono truncate mt-1">
-                    {user.email}
-                  </p>
+                  <div className="mb-0.5">
+                    <span className="text-xs text-gray-500 dark:text-gray-400">Usuario: </span>
+                    <span className="text-lg font-semibold text-gray-600 dark:text-gray-300">
+                      {user.name}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">Correo: </span>
+                    <span className="text-sm text-gray-600 dark:text-gray-300 font-mono">
+                      {user.email}
+                    </span>
+                  </div>
                 </div>
                 <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase whitespace-nowrap ${getRoleStyles(user.role)}`}>
                   {user.role}
@@ -72,13 +78,11 @@ export function UserProgressTable({ users }: UserProgressTableProps) {
               </div>
 
               {/* Action Button */}
-              <div className="pt-2 border-t border-gray-100 dark:border-gray-800">
-                <RoleToggleButton 
-                  userId={user.id}
-                  userName={user.name}
-                  currentRole={user.role as 'admin' | 'student'}
-                />
-              </div>
+              <RoleToggleButton 
+                userId={user.id}
+                userName={user.name}
+                currentRole={user.role as 'admin' | 'student'}
+              />
             </div>
           </div>
         ))}
@@ -102,8 +106,8 @@ export function UserProgressTable({ users }: UserProgressTableProps) {
               <tr key={user.id} className="hover:bg-gray-50/80 dark:hover:bg-gray-800/30 transition-colors">
                 <td className="px-6 py-4">
                   <div className="flex flex-col">
-                    <span className="font-semibold text-gray-900 dark:text-gray-100">{user.name}</span>
-                    <span className="text-xs text-gray-500 font-mono">{user.email}</span>
+                    <span className="font-semibold text-gray-600 dark:text-gray-300">{user.name}</span>
+                    <span className="text-xs text-gray-600 dark:text-gray-300 font-mono">{user.email}</span>
                   </div>
                 </td>
                 

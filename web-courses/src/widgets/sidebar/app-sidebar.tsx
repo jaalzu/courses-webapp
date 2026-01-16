@@ -41,17 +41,17 @@ const items = [
      url: "/favoritos",
       icon: HeartIcon 
     },
-  {
-     title: "FAQS",
-      url: "/faqs",
-       icon: QuestionMarkCircleIcon
-  },
-  { 
-    title: "Metricas", 
-    url: "/metricas", 
-    icon: PresentationChartBarIcon, 
-    isAdmin: true 
-  },
+    { 
+      title: "Metricas", 
+      url: "/metricas", 
+      icon: PresentationChartBarIcon, 
+      isAdmin: true 
+    },
+    {
+       title: "FAQS",
+        url: "/faqs",
+         icon: QuestionMarkCircleIcon
+    },
 ]
 
 export function AppSidebar() {
