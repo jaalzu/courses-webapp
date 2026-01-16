@@ -9,82 +9,90 @@ Este documento describe el modelo de datos inicial de la plataforma **JavaCourse
 
 
 ## Diagrama de Relaciones (Esquema General)
+## Diagrama de Relaciones (ERD Simplificado)
 
-auth.users
-└── id (uuid)
-    │
-    └── profiles
-        ├── id (uuid, PK, FK → auth.users.id)
-        ├── email (text)
-        ├── name (text)
-        ├── avatar_url (text)
-        ├── bio (text)
-        ├── role (text)
-        ├── created_at (timestamptz)
-        └── updated_at (timestamptz)
-            │
-            ├── forum_posts
-            │   ├── id (uuid)
-            │   ├── course_id (uuid, FK → courses.id)
-            │   ├── lesson_id (uuid, FK → lessons.id)
-            │   ├── user_id (uuid, FK → profiles.id)
-            │   ├── title (text)
-            │   ├── content (text)
-            │   ├── is_pinned (boolean)
-            │   ├── created_at (timestamptz)
-            │   └── updated_at (timestamptz)
-            │       │
-            │       └── forum_comments
-            │           ├── id (uuid)
-            │           ├── post_id (uuid, FK → forum_posts.id)
-            │           ├── user_id (uuid, FK → profiles.id)
-            │           ├── content (text)
-            │           ├── created_at (timestamptz)
-            │           └── updated_at (timestamptz)
-            │
-            ├── favorites
-            │   ├── id (uuid)
-            │   ├── user_id (uuid, FK → auth.users.id)
-            │   ├── course_id (uuid, FK → courses.id)
-            │   └── created_at (timestamptz)
-            │
-            └── user_progress
-                ├── id (uuid)
-                ├── user_id (uuid, FK → auth.users.id)
-                ├── course_id (uuid, FK → courses.id)
-                ├── lesson_id (uuid, FK → lessons.id)
-                ├── status (text)
-                ├── completed_at (timestamptz)
-                ├── created_at (timestamptz)
-                └── updated_at (timestamptz)
-
-courses
-├── id (uuid)
-├── title (text)
-├── description (text)
-├── instructor (text)
-├── thumbnail_url (text)
-├── difficulty (text)
-├── duration (text)
-├── category (text)
-├── tags (text[])
-├── key_points (text[])
-├── is_published (boolean)
-├── created_at (timestamptz)
-└── updated_at (timestamptz)
-    │
-    └── lessons
-        ├── id (uuid)
-        ├── course_id (uuid, FK → courses.id)
-        ├── title (text)
-        ├── description (text)
-        ├── content (text)
-        ├── video_url (text)
-        ├── duration (text)
-        ├── order_index (int)
-        ├── is_published (boolean)
-        ├── created_at (timestamptz)
-        └── updated_at (timestamptz)
+┌─────────────────────┐
+│     auth.users      │
+├─────────────────────┤
+│ id (uuid)           │
+│ email               │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│      profiles       │
+├─────────────────────┤
+│ id (uuid, PK/FK)    │
+│ email               │
+│ name                │
+│ avatar_url          │
+│ bio                 │
+│ role                │
+│ created_at          │
+│ updated_at          │
+└───────┬───────┬─────┘
+        │       │
+        │       │
+        │       ▼
+        │   ┌─────────────────────┐
+        │   │    forum_posts      │
+        │   ├─────────────────────┤
+        │   │ id                  │
+        │   │ user_id             │
+        │   │ course_id           │
+        │   │ lesson_id           │
+        │   │ title               │
+        │   │ content             │
+        │   │ is_pinned           │
+        │   │ created_at          │
+        │   │ updated_at          │
+        │   └─────────┬───────────┘
+        │             │
+        │             ▼
+        │   ┌─────────────────────┐
+        │   │  forum_comments     │
+        │   ├─────────────────────┤
+        │   │ id                  │
+        │   │ post_id             │
+        │   │ user_id             │
+        │   │ content             │
+        │   │ created_at          │
+        │   │ updated_at          │
+        │   └─────────────────────┘
+        │
+        │
+        ▼
+┌─────────────────────┐        ┌─────────────────────┐
+│      favorites      │        │    user_progress    │
+├─────────────────────┤        ├─────────────────────┤
+│ id                  │        │ id                  │
+│ user_id             │        │ user_id             │
+│ course_id           │◄───────│ course_id           │
+│ created_at          │        │ lesson_id           │
+└─────────────────────┘        │ status              │
+                               │ completed_at        │
+                               │ created_at          │
+                               │ updated_at          │
+                               └─────────┬───────────┘
+                                         │
+                                         ▼
+┌─────────────────────┐        ┌─────────────────────┐
+│       courses       │        │       lessons       │
+├─────────────────────┤        ├─────────────────────┤
+│ id                  │◄───────│ id                  │
+│ title               │        │ course_id           │
+│ description         │        │ title               │
+│ instructor          │        │ description         │
+│ thumbnail_url       │        │ content             │
+│ difficulty          │        │ video_url           │
+│ duration            │        │ duration            │
+│ category            │        │ order_index         │
+│ tags[]              │        │ is_published        │
+│ key_points[]        │        │ created_at          │
+│ is_published        │        │ updated_at          │
+│ created_at          │        └─────────────────────┘
+│ updated_at          │
+└─────────────────────┘
 
 
 ---
