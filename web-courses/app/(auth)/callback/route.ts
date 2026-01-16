@@ -1,5 +1,3 @@
-// Resumen de callback/route.ts: Es el puente que recibe un código temporal de Supabase (cuando el usuario viene de un email o de Google) y lo transforma en una sesión real (cookies) para que el navegador recuerde quién es el usuario.
-
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'

@@ -31,7 +31,7 @@ Plataforma educativa privada de acceso controlado, diseñada como un valor agreg
 
 | Rol | Descripción | Permisos Clave |
 | :--- | :--- | :--- |
-| **Mentor (Admin)** | Dueño de la academia y gestor del programa. | • Crear/Editar cursos y módulos.<br>• Subir material (videos/PDFs).<br>• Gestionar acceso de alumnos (Invitaciones).<br>• Dashboard con métricas de progreso. |
+| **Mentor (Admin)** | Dueño de la academia y gestor del programa. | • Crear/Editar cursos y módulos.<br>• Subir material (imagenes).<br>• Gestionar acceso de alumnos (Invitaciones).<br>• Dashboard con métricas de progreso. |
 | **Emprendedor (Alumno)** | Cliente exclusivo del programa de mentoría. | • Visualizar contenido de cursos asignados.<br>• Editar perfil personal. |
 
 ---
@@ -59,48 +59,104 @@ Plataforma educativa privada de acceso controlado, diseñada como un valor agreg
 * **Sección de Favoritos:** Listado de lecciones marcadas por el usuario para acceso directo.
 
 ### 4.5 Administración (Panel del Mentor)
-* **Gestión de Invitaciones y Roles:** * Sistema de "Whitelist" para autorizar correos electrónicos.
-    * Asignación y cambio de roles (Mentor/Emprendedor).
+* **Gestión de  Roles:** 
+    * Asignación y cambio de roles (Admin/Student).
 * **Gestión Integral de Contenido (CRUD):** * Panel para Crear, Editar y Borrar cursos y lecciones.
     * Carga de metadatos (solo **nombre del archivo** para imágenes y videos).
 * **Moderación del Foro:** * Herramientas para editar o borrar comentarios/hilos inapropiados para mantener el entorno profesional.
----
+* **Métricas de Alumnos** * Visualización detallada de qué lecciones ha completado cada emprendedor para dar seguimiento personalizado.
+
+
+
 
 ## 5. Modelo de Datos (Esquema Inicial)
 
-> **Nota:** Recordar guardar solo el **nombre del archivo** de imagen en la DB para optimizar el almacenamiento.
+> Modelo de datos simplificado que define las entidades principales del sistema.
+> Los detalles técnicos y campos completos se documentarán en un archivo separado.
 
-* **User:** id, email, password, role.
-* **Product:** id, name, description, price, image_filename (String).
-* **Order:** id, userId, status, total.
+### User
+Representa a una persona con acceso a la plataforma.
+
+- Puede tener un rol (mentor o alumno)
+- Puede acceder a contenido educativo
 
 ---
+
+### Course
+Representa una unidad de contenido educativo.
+
+- Contiene lecciones
+- El acceso está controlado por el sistema
+
+---
+
+### Lesson
+Unidad básica de contenido.
+
+- Pertenece a un curso
+- Contiene material educativo (video u otros recursos)
+
+---
+
+### UserProgress
+Representa el avance individual de cada alumno dentro de los cursos.
+
+- Relaciona a un User con una Lesson específica.
+- Permite calcular el porcentaje de completado de un Course.
+
+---
+
+
+### Enrollment
+Define el acceso de un usuario a un curso.
+
+- Relaciona usuarios con cursos
+
+---
+
+### Forum
+Espacio de interacción entre usuarios.
+
+- Permite discusiones entre participantes
+
+
 
 ## 6. Estructura de Páginas
 
 | Sección | Rutas ejemplo |
 | :--- | :--- |
-| **Públicas** | `/`, `/products`, `/login` |
-| **Privadas** | `/cart`, `/checkout`, `/profile` |
-| **Admin** | `/admin/dashboard`, `/admin/products` |
+| **Públicas** | `/`, `/login`, `/register` |
+| **Privadas** | `/dashboard`, `/curso`, `/favoritos`, `/faqs`, `/perfil` |
+| **Admin** | `/metricas` |
 
----
 
-## 7. API Endpoints
 
-* `GET /api/products` - Obtener lista de productos.
-* `POST /api/checkout` - Procesar intención de pago.
+## 7. API y Acceso a Datos
+> El sistema utiliza Supabase como backend principal.
+> Se implementan Route Handlers en Next.js únicamente para acciones sensibles o integraciones específicas.
 
----
+### Endpoints existentes
+- POST /api/users/update-role
+- POST /api/sentry
+
 
 ## 8. Requisitos No Funcionales
-* **Performance:** Uso de Skeletons para estados de carga.
-* **SEO:** Metadata dinámica para productos.
-* **UI:** Soporte para Dark/Light mode con `next-themes`.
+
+- **Performance:** La aplicación debe ofrecer tiempos de carga rápidos y una navegación ágil, minimizando bloqueos de la interfaz y evitando cargas innecesarias de datos para mantener una sensación de fluidez constante.
+- **Seguridad:** El acceso al contenido debe estar protegido mediante autenticación y control de permisos por rol.
+- **Escalabilidad:** La arquitectura debe permitir el crecimiento del sistema (más cursos, más usuarios, más contenido) sin requerir cambios estructurales significativos.
+- **Mantenibilidad:** El código debe estar organizado de forma modular y tipada para facilitar correcciones, mejoras y nuevas funcionalidades en el tiempo.
+- **UX:** La interfaz debe ser clara, consistente y enfocada en el consumo de contenido, reduciendo fricción y distracciones durante la experiencia del usuario.
+- **Accesibilidad:** La aplicación debe contemplar buenas prácticas de accesibilidad web, permitiendo su uso correcto con teclado y lectores de pantalla en los flujos principales.
+
 
 ---
 
-## 9. Fases de Implementación
-1.  **Fase 1:** Configuración de Base de Datos y Modelos.
-2.  **Fase 2:** CRUD de administración.
-3.  **Fase 3:** Flujo de compra del cliente.
+## 9. Exclusiones (No incluido)
+
+- **Sistema de pagos integrado:** La plataforma no gestiona cobros, suscripciones ni facturación. El acceso se otorga únicamente por invitación administrativa.
+- **Certificados automáticos:** No se incluye generación de certificados de finalización.
+- **Gamificación avanzada:** No hay sistema de puntos, badges, rankings o logros.
+- **Clases en vivo integradas:** No se incluye streaming en tiempo real ni integración con herramientas de videoconferencia.
+- **Multi-idioma:** La plataforma funciona en un único idioma.
+- **Modo offline:** El contenido requiere conexión activa a internet.

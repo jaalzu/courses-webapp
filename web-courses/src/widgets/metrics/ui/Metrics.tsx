@@ -84,7 +84,7 @@ export function Metrics() {
   <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden">
     <div className="p-6 border-b border-gray-100 dark:border-gray-800">
       <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">
-        Gestión de Usuarios
+        Usuarios y Roles
       </h2>
     </div>
     <UserProgressTable users={metrics.usersWithProgress} />
