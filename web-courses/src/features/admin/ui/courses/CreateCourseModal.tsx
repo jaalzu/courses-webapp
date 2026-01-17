@@ -30,6 +30,7 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
     duration: "",
     instructor: "",
     level: "beginner" as const,
+      isInitial: false, // ← NUEVO
   })
 
   const [imageFile, setImageFile] = useState<File | null>(null)
@@ -91,7 +92,6 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
     setIsUploading(true)
 
 try {
-      // 1. Crear el curso (sin imagen)
       const newCourse = {
         title: form.title,
         description: form.description,
@@ -99,6 +99,7 @@ try {
         duration: form.duration || '',
         instructor: form.instructor || '',
         level: form.level,
+          is_initial: form.isInitial, // ← NUEVO
         keyPoints: [],
         lessons: [],
         video: '',
@@ -146,6 +147,7 @@ try {
       duration: "",
       instructor: "",
       level: "beginner",
+      isInitial:false
     })
     setImageFile(null)
     setImagePreview("")
@@ -246,6 +248,24 @@ try {
                     { value: "advanced", label: "Avanzado" },
                   ]}
                 />
+
+
+                <div className="col-span-full">
+  <label className="flex items-center gap-2 cursor-pointer">
+    <input
+      type="checkbox"
+      checked={form.isInitial}
+      onChange={(e) => setForm({ ...form, isInitial: e.target.checked })}
+      className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+    />
+    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+      Curso inicial (acceso automático)
+    </span>
+  </label>
+  <p className="text-xs text-gray-500 ml-6 mt-1">
+    Si está marcado, todos los usuarios registrados verán este curso automáticamente
+  </p>
+</div>
               </div>
             </div>
 
