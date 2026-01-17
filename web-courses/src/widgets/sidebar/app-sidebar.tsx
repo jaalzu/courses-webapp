@@ -7,6 +7,7 @@ import {
   UserIcon,
   QuestionMarkCircleIcon,
   HeartIcon,
+  UserGroupIcon,
   PresentationChartBarIcon,
   LockClosedIcon 
 } from "@heroicons/react/24/outline"
@@ -21,6 +22,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarHeader,
+  
   SidebarTrigger,
 } from "@/widgets/sidebar/sidebar"
 
@@ -53,6 +55,11 @@ const items = [
     url: "/course-access", 
     icon: LockClosedIcon, // 
     isAdmin: true 
+  },
+  { 
+    title: "Comunidad", 
+    url: "/comunidad", 
+    icon: UserGroupIcon
   },
   {
     title: "FAQS",
