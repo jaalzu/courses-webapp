@@ -1,4 +1,3 @@
-// @/shared/lib/supabase/queries/forum.ts
 import { supabase } from '../client';
 
 // Validación de contenido para posts y comentarios
@@ -206,7 +205,6 @@ export const forumQueries = {
     }
   },
 
-  // Eliminar comentario
   deleteComment: async (commentId: string) => {
     const { error } = await supabase
       .from('forum_comments')
@@ -223,5 +221,4 @@ export const forumQueries = {
   }
 };
 
-// Exportar la función de validación para usar en UI si es necesario
 export { validateContent };

@@ -25,9 +25,9 @@ export function ThemeToggle({ isDark, onToggle }: Props) {
             className="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           >
             {isDark ? (
-              <SunIcon className="!w-5.5 !h-5.5 text-yellow-500" />
+              <SunIcon className="!w-6 !h-6 text-white-500" />
             ) : (
-              <MoonIcon className="!w-5.5 !h-5.5 text-gray-600" />
+              <MoonIcon className="!w-6 !h-6 text-gray-600" />
             )}
           </Button>
         </TooltipTrigger>
