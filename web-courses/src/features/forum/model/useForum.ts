@@ -28,10 +28,11 @@ export const useForum = (courseId: string) => {
 
   const createPost = async (content: string, userId: string, notify?: NotifyFn) => {
     const rateLimitKey = `forum-post:${userId}`;
-    const { allowed, retryAfter } = rateLimiter.canProceed(rateLimitKey, RATE_LIMITS.FORUM_POST);
+const check = rateLimiter.canProceed(rateLimitKey, RATE_LIMITS.FORUM_POST);
 
-    if (!allowed) {
-      notify?.(`Por favor espera ${retryAfter} segundos antes de publicar de nuevo`, 'warning');
+    if (!check.allowed) {
+      // Usamos directamente el mensaje que ya armamos en el rateLimiter.ts
+      notify?.(check.message || 'Límite de publicaciones alcanzado', 'warning');
       return;
     }
 
@@ -53,10 +54,10 @@ export const useForum = (courseId: string) => {
 
   const addComment = async (postId: string, content: string, userId: string, notify?: NotifyFn) => {
     const rateLimitKey = `forum-comment:${userId}`;
-    const { allowed, retryAfter } = rateLimiter.canProceed(rateLimitKey, RATE_LIMITS.FORUM_COMMENT);
+const check = rateLimiter.canProceed(rateLimitKey, RATE_LIMITS.FORUM_COMMENT);
 
-    if (!allowed) {
-      notify?.(`Por favor espera ${retryAfter} segundos antes de comentar de nuevo`, 'warning');
+    if (!check.allowed) {
+      notify?.(check.message || 'Espera un momento antes de comentar de nuevo', 'warning');
       return;
     }
 

@@ -90,12 +90,12 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
 
     setIsUploading(true)
 
-    try {
-      // 1. Crear el curso primero (sin imagen)
+try {
+      // 1. Crear el curso (sin imagen)
       const newCourse = {
         title: form.title,
         description: form.description,
-        image: '', // Vacío por ahora
+        image: '', 
         duration: form.duration || '',
         instructor: form.instructor || '',
         level: form.level,
@@ -112,7 +112,7 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
         return
       }
 
-      // 2. Subir la imagen con el ID del curso
+      // 2. Subir la imagen (Rate Limit y Redimensión ocurren adentro)
       const uploadResult = await uploadCourseImage(imageFile, createdCourse.id)
       
       if (!uploadResult.success) {
@@ -121,15 +121,17 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
         return
       }
 
-      // 3. Actualizar el curso con la URL de la imagen 🔥 ESTO FALTABA
+      // 3. 🔥 ACTUALIZACIÓN CLAVE: Guardamos SOLO el nombre del archivo
+      // Usamos 'uploadResult.fileName' en lugar de la URL larga
       await updateMutation.mutateAsync({
         courseId: createdCourse.id,
-        updates: { image: uploadResult.url }
+        updates: { image: uploadResult.fileName } // <--- Guardamos solo el string
       })
       
       toast.success("Curso creado exitosamente")
       setTempCourseId(createdCourse.id)
       setStep('content')
+
     } catch (error) {
       console.error("Error creando curso:", error)
       toast.error("Error al crear el curso")
@@ -137,7 +139,6 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
       setIsUploading(false)
     }
   }
-
   const handleContentClose = () => {
     setForm({
       title: "",
