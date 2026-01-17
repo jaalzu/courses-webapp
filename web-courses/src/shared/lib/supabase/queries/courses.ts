@@ -7,6 +7,7 @@ const formatCourse = (dbCourse: any) => ({
   image: dbCourse.thumbnail_url ? getCourseImage(dbCourse.thumbnail_url) : '',
   level: dbCourse.difficulty || 'beginner',
   keyPoints: dbCourse.key_points || [], 
+  is_initial: dbCourse.is_initial || false, // ← AGREGAR ESTA LÍNEA
   lessons: (dbCourse.lessons || []).map((l: any) => ({
     ...l,
     duration: String(l.duration || '0'),
@@ -41,7 +42,7 @@ export const courseQueries = {
 
 
 
-  create: async (course: any) => {
+create: async (course: any) => {
   // Mapear de frontend a DB antes de insertar
   const dbCourse = {
     title: course.title,
@@ -51,11 +52,12 @@ export const courseQueries = {
     instructor: course.instructor || null,
     difficulty: course.level,
     key_points: course.keyPoints || [],
+    is_initial: course.is_initial || false, 
   }
 
   const { data, error } = await supabase
     .from('courses')
-    .insert(dbCourse) // Insertar el objeto mapeado
+    .insert(dbCourse)
     .select()
     .single();
   
@@ -63,7 +65,6 @@ export const courseQueries = {
   
   return { data: formatCourse(data), error: null };
 },
-
 
   update: async (id: string, updates: any) => {
     const { data, error } = await supabase

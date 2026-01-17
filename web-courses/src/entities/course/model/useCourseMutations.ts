@@ -3,6 +3,7 @@ import { coursesApi } from '@/shared/api/courses'
 import type { Course } from '../types'
 import { toast } from 'sonner'
 import { getAuthErrorMessage } from '@/shared/lib/supabase/errorHandler'
+import type { CreateCourseInput } from '../types' 
 
 
 const MAX_TITLE_LENGTH = 60
@@ -29,7 +30,7 @@ export function useCreateCourse() {
   const queryClient = useQueryClient()
   
   return useMutation({
-    mutationFn: async (newCourse: Omit<Course, 'id'>) => {
+    mutationFn: async (newCourse: CreateCourseInput) => {
       if (newCourse.title.length > MAX_TITLE_LENGTH) {
         throw new Error(`El título es demasiado largo (máximo ${MAX_TITLE_LENGTH} caracteres)`)
       }

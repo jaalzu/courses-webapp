@@ -1,6 +1,6 @@
 import { courseQueries } from '@/shared/lib/supabase/queries/courses'
 import { lessonQueries } from '@/shared/lib/supabase/queries/lessons'
-import type { Course } from '@/entities/course/types'
+import type { Course ,CreateCourseInput } from '@/entities/course/types'
 
 export const coursesApi = {
   async getAll() {
@@ -9,7 +9,7 @@ export const coursesApi = {
     return data || []
   },
   
-  async create(course: Omit<Course, 'id'>) {
+  async create(course: CreateCourseInput) {
     const { data, error } = await courseQueries.create(course)
     if (error) throw new Error(error.message)
     if (!data) throw new Error('No se pudo crear el curso')
@@ -55,6 +55,7 @@ function mapCourseToDb(updates: Partial<Course>) {
   if (updates.instructor !== undefined) dbUpdates.instructor = updates.instructor
   if (updates.keyPoints !== undefined) dbUpdates.key_points = updates.keyPoints
   if (updates.level !== undefined) dbUpdates.difficulty = updates.level
+  if (updates.is_initial !== undefined) dbUpdates.is_initial = updates.is_initial // ← NUEVO
   
   if (updates.image !== undefined) {
     dbUpdates.thumbnail_url = updates.image.includes('supabase.co/storage')
