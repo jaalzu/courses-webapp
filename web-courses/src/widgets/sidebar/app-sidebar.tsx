@@ -7,7 +7,8 @@ import {
   UserIcon,
   QuestionMarkCircleIcon,
   HeartIcon,
-  PresentationChartBarIcon 
+  PresentationChartBarIcon,
+  LockClosedIcon 
 } from "@heroicons/react/24/outline"
 
 import {
@@ -28,30 +29,36 @@ import { useAuthStore } from "@/features/auth/model/useAuthStore"
 const items = [
   { 
     title: "Inicio",
-     url: "/dashboard",
-      icon: HomeIcon 
-    },
+    url: "/dashboard",
+    icon: HomeIcon 
+  },
   { 
     title: "Perfil",
-     url: "/perfil",
-      icon: UserIcon 
-    },
+    url: "/perfil",
+    icon: UserIcon 
+  },
   { 
     title: "Favoritos",
-     url: "/favoritos",
-      icon: HeartIcon 
-    },
-    { 
-      title: "Metricas", 
-      url: "/metricas", 
-      icon: PresentationChartBarIcon, 
-      isAdmin: true 
-    },
-    {
-       title: "FAQS",
-        url: "/faqs",
-         icon: QuestionMarkCircleIcon
-    },
+    url: "/favoritos",
+    icon: HeartIcon 
+  },
+  { 
+    title: "Metricas", 
+    url: "/metricas", 
+    icon: PresentationChartBarIcon, 
+    isAdmin: true 
+  },
+  { 
+    title: "Gestión de Accesos", 
+    url: "/course-access", 
+    icon: LockClosedIcon, // 
+    isAdmin: true 
+  },
+  {
+    title: "FAQS",
+    url: "/faqs",
+    icon: QuestionMarkCircleIcon
+  },
 ]
 
 export function AppSidebar() {

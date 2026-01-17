@@ -2,7 +2,6 @@
 
 import { lazy, Suspense } from 'react'
 
-// Lazy load del FAQ real
 const FAQ = lazy(() => import('./FAQS'))
 
 export function FAQWrapper() {

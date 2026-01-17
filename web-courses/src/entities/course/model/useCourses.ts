@@ -6,12 +6,11 @@ import { getAuthErrorMessage } from '@/shared/lib/supabase/errorHandler'
 export function useCourses() {
   const { data: courses, isLoading, error, refetch } = useQuery({
     queryKey: ['courses'],
-    queryFn: coursesApi.getAll,
+    queryFn: coursesApi.getAll, // ✅ MANTENER - el RLS ya filtra automáticamente
   })
   
   const { filterLevel, searchQuery, viewMode } = useCourseStore()
   
-  // En lugar de pisar 'error', creamos una constante nueva
   const errorMessage = error ? getAuthErrorMessage(error) : null
 
   const filteredCourses = courses?.filter(course => {
@@ -44,9 +43,3 @@ export function useCourse(courseId: string) {
     errorMessage: error ? getAuthErrorMessage(error) : null
   }
 }
-
-
-
-
-
-

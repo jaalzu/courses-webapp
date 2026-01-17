@@ -1,0 +1,1 @@
+export { CourseAccessManager } from './ui/CourseAccessManager'

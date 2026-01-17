@@ -13,6 +13,7 @@ export interface Course {
   level?: CourseLevel 
   lessons: Lesson[]
   image: string
+    is_initial?: boolean  
   keyPoints?: string[]
   extraInfo?: string
   quote?: string
