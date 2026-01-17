@@ -121,7 +121,7 @@ export const uploadCourseImage = async (
     return { 
       success: true, 
       url: publicUrl, 
-      fileName: fileName // Este es el que tenés que guardar en tu tabla 'courses'
+      fileName: fileName 
     }
 
   } catch (err) {

@@ -1,4 +1,3 @@
-// src/features/auth/components/icons.tsx
 import { UserIcon as HeroUserIcon, LockClosedIcon as HeroLockIcon, EyeIcon as HeroEyeIcon, EnvelopeIcon as HeroEnvelopeIcon } from "@heroicons/react/24/outline"
 
 // Wrappers de iconos

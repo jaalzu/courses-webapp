@@ -103,8 +103,6 @@ export const useAuthStore = create<AuthStore>()(
         }
       },
 
-      // Verificar autenticación al cargar la app
-      // Verificar autenticación al cargar la app
 checkAuth: async () => {
   set({ isLoading: true });
   

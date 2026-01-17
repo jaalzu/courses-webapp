@@ -1,13 +1,12 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useRouter } from "next/navigation"
+
 import { useAuthStore } from "@/features/auth/model/useAuthStore"
 import { getAuthErrorMessage } from '@/shared/lib/supabase/errorHandler'
 import { loginSchema, type LoginFormData } from "@/features/auth/lib/schemas"
 import { useState } from "react"
 
 export function useLoginForm() {
-  const router = useRouter()
   const { login, loginWithGoogle, isLoading } = useAuthStore()
   const [serverError, setServerError] = useState<string>("")
 

@@ -1,4 +1,3 @@
-// shared/api/users.ts
 import { profileQueries } from '@/shared/lib/supabase/queries/profiles'
 import { supabase } from '@/shared/lib/supabase/client'
 import type { User } from '@/entities/user'

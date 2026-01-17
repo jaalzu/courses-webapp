@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { coursesApi } from '@/shared/api/courses'
 import { useCourseStore } from './useCourseStore'
+import { getAuthErrorMessage } from '@/shared/lib/supabase/errorHandler'
 
 export function useCourses() {
   const { data: courses, isLoading, error, refetch } = useQuery({
@@ -10,6 +11,9 @@ export function useCourses() {
   
   const { filterLevel, searchQuery, viewMode } = useCourseStore()
   
+  // En lugar de pisar 'error', creamos una constante nueva
+  const errorMessage = error ? getAuthErrorMessage(error) : null
+
   const filteredCourses = courses?.filter(course => {
     const matchesLevel = !filterLevel || course.level === filterLevel
     const matchesSearch = !searchQuery || 
@@ -21,21 +25,28 @@ export function useCourses() {
     courses: filteredCourses,
     allCourses: courses || [], 
     isLoading,
-    error,
+    error, 
+    errorMessage, 
     viewMode, 
     refetchCourses: refetch, 
   }
 }
 
-// Query para un curso individual
 export function useCourse(courseId: string) {
-  const { data: courses } = useQuery({
+  const { data: courses, isLoading, error } = useQuery({
     queryKey: ['courses'],
     queryFn: coursesApi.getAll,
   })
   
   return {
     data: courses?.find(c => c.id === courseId),
-    isLoading: !courses,
+    isLoading,
+    errorMessage: error ? getAuthErrorMessage(error) : null
   }
 }
+
+
+
+
+
+
