@@ -1,4 +1,4 @@
-// app/layout.tsx
+
 import { Montserrat } from 'next/font/google'
 import "../src/shared/styles/globals.css"
 import { QueryProvider } from '@/shared/providers/QueryProvider'

@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { useFavoriteCourses } from '@/features/favorites/model/hooks/useFavoritesCourses'
-
+import { DashboardLayout } from '@/shared/layouts/DashboardLayout'
 const Card = dynamic(() => import('@/widgets/dashboard/Card'), {
   ssr: false,
 })
@@ -25,7 +25,11 @@ export function FavoriteCourses() {
   }
 
   return (
-    <main className="p-6 lg:p-10 space-y-6">
+    
+    <DashboardLayout
+  title="Tus Favoritos"
+  description="Cursos que guardaste para ver más tarde"
+>
       <h1 className="text-2xl font-bold">Tus Favoritos</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-3 xl:gap-x-8 gap-y-9 justify-items-center">
@@ -40,6 +44,6 @@ export function FavoriteCourses() {
           />
         ))}
       </div>
-    </main>
+    </DashboardLayout>
   )
 }

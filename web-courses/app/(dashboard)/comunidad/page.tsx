@@ -7,14 +7,15 @@ export const dynamicConfig = 'force-dynamic'
 
 const CommunitySection = dynamic(
   () =>
-    import("@/widgets/community/CommunitySection").then(
-      mod => mod.default
+    import('@/widgets/community/CommunitySection').then(
+      mod => mod.CommunitySection
     ),
   {
     ssr: false,
-    loading: () => <CommunitySkeleton />
+    loading: () => <CommunitySkeleton />,
   }
 )
+
 
 
 export default function ComunidadPage() {

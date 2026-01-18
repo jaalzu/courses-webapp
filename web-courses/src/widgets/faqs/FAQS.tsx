@@ -1,6 +1,8 @@
 'use client'
 
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/shared/ui/index"
+import { DashboardLayout } from '@/shared/layouts/DashboardLayout'
+
 
 const faqs = [
   { question: "¿Qué tecnologías usas en tus proyectos?", answer: "Principalmente React, Next.js, TypeScript, Tailwind CSS, y Shadcn UI. También manejo Node.js y Express para backend cuando es necesario." },
@@ -11,7 +13,10 @@ const faqs = [
 
 export default function FAQ() {
   return (
-    <section className="max-w-3xl mx-auto p-6 bg-white dark:bg-neutral-900 rounded-2xl shadow-md space-y-6">
+    <DashboardLayout
+  title="Preguntas Frecuentes"
+  description="Respuestas a las dudas más comunes"
+>
       <Accordion type="multiple" className="space-y-3">
         {faqs.map((faq, index) => (
           <AccordionItem key={index} value={`faq-${index}`} className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
@@ -24,6 +29,6 @@ export default function FAQ() {
           </AccordionItem>
         ))}
       </Accordion>
-    </section>
+    </DashboardLayout>
   )
 }

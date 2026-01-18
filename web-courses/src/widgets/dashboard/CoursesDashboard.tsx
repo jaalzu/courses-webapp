@@ -12,7 +12,7 @@ import { useUserProgress } from "@/entities/progress/model/useProgressQueries"
 
 //  UI Local
 import CoursesSkeleton from "./coursesSkeleton"
-import { DashboardLayout } from "./DashboardLayout"
+import { DashboardLayout } from "../../shared/layouts/DashboardLayout"
 import { CoursesGrid } from "./CoursesGrid"
 
 export function CoursesDashboard() {
