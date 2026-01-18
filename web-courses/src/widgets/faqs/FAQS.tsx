@@ -12,8 +12,6 @@ const faqs = [
 export default function FAQ() {
   return (
     <section className="max-w-3xl mx-auto p-6 bg-white dark:bg-neutral-900 rounded-2xl shadow-md space-y-6">
-     
-      
       <Accordion type="multiple" className="space-y-3">
         {faqs.map((faq, index) => (
           <AccordionItem key={index} value={`faq-${index}`} className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
