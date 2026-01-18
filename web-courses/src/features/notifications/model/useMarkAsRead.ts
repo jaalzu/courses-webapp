@@ -1,30 +1,28 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { notificationQueries } from '@/shared/lib/supabase/queries/notifications'
-import { useNotificationStore } from './useNotificationStore'
 
 export function useMarkAsRead() {
   const queryClient = useQueryClient()
-  const decrementUnread = useNotificationStore((s) => s.decrementUnread)
 
   return useMutation({
     mutationFn: (notificationIds: string[]) =>
       notificationQueries.markAsRead(notificationIds),
-    onSuccess: (_, notificationIds) => {
-      decrementUnread(notificationIds.length)
+    onSuccess: () => {
+      //  Invalidar queries para refetch inmediato
       queryClient.invalidateQueries({ queryKey: ['notifications'] })
+      queryClient.invalidateQueries({ queryKey: ['notifications-unread-count'] })
     },
   })
 }
 
 export function useMarkAllAsRead() {
   const queryClient = useQueryClient()
-  const setUnreadCount = useNotificationStore((s) => s.setUnreadCount)
 
   return useMutation({
     mutationFn: () => notificationQueries.markAllAsRead(),
     onSuccess: () => {
-      setUnreadCount(0)
       queryClient.invalidateQueries({ queryKey: ['notifications'] })
+      queryClient.invalidateQueries({ queryKey: ['notifications-unread-count'] })
     },
   })
 }

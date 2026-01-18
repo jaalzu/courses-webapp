@@ -7,31 +7,36 @@ export function NotificationsList() {
   const markAsRead = useMarkAsRead()
 
   if (isLoading) {
-    return <p className="p-4 text-sm text-muted-foreground">Cargando…</p>
+    return (
+      <div className="p-8 text-center">
+        <p className="text-sm text-gray-500">Cargando notificaciones...</p>
+      </div>
+    )
   }
 
   if (notifications.length === 0) {
     return (
-      <p className="p-4 text-sm text-muted-foreground">
-        No tenés notificaciones
-      </p>
+      <div className="p-8 text-center">
+        <p className="text-sm text-gray-500">No tenés notificaciones</p>
+      </div>
     )
   }
 
   return (
-    <div className="max-h-96 overflow-y-auto">
-      {notifications.map((notification) => (
-        <NotificationItem
-          key={notification.id}
-          notification={notification}
-          onClick={() => {
-            if (!notification.isRead) {
-              markAsRead.mutate([notification.id])
-            }
-            // navegación futura al post
-          }}
-        />
-      ))}
+    <div className="max-h-[400px] overflow-y-auto">
+      <div className="divide-y divide-gray-200 dark:divide-gray-800">
+        {notifications.map((notification) => (
+          <NotificationItem
+            key={notification.id}
+            notification={notification}
+            onMarkAsRead={() => {
+              if (!notification.isRead) {
+                markAsRead.mutate([notification.id])
+              }
+            }}
+          />
+        ))}
+      </div>
     </div>
   )
 }

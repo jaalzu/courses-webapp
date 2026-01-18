@@ -8,6 +8,13 @@ export const coursesApi = {
     if (error) throw new Error(error.message)
     return data || []
   },
+
+   async getById(courseId: string) {
+    const { data, error } = await courseQueries.getById(courseId)
+    if (error) throw new Error(error.message)
+    if (!data) throw new Error('Curso no encontrado')
+    return data
+  },
   
   async create(course: CreateCourseInput) {
     const { data, error } = await courseQueries.create(course)

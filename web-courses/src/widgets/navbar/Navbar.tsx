@@ -7,6 +7,7 @@ import { SidebarTrigger } from "@/widgets/sidebar/sidebar"
 import { UserMenu } from "./UserMenu"
 import { ThemeToggle } from "./ThemeToggle"
 import { NotificationsDropdown } from "@/widgets/navbar/NotificationsDropdown"
+import { useNotifications } from "@/features/notifications/model/useNotifications" // ← Importar
 
 type NavbarProps = {
   onToggleTheme: () => void
@@ -14,6 +15,8 @@ type NavbarProps = {
 }
 
 export function Navbar({ onToggleTheme, isDark }: NavbarProps) {
+  useNotifications() // ← Ejecutar acá para que siempre esté activo
+
   return (
     <nav className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 shadow-sm transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

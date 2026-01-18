@@ -1,27 +1,13 @@
-'use client'
-
-import { useParams } from "next/navigation"
-import CourseNotFound from "@/widgets/courseContent/CourseNotFound"
-import CoursePageContent from "@/widgets/courseContent/CoursePageContent"
-import { useCourses } from "@/entities/course/model/useCourses" 
+import { CoursePageWrapper } from '@/widgets/courseContent/CoursePageWrapper'
 
 export const dynamic = 'force-dynamic'
 
-export default function CoursePage() {
-
-  const { id } = useParams()
-  const courseId = String(id)
+export default async function CoursePage({ 
+  params 
+}: { 
+  params: Promise<{ id: string }> 
+}) {
+  const { id } = await params
   
-  const { courses, isLoading } = useCourses() 
-  const course = courses?.find(c => c.id === courseId) 
-
- if (isLoading) {
-    return <div className="p-20 text-center">Cargando curso...</div>
-  }
-
-  if (!course) {
-    return <CourseNotFound />
-  }
-
-  return <CoursePageContent courseId={courseId} />
+  return <CoursePageWrapper courseId={id} />
 }
