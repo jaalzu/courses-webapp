@@ -1,6 +1,5 @@
 import { supabase } from '../client';
 
-// Interfaces planas para que tengas autocompletado en el front
 export interface UserProgress {
   user_id: string;
   course_id: string;

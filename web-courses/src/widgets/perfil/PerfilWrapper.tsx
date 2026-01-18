@@ -47,7 +47,7 @@ export function PerfilWrapper() {
   return (
     <main className="w-full p-6 lg:p-10 space-y-6">
       <header>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Mi Perfil</h1>
+        <h1 className="text-2xl uppercase tracking-widest text-muted-foreground">Mi Perfil</h1>
         <p className="text-gray-600 dark:text-gray-400">Gestiona tu información y revisa tu progreso.</p>
       </header>
 

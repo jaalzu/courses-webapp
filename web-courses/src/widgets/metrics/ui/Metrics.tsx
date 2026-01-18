@@ -60,7 +60,7 @@ export function Metrics() {
         {/* HEADER SECTION */}
         <div className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
+            <h1 className="text-2xl uppercase tracking-widest text-muted-foreground">
               Métricas del Sistema
             </h1>
             <p className="text-gray-600 dark:text-gray-400 mt-1">

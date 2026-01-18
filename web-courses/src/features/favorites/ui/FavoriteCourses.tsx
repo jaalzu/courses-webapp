@@ -13,7 +13,7 @@ export function FavoriteCourses() {
   if (favoriteCourses.length === 0) {
     return (
       <main className="p-6 lg:p-10">
-        <h1 className="text-2xl font-bold mb-4">Tus Favoritos</h1>
+        <h1 className="text-2xl uppercase tracking-widest text-muted-foreground mb-3">Tus Favoritos</h1>
         <p className="text-gray-600 dark:text-gray-300">
           No tienes cursos favoritos todavía.{' '}
           <a href="/dashboard" className="text-blue-500">

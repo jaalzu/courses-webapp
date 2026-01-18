@@ -3,10 +3,10 @@ import Image from "next/image";
 
 export default function CommunitySection() {
   return (
-    <section className="relative w-full overflow-hidden">
+    <section className="relative w-full overflow-hidden p-4 md:p-5 space-y-6">
       <div className="mx-auto max-w-7xl px-4 md:px-8">
         {/* Título pequeño */}
-        <h3 className="text-sm uppercase tracking-widest text-muted-foreground">
+        <h3 className="text-2xl uppercase tracking-widest text-muted-foreground">
           Comunidad
         </h3>
 
