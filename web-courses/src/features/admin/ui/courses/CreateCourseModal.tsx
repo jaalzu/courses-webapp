@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import EditCourseContentModal from "@/features/admin/ui/courses/EditCourseLessonsModal"
-import { useCreateCourse, useUpdateCourse } from '@/entities/course/model/useCourseMutations' // 🔥 AGREGAR useUpdateCourse
+import { useCreateCourse, useUpdateCourse } from '@/entities/course/model/useCourseMutations' 
 import { useCourses } from '@/entities/course/model/useCourses'
 import { CourseFormField } from "@/features/admin/ui/courses/CourseFormField"
 import { ImageUploadField } from "@/features/admin/ui/courses/ImageUploadField"

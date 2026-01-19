@@ -42,7 +42,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <Navbar onToggleTheme={toggleTheme} isDark={isDark} />
 
           <main className="flex-1 relative">
-            {children}
+              {children}
           </main>
         </div>
       </div>

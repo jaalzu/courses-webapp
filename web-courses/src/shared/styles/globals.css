@@ -7,8 +7,9 @@ body {
 
 
  html.dark {
-    --sidebar: #111827; /* color exacto de bg-gray-900 */
+    --sidebar: #111827; 
 }
+
 
 
 
@@ -57,6 +58,14 @@ body {
 .light .overflow-y-auto::-webkit-scrollbar-thumb:hover {
   background: rgb(156 163 175);
 }
+
+
+
+
+
+
+
+
 
 
 
@@ -179,3 +188,5 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+
