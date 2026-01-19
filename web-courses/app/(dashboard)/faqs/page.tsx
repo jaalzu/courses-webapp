@@ -1,7 +1,5 @@
-import { FAQWrapper } from '@/widgets/faqs/FAQWrapper'
-
-export const dynamic = 'force-dynamic'
+import FAQ from '@/widgets/faqs/FAQS'
 
 export default function FAQPage() {
-  return <FAQWrapper />
+  return <FAQ />
 }
