@@ -9,12 +9,16 @@ export const coursesApi = {
     return data || []
   },
 
-   async getById(courseId: string) {
-    const { data, error } = await courseQueries.getById(courseId)
-    if (error) throw new Error(error.message)
-    if (!data) throw new Error('Curso no encontrado')
-    return data
-  },
+  async getById(courseId: string) {
+  const { data, error } = await supabase
+    .from('courses')
+    .select('*')
+    .eq('id', courseId)
+    .maybeSingle()  // <-- en vez de .single()
+  
+  return { data, error }
+},
+
   
   async create(course: CreateCourseInput) {
     const { data, error } = await courseQueries.create(course)
@@ -47,9 +51,18 @@ export const coursesApi = {
   },
   
   async delete(courseId: string) {
-    const { error } = await courseQueries.delete(courseId)
-    if (error) throw new Error(error.message)
+  const res = await fetch(`/api/courses/${courseId}`, {
+    method: 'DELETE',
+  })
+
+  if (!res.ok) {
+    const error = await res.json()
+    throw error
   }
+
+  return true
+}
+
 }
 
 // Helper privado para mapeo

@@ -23,11 +23,9 @@ export default async function AdminLayout({
     .eq('id', user.id)
     .single()
 
-  // Error o no admin → dashboard
   if (error || profile?.role !== 'admin') {
     redirect('/dashboard')
   }
 
-  // Todo OK → renderiza la página admin
   return <>{children}</>
 }

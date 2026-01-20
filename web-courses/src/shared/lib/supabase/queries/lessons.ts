@@ -1,6 +1,5 @@
 import { supabase } from '../client';
 
-
 export const lessonQueries = {
   syncLessons: async (courseId: string, lessons: any[]) => {
     const { error: deleteError } = await supabase
@@ -35,7 +34,16 @@ export const lessonQueries = {
       return { data: formattedLessons, error: null };
     }
     
-    // Si no hay lecciones nuevas, retornamos array vacío
     return { data: [], error: null };
+  },
+
+  // ✅ Nuevo método para borrar todas las lecciones de un curso
+  deleteByCourseId: async (courseId: string) => {
+    const { error } = await supabase
+      .from('lessons')
+      .delete()
+      .eq('course_id', courseId);
+
+    return { error };
   }
 }
