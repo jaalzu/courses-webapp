@@ -63,9 +63,9 @@ Plataforma educativa privada de acceso controlado, diseñada como un valor agreg
     * Asignación y cambio de roles (Admin/Student).
 * **Gestión Integral de Contenido (CRUD):** * Panel para Crear, Editar y Borrar cursos y lecciones.
     * Carga de metadatos (solo **nombre del archivo** para imágenes y videos).
+* **Gestión de Assets Inteligente: * Limpieza Automática de Storage** * Sistema sincronizado que detecta y elimina archivos huérfanos (imágenes antiguas) en Supabase Storage al actualizar o borrar cursos, evitando costos innecesarios y desorden en el servidor.
 * **Moderación del Foro:** * Herramientas para editar o borrar comentarios/hilos inapropiados para mantener el entorno profesional.
 * **Métricas de Alumnos** * Visualización detallada de qué lecciones ha completado cada emprendedor para dar seguimiento personalizado.
-
 
 
 

@@ -25,28 +25,30 @@ async getById(courseId: string): Promise<Course> {
     return data
   },
   
-  async update(courseId: string, updates: Partial<Course>) {
-    // 1. Actualizar datos del curso (sin lecciones)
-    const dbUpdates = mapCourseToDb(updates)
-    
-    let courseData = null
-    if (Object.keys(dbUpdates).length > 0) {
-      const { data, error } = await courseQueries.update(courseId, dbUpdates)
-      if (error) throw new Error(error.message)
-      courseData = data
-    }
-    
-    // 2. Sincronizar lecciones si las hay
-    if (updates.lessons) {
-      const { data: lessonsData, error: lessonsError } = await lessonQueries.syncLessons(
-        courseId,
-        updates.lessons
-      )
-      if (lessonsError) throw new Error(lessonsError.message)
-    }
-    
-    return courseData
-  },
+
+
+ // @/shared/api/courses.ts
+async update(courseId: string, updates: Partial<Course>) {
+  const res = await fetch(`/api/courses/${courseId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updates), // Mandamos 'keyPoints' tranquilo
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.error || 'Error al actualizar');
+  }
+
+  const result = await res.json();
+  
+  // Si hay lecciones, las sincronizamos aparte como ya hacías
+  if (updates.lessons) {
+    await lessonQueries.syncLessons(courseId, updates.lessons);
+  }
+
+  return result.data;
+},
   
   async delete(courseId: string) {
   const res = await fetch(`/api/courses/${courseId}`, {

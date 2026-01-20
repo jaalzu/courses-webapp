@@ -62,29 +62,26 @@ export default function EditCourseModal({ course, isOpen, onClose }: Props) {
     setImageError("")
   }
 
-  const handleSave = async () => {
+ const handleSave = async () => {
     setIsUploading(true)
     
     try {
-      let imageUrl = formData.image
+      let imageUrl = formData.image 
 
-      // Subir imagen si hay una nueva
       if (imageFile) {
         const uploadResult = await uploadCourseImage(imageFile, course.id)
         if (!uploadResult.success) {
           toast.error(uploadResult.error || "Error al subir la imagen")
-          setIsUploading(false)
           return
         }
         imageUrl = uploadResult.url || formData.image
       }
 
-      // Actualizar curso completo
       await updateMutation.mutateAsync({
         courseId: course.id,
         updates: {
           ...formData,
-          image: imageUrl,
+          image: imageUrl, 
           keyPoints,
           lessons,
         }
@@ -97,6 +94,8 @@ export default function EditCourseModal({ course, isOpen, onClose }: Props) {
       setIsUploading(false)
     }
   }
+
+
 
   // Funciones de key points
   const handleAddKeyPoint = () => {
