@@ -9,16 +9,14 @@ export const coursesApi = {
     return data || []
   },
 
-  async getById(courseId: string) {
-  const { data, error } = await supabase
-    .from('courses')
-    .select('*')
-    .eq('id', courseId)
-    .maybeSingle()  // <-- en vez de .single()
+async getById(courseId: string): Promise<Course> {
+  const { data, error } = await courseQueries.getById(courseId)
   
-  return { data, error }
+  if (error) throw new Error(error.message) // Si hay error, lanzamos para que React Query lo capture
+  if (!data) throw new Error('Curso no encontrado')
+  
+  return data // Aquí devolvemos el Course puro, NO { data, error }
 },
-
   
   async create(course: CreateCourseInput) {
     const { data, error } = await courseQueries.create(course)
