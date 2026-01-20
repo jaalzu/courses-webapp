@@ -10,6 +10,8 @@ import {
   TooltipTrigger,
 } from "@/shared/ui/tooltip"
 
+import { useAdminDemo } from "@/shared/hooks/useAdminDemo"; 
+
 interface Props {
   post: ForumPost
   currentUserName: string
@@ -18,6 +20,7 @@ interface Props {
 }
 
 export const PostHeader = ({ post, currentUserName, isCurrentUserAdmin, onDeletePost }: Props) => {
+  const { isDemoAdmin } = useAdminDemo(); 
   const canDelete = post.userName === currentUserName || isCurrentUserAdmin
 
   return (
@@ -38,13 +41,18 @@ export const PostHeader = ({ post, currentUserName, isCurrentUserAdmin, onDelete
               <TooltipTrigger asChild>
                 <button
                   onClick={() => onDeletePost(post.id)}
-                  className="text-gray-400 hover:text-red-500 transition-colors p-1.5 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md"
+                  disabled={isDemoAdmin}
+                  className={`transition-colors p-1.5 rounded-md ${
+                    isDemoAdmin 
+                      ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed' 
+                      : 'text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20'
+                  }`}
                 >
                   <TrashIcon className="w-4 h-4" />
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Eliminar publicación</p>
+                <p>{isDemoAdmin ? "Acción no permitida en modo demo" : "Eliminar publicación"}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

@@ -3,6 +3,8 @@
 
 import { type UserRole } from '@/entities/user/api/updateUserRole'
 import { useUpdateUserRole } from '@/entities/user/model/useUpdateUserRole'
+import { useAdminDemo } from "@/shared/hooks/useAdminDemo" // <--- Importamos el hook
+
 
 interface RoleChangeModalProps {
   isOpen: boolean
@@ -22,18 +24,26 @@ export function RoleChangeModal({
   newRole,
 }: RoleChangeModalProps) {
   const { mutate: updateRole, isPending } = useUpdateUserRole()
-
+const { runIfAllowed, isDemoAdmin } = useAdminDemo() // <--- Usamos el hook
   if (!isOpen) return null
 
   const handleConfirm = () => {
-    updateRole(
-      { userId, newRole },
-      {
-        onSuccess: () => {
-          onClose()
-        },
-      }
-    )
+    // 🛡️ Aplicamos el escudo aquí
+    runIfAllowed(() => {
+      updateRole(
+        { userId, newRole },
+        {
+          onSuccess: () => {
+            onClose()
+          },
+        }
+      )
+    })
+
+    // Si es demo, cerramos el modal después del aviso del hook
+    if (isDemoAdmin) {
+      onClose()
+    }
   }
 
   const roleLabels = {

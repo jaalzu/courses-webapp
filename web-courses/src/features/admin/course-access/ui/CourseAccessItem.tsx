@@ -1,5 +1,8 @@
+'use client'
+
 import { Course } from '@/entities/course/types'
 import { CheckCircleIcon, LockClosedIcon } from '@heroicons/react/24/solid'
+import { useAdminDemo } from "@/shared/hooks/useAdminDemo" 
 
 type Props = {
   course: Course
@@ -16,6 +19,8 @@ export function CourseAccessItem({
   onToggle, 
   isPending 
 }: Props) {
+  const { isDemoAdmin } = useAdminDemo()
+
   return (
     <div className="p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
       <div className="flex items-center gap-4 flex-1">
@@ -45,12 +50,14 @@ export function CourseAccessItem({
       {!isInitial && (
         <button
           onClick={() => onToggle(course.id, hasAccess)}
-          disabled={isPending}
+          // 🛡️ Bloqueo visual si es demo o si está cargando
+          disabled={isPending || isDemoAdmin}
           className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
             hasAccess
               ? 'bg-red-100 text-red-700 hover:bg-red-200'
               : 'bg-green-100 text-green-700 hover:bg-green-200'
           } disabled:opacity-50 disabled:cursor-not-allowed`}
+          title={isDemoAdmin ? "Acción no permitida en modo demo" : ""}
         >
           {isPending ? 'Procesando...' : hasAccess ? 'Revocar' : 'Otorgar'}
         </button>

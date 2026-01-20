@@ -11,7 +11,7 @@ export function LoginForm() {
     serverError,
     isLoading,
     handleGoogleLogin,
-    setValue, // <--- Sacamos esto del hook (react-hook-form)
+    setValue, 
   } = useLoginForm()
 
   const handleAdminDemo = () => {

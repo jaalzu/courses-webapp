@@ -49,11 +49,11 @@ export function LoginFormView({
       <Button 
         variant="ghost" 
         size="sm"
-        className="w-full border border-dashed border-gray-300 text-gray-500 hover:bg-gray-50 text-[11px] h-8"
+        className="w-full border border border-gray-300 text-gray-500 hover:bg-gray-50 text-[12px] h-8"
         onClick={onAdminDemo}
         type="button"
       >
-        Entrar como Mentor (Demo)
+        Entrar como Admin (Demo)
       </Button>
       
 

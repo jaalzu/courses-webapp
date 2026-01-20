@@ -1,10 +1,11 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-
 import { useAuthStore } from "@/features/auth/model/useAuthStore"
 import { getAuthErrorMessage } from '@/shared/lib/supabase/errorHandler'
 import { loginSchema, type LoginFormData } from "@/features/auth/lib/schemas"
 import { useState } from "react"
+import { supabase } from '@/shared/lib/supabase/client' 
+import { toast } from "sonner" 
 
 export function useLoginForm() {
   const { login, loginWithGoogle, isLoading } = useAuthStore()
@@ -13,9 +14,8 @@ export function useLoginForm() {
   const {
     register,
     handleSubmit,
-    setValue, // <--- 1. Extraemos setValue de aquí
+    setValue,
     formState: { errors, isSubmitting },
-    setError,
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     mode: "onBlur",
@@ -25,16 +25,16 @@ export function useLoginForm() {
     }
   })
 
-  const onSubmit = async (data: LoginFormData) => {
-    setServerError("")
-    try {
-      await login(data.email, data.password)
-      window.location.href = '/dashboard' // Hard reload para que el proxy detecte la sesión
-    } catch (err: any) {
-      const errorMsg = getAuthErrorMessage(err)
-      setServerError(errorMsg)
-    }
+ const onSubmit = async (data: LoginFormData) => {
+  setServerError("")
+  try {
+    await login(data.email, data.password)
+    window.location.href = '/dashboard' 
+  } catch (err: any) {
+    const errorMsg = getAuthErrorMessage(err)
+    setServerError(errorMsg)
   }
+}
 
   const handleGoogleLogin = async () => {
     setServerError("")

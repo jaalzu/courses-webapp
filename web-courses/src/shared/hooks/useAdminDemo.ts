@@ -11,7 +11,7 @@ export const useAdminDemo = () => {
   const runIfAllowed = (action: () => void) => {
     if (isDemoAdmin) {
       toast.error("Acción deshabilitada", {
-        description: "En el modo demo no puedes modificar datos, ¡pero sentite libre de explorar!",
+        description: "En el modo demo no puedes hacer esto!",
         duration: 4000,
       });
       return;

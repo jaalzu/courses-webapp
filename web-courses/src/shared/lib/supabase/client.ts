@@ -1,5 +1,4 @@
 import { createBrowserClient } from '@supabase/ssr'
-// import type { Database } from './types'
 import type { Database } from '@/shared/lib/supabase/database.types'
 
 
