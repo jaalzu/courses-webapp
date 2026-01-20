@@ -40,13 +40,15 @@ Plataforma educativa privada de acceso controlado, diseñada como un valor agreg
 
 ### 4.1 Academia Privada
 * **Visualizador de Clases:** Interfaz optimizada para el consumo de contenido en video sin distracciones.
-* **Organización Jerárquica:** Contenido estructurado por Cursos, Módulos y Lecciones.
+* **Organización Jerárquica:** Contenido estructurado por Cursos y Lecciones.
+* **Gestión de Visibilidad:** Soporte para cursos públicos (abiertos a la comunidad) y privados (exclusivos por invitación o compra).
 * **Sistema de Favoritos:** Capacidad para que el usuario guarde lecciones específicas y acceda a ellas rápidamente desde su perfil.
 * **Control de Acceso:** Sistema privado por invitación; acceso restringido mediante Middleware si no hay una sesión válida.
 
 ### 4.2 Espacio de Comunidad (Foro)
 * **Hilos de Discusión:** Espacio para que los emprendedores realicen consultas, compartan experiencias y generen networking.
 * **Interacción Directa:** Sistema de comentarios y respuestas en hilos específicos o asociados a las lecciones.
+* **Sistema de Notificaciones:** Alertas en tiempo real dentro de la plataforma para informar al usuario sobre nuevas respuestas en sus hilos o interacciones relevantes.
 
 ### 4.3 Autenticación y Seguridad (Auth & User)
 * **Acceso Controlado:** Registro y Login gestionado con **Supabase Auth** (JWT & Cookies).
@@ -126,8 +128,8 @@ Espacio de interacción entre usuarios.
 | Sección | Rutas ejemplo |
 | :--- | :--- |
 | **Públicas** | `/`, `/login`, `/register` |
-| **Privadas** | `/dashboard`, `/curso`, `/favoritos`, `/faqs`, `/perfil` |
-| **Admin** | `/metricas` |
+| **Privadas** | `/dashboard`, `/curso`, `/favoritos`, `/faqs`, `/perfil`, `/comunidad` |
+| **Admin** | `/metricas`,`/course-access`  |
 
 
 
@@ -138,6 +140,8 @@ Espacio de interacción entre usuarios.
 ### Endpoints existentes
 - POST /api/users/update-role
 - POST /api/sentry
+- PUT /api/courses/[id]
+- DELETE /api/courses/[id]
 
 
 ## 8. Requisitos No Funcionales
