@@ -82,8 +82,11 @@ export default function Card({
           alt={courseData.title || "Imagen del curso"}
           width={400}
           height={200}
+          priority={true}  
+  loading="eager"  
+  quality={75}     
           className="w-full h-40 object-cover"
-          unoptimized 
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // ⬅️ CAMBIO 4
         />
 
         <div className="p-4 flex flex-col flex-1 justify-between">
