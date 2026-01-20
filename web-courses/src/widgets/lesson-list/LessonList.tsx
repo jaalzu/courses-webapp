@@ -1,5 +1,5 @@
 'use client'
-
+import { useMemo } from "react"
 import { useUserProgress } from "@/entities/progress/model/useProgressQueries"
 import { useProgressMutations } from "@/entities/progress/model/useProgressMutations"
 import { Accordion, Badge, ScrollArea } from "@/shared/ui"
@@ -15,7 +15,9 @@ export function LessonList({ lessons, currentLessonId, courseId, userId, onLesso
   const { toggleLesson, isUpdating } = useProgressMutations()
 
   const completedCount = lessons.filter(l => progress.some(p => p.lessonId === l.id)).length
-  const percentage = lessons.length > 0 ? Math.round((completedCount / lessons.length) * 100) : 0
+const percentage = useMemo(() => 
+  lessons.length > 0 ? Math.round((completedCount / lessons.length) * 100) : 0,
+[completedCount, lessons.length])
 
   const handleToggleProgress = (e: React.MouseEvent, lessonId: string) => {
     e.preventDefault(); e.stopPropagation()

@@ -13,7 +13,6 @@ interface AdminCardActionsProps {
 }
 
 export function AdminCardActions({ courseId, onEdit }: AdminCardActionsProps) {
-  // 1. Estado local para abrir/cerrar el modal
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   
   const deleteMutation = useDeleteCourse() 

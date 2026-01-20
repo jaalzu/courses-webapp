@@ -1,20 +1,23 @@
 'use client'
 
-
-// 2. Features
-import { ForumSection } from '@/features/forum/ui/ForumSection'
+import { useMemo, useCallback } from 'react'  // ⬅️ AGREGAR
+import dynamic from 'next/dynamic'
 import { useCourseNavigation } from "@/features/course-navigation/useCourseNavigation"
 import { useAuthStore } from '@/features/auth/model/useAuthStore'
 import { useUserProgress } from "@/entities/progress/model/useProgressQueries" 
-
-// 3. Widgets
 import CourseContent from "@/widgets/courseContent/CourseContent"
 import { LessonList } from "@/widgets/lesson-list/LessonList"
-import InstructorCard from "@/widgets/courseContent/InstructorCard"
 import { CourseSwitcher } from "@/widgets/courseContent/CourseSwitcher"
-
-// 4. Types
 import type { Lesson } from "@/entities/lesson/types"
+
+const ForumSection = dynamic(
+  () => import('@/features/forum/ui/ForumSection').then(m => ({ default: m.ForumSection })),
+  { ssr: false }
+)
+
+const InstructorCard = dynamic(
+  () => import('@/widgets/courseContent/InstructorCard')
+)
 
 interface CoursePageContentProps {
   courseId: string
@@ -26,16 +29,18 @@ export default function CoursePageContent({ courseId }: CoursePageContentProps) 
 
   const { course, currentLesson, selectLesson } = useCourseNavigation(courseId)
 
-  useUserProgress(userId)
+  useUserProgress(userId) 
 
-  const currentVideoUrl = currentLesson?.videoUrl || course?.lessons[0]?.videoUrl
+  const currentVideoUrl = useMemo(
+    () => currentLesson?.videoUrl || course?.lessons[0]?.videoUrl,
+    [currentLesson?.videoUrl, course?.lessons]
+  )
 
-  const handleLessonClick = (lesson: Lesson) => {
+  const handleLessonClick = useCallback((lesson: Lesson) => {
     selectLesson(lesson)
-  }
+  }, [selectLesson])
 
   if (!course) return null
-
   return (
     <main className="w-full p-4 md:p-8 space-y-5">
       {/* HEADER */}
