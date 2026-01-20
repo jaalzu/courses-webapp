@@ -13,6 +13,7 @@ interface LoginFormViewProps {
   isLoading: boolean
   onSubmit: (e: React.FormEvent) => void
   onGoogleLogin: () => void
+  onAdminDemo: () => void // <--- Agregamos la prop al interface
 }
 
 export function LoginFormView({
@@ -22,6 +23,7 @@ export function LoginFormView({
   isLoading,
   onSubmit,
   onGoogleLogin,
+  onAdminDemo, // <--- La recibimos
 }: LoginFormViewProps) {
   return (
     <div className="w-full max-w-sm space-y-6 animate-in fade-in duration-500">
@@ -42,6 +44,18 @@ export function LoginFormView({
         <Image src="/icons/svg/google-icon.svg" alt="Google" width={18} height={18} />
         <span className="text-lg font-medium">Continuar con Google</span>
       </Button>
+
+      {/* --- BOTÓN ADMIN DEMO --- */}
+      <Button 
+        variant="ghost" 
+        size="sm"
+        className="w-full border border-dashed border-gray-300 text-gray-500 hover:bg-gray-50 text-[11px] h-8"
+        onClick={onAdminDemo}
+        type="button"
+      >
+        Entrar como Mentor (Demo)
+      </Button>
+      
 
       <div className="relative">
         <div className="absolute inset-0 flex items-center">

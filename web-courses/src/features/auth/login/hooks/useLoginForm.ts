@@ -13,6 +13,7 @@ export function useLoginForm() {
   const {
     register,
     handleSubmit,
+    setValue, // <--- 1. Extraemos setValue de aquí
     formState: { errors, isSubmitting },
     setError,
   } = useForm<LoginFormData>({
@@ -26,20 +27,17 @@ export function useLoginForm() {
 
   const onSubmit = async (data: LoginFormData) => {
     setServerError("")
-    
     try {
       await login(data.email, data.password)
       window.location.href = '/dashboard' // Hard reload para que el proxy detecte la sesión
     } catch (err: any) {
       const errorMsg = getAuthErrorMessage(err)
-      
       setServerError(errorMsg)
     }
   }
 
   const handleGoogleLogin = async () => {
     setServerError("")
-    
     try {
       await loginWithGoogle()
     } catch (err: any) {
@@ -50,6 +48,7 @@ export function useLoginForm() {
   return {
     register,
     handleSubmit: handleSubmit(onSubmit),
+    setValue,
     errors,
     serverError,
     isLoading: isLoading || isSubmitting,

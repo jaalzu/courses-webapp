@@ -11,6 +11,8 @@ import { useEditCourseForm } from "../../hooks/useEditCourseForm"
 import { toast } from 'sonner'
 import type { Course } from "@/entities/course/types"
 import type { Lesson } from "@/entities/lesson/types"
+import { useAdminDemo } from "@/shared/hooks/useAdminDemo"
+
 
 interface Props {
   course: Course
@@ -21,9 +23,9 @@ interface Props {
 type Tab = 'basic' | 'content'
 
 export default function EditCourseModal({ course, isOpen, onClose }: Props) {
-  const updateMutation = useUpdateCourse()
+ const updateMutation = useUpdateCourse()
   const { formData, handleChange } = useEditCourseForm(course, isOpen)
-  
+  const { runIfAllowed, isDemoAdmin } = useAdminDemo(); // Sacamos ambos
   const [activeTab, setActiveTab] = useState<Tab>('basic')
   
   // Estados de imagen
@@ -62,38 +64,38 @@ export default function EditCourseModal({ course, isOpen, onClose }: Props) {
     setImageError("")
   }
 
+
  const handleSave = async () => {
-    setIsUploading(true)
-    
-    try {
-      let imageUrl = formData.image 
+    runIfAllowed(async () => {
+      setIsUploading(true);
+      try {
+        let imageUrl = formData.image;
 
-      if (imageFile) {
-        const uploadResult = await uploadCourseImage(imageFile, course.id)
-        if (!uploadResult.success) {
-          toast.error(uploadResult.error || "Error al subir la imagen")
-          return
+        if (imageFile) {
+          const uploadResult = await uploadCourseImage(imageFile, course.id);
+          if (!uploadResult.success) throw new Error(uploadResult.error);
+          imageUrl = uploadResult.url || formData.image;
         }
-        imageUrl = uploadResult.url || formData.image
+
+        await updateMutation.mutateAsync({
+          courseId: course.id,
+          updates: { ...formData, image: imageUrl, keyPoints, lessons }
+        });
+
+        toast.success("Cambios guardados");
+        onClose();
+      } catch (error) {
+        toast.error("Error al guardar");
+        
+      } finally {
+        setIsUploading(false);
       }
+  });
 
-      await updateMutation.mutateAsync({
-        courseId: course.id,
-        updates: {
-          ...formData,
-          image: imageUrl, 
-          keyPoints,
-          lessons,
-        }
-      })
-
-      onClose()
-    } catch (error) {
-      console.error("Error al guardar:", error)
-    } finally {
-      setIsUploading(false)
-    }
+  if (isDemoAdmin) {
+    onClose(); 
   }
+};
 
 
 

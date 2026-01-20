@@ -6,6 +6,14 @@ export async function DELETE(
 ) {
   const { id } = await params;
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (user?.email === 'admin@demo.com') {
+    return NextResponse.json(
+      { success: false, error: "Lo siento, las modificaciones están deshabilitadas en la cuenta de demostración." }, 
+      { status: 403 }
+    );
+  }
 
   try {
     const { data: course } = await supabase

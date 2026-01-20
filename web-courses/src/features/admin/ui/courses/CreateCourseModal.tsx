@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { useState } from "react"
 import EditCourseContentModal from "@/features/admin/ui/courses/EditCourseLessonsModal"
@@ -9,6 +9,9 @@ import { ImageUploadField } from "@/features/admin/ui/courses/ImageUploadField"
 import { uploadCourseImage, validateImage } from "@/shared/lib/supabase/imageUpload"
 import { XMarkIcon, ArrowRightIcon } from "@heroicons/react/24/outline"
 import { toast } from "sonner"
+import { useAdminDemo } from "@/shared/hooks/useAdminDemo"
+import type { Course } from "@/entities/course/types"
+import type { Lesson } from "@/entities/lesson/types"
 
 interface CreateCourseModalProps {
   open: boolean
@@ -17,8 +20,9 @@ interface CreateCourseModalProps {
 
 export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
   const createMutation = useCreateCourse() 
-  const updateMutation = useUpdateCourse() // 🔥 AGREGAR ESTO
+  const updateMutation = useUpdateCourse() 
   const { allCourses: courses } = useCourses() 
+  const { isDemoAdmin } = useAdminDemo()
   
   const [step, setStep] = useState<'basic' | 'content'>('basic')
   const [tempCourseId, setTempCourseId] = useState<string | null>(null)
@@ -30,7 +34,7 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
     duration: "",
     instructor: "",
     level: "beginner" as const,
-      isInitial: false, // ← NUEVO
+    isInitial: false, 
   })
 
   const [imageFile, setImageFile] = useState<File | null>(null)
@@ -50,8 +54,6 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
       setImageError("")
       return
     }
-
-    // Validar imagen
     const validation = validateImage(file)
     if (!validation.valid) {
       setImageError(validation.error || "Imagen inválida")
@@ -59,39 +61,30 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
       setImagePreview("")
       return
     }
-
-    // Todo OK
     setImageFile(file)
     setImagePreview(URL.createObjectURL(file))
     setImageError("")
   }
 
   const handleNext = async () => {
-    // Validaciones de texto
-    if (!form.title.trim() || !form.description.trim()) {
-      toast.error("El título y la descripción son obligatorios")
-      return
-    }
-
-    if (form.title.length > 60) {
-      toast.warning("El título no puede tener más de 60 caracteres")
-      return
-    }
-
-    if (form.description.length > 500) {
-      toast.warning("La descripción es demasiado larga (máx. 500)")
-      return
-    }
-
-    // Validar que haya imagen
-    if (!imageFile) {
-      toast.error("Debes seleccionar una imagen para el curso")
+    if (!form.title.trim() || !form.description.trim() || !imageFile) {
+      toast.error("Faltan campos obligatorios e imagen")
       return
     }
 
     setIsUploading(true)
 
-try {
+    try {
+      console.log("¿Es Demo Admin?:", isDemoAdmin);
+      if (isDemoAdmin) {
+        console.log("🛑 DETENIENDO: No debería tocar la DB");
+        const fakeId = "demo-" + Date.now()
+        toast.info("Modo Demo: Simulando creación...", { icon: "🚀" })
+        setTempCourseId(fakeId)
+        setStep('content')
+        return 
+      }
+
       const newCourse = {
         title: form.title,
         description: form.description,
@@ -99,34 +92,21 @@ try {
         duration: form.duration || '',
         instructor: form.instructor || '',
         level: form.level,
-          is_initial: form.isInitial, // ← NUEVO
+        is_initial: form.isInitial,
         keyPoints: [],
         lessons: [],
         video: '',
       }
       
       const createdCourse = await createMutation.mutateAsync(newCourse)
-      
-      if (!createdCourse?.id) {
-        toast.error("No se pudo crear el curso")
-        setIsUploading(false)
-        return
-      }
+      if (!createdCourse?.id) throw new Error("No ID returned")
 
-      // 2. Subir la imagen (Rate Limit y Redimensión ocurren adentro)
       const uploadResult = await uploadCourseImage(imageFile, createdCourse.id)
-      
-      if (!uploadResult.success) {
-        toast.error(uploadResult.error || "Error al subir la imagen")
-        setIsUploading(false)
-        return
-      }
+      if (!uploadResult.success) throw new Error(uploadResult.error)
 
-      // 3. 🔥 ACTUALIZACIÓN CLAVE: Guardamos SOLO el nombre del archivo
-      // Usamos 'uploadResult.fileName' en lugar de la URL larga
       await updateMutation.mutateAsync({
         courseId: createdCourse.id,
-        updates: { image: uploadResult.fileName } // <--- Guardamos solo el string
+        updates: { image: uploadResult.fileName }
       })
       
       toast.success("Curso creado exitosamente")
@@ -134,24 +114,17 @@ try {
       setStep('content')
 
     } catch (error) {
-      console.error("Error creando curso:", error)
+      console.error(error)
       toast.error("Error al crear el curso")
     } finally {
       setIsUploading(false)
     }
   }
+
   const handleContentClose = () => {
-    setForm({
-      title: "",
-      description: "",
-      duration: "",
-      instructor: "",
-      level: "beginner",
-      isInitial:false
-    })
+    setForm({ title: "", description: "", duration: "", instructor: "", level: "beginner", isInitial: false })
     setImageFile(null)
     setImagePreview("")
-    setImageError("")
     setStep('basic')
     setTempCourseId(null)
     onClose()
@@ -166,8 +139,23 @@ try {
     handleContentClose()
   }
 
-  const tempCourse = tempCourseId ? courses?.find(c => c.id === tempCourseId) : null
-
+  // Calculamos el curso actual (Real o Fake) sin disparar sets
+  const tempCourse = tempCourseId 
+    ? (courses?.find(c => c.id === tempCourseId) || { 
+        id: tempCourseId, 
+        title: form.title, 
+        description: form.description, 
+        image: imagePreview, 
+        level: form.level,
+        instructor: form.instructor,
+        duration: form.duration,
+        lessons: [] as Lesson[], 
+        keyPoints: [] as string[],
+        video: '',
+        is_initial: form.isInitial,
+      } as Course) 
+    : null
+  
   return (
     <>
       {step === 'basic' && (

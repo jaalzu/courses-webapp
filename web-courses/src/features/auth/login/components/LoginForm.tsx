@@ -11,7 +11,16 @@ export function LoginForm() {
     serverError,
     isLoading,
     handleGoogleLogin,
+    setValue, // <--- Sacamos esto del hook (react-hook-form)
   } = useLoginForm()
+
+  const handleAdminDemo = () => {
+    setValue("email", "admin@demo.com")
+    setValue("password", "pepe321")
+    setTimeout(() => {
+      handleSubmit() 
+    }, 800)
+  }
 
   return (
     <LoginFormView
@@ -21,6 +30,7 @@ export function LoginForm() {
       isLoading={isLoading}
       onSubmit={handleSubmit}
       onGoogleLogin={handleGoogleLogin}
+      onAdminDemo={handleAdminDemo} // <--- Pasamos la nueva función
     />
   )
 }
