@@ -11,16 +11,17 @@ import { AdminCardActions } from "@/features/admin/ui/AdminCardActions"
 import { useAuthStore } from '@/features/auth/model/useAuthStore'
 
 // 3. Entities 
-// CAMBIO: Importamos el hook de Query para el usuario
 import { useUserProgress } from "@/entities/progress/model/useProgressQueries"
 import { getCourseStats } from "@/entities/progress"
 import { getLevelConfig } from "@/entities/course/model/helpers"
 import type { Course } from "@/entities/course/types"
 
-// 4. Shared
+// 4. Shared & Lib
 import { Button } from "@/shared/ui/button"
 import { Progress, Badge } from "@/shared/ui"
 import { CheckCircleIcon } from "@heroicons/react/24/solid"
+import { useQueryClient } from '@tanstack/react-query'
+import { courseQueries } from '@/shared/lib/supabase/queries/courses'
 
 interface CardProps {
   courseId: string
@@ -41,27 +42,36 @@ export default function Card({
   level,
   onEdit,
 }: CardProps) {
-  // 1. Auth
+  // --- Hooks ---
   const currentUser = useAuthStore(state => state.currentUser)
   const isAdmin = currentUser?.role === 'admin'
   const userId = currentUser?.id
-
-  // 2. Progress & Favorites
-  const { isFavorite, toggleFavorite } = useFavoriteIds()
+  const queryClient = useQueryClient()
   
-  // CAMBIO: Usamos el hook de Query. 
-  // Automáticamente traerá el progreso del caché si ya se cargó en otro lado.
+  const { isFavorite, toggleFavorite } = useFavoriteIds()
   const { data: progress = [] } = useUserProgress(userId) 
   
+  // --- Lógica de Negocio ---
   const levelConfig = level ? getLevelConfig(level) : null
-  
-  // Pasamos el progreso obtenido de la Query
   const stats = getCourseStats(courseData, progress, userId || "user-default")
 
+  // --- PREFETCH "Nivel Dios" ---
+  const prefetchCourseData = async () => {
+    // Esto precarga los datos del curso en el caché antes del click
+    await queryClient.prefetchQuery({
+      queryKey: ['course', courseId],
+      queryFn: () => courseQueries.getById(courseId),
+      staleTime: 5 * 60 * 1000, 
+    })
+  }
+
   return (
-    <div className={`relative ${className} flex flex-col h-full`}>
+    <div 
+      className={`relative ${className} flex flex-col h-full`}
+      onMouseEnter={prefetchCourseData} // Se dispara al pasar el mouse
+    >
       
-      {/* --- BOTONES DE ACCIÓN --- */}
+      {/* --- BOTONES DE ACCIÓN (Favoritos/Admin) --- */}
       <div className="absolute top-2 right-2 z-10 flex gap-2">
         {enableEdit && isAdmin && (
           <AdminCardActions courseId={courseId} onEdit={onEdit} />
@@ -82,11 +92,10 @@ export default function Card({
           alt={courseData.title || "Imagen del curso"}
           width={400}
           height={200}
-          priority={true}  
-  loading="eager"  
-  quality={75}     
+          loading="eager"  
+          quality={75}     
           className="w-full h-40 object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // ⬅️ CAMBIO 4
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
 
         <div className="p-4 flex flex-col flex-1 justify-between">
