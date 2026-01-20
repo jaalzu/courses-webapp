@@ -6,17 +6,17 @@ JavaCourses es una plataforma educativa de acceso controlado diseñada para prog
 
 ## 🚀 Highlights Técnicos
 
-Este proyecto no es solo un LMS, es una demostración de arquitectura frontend moderna:
+Este proyecto es una demostración de arquitectura frontend de alto nivel:
 
-- **Arquitectura FSD (Feature-Sliced Design):** Organización de código basada en funcionalidades para máxima escalabilidad y desacoplamiento.
-- **Orquestación de API:** Implementación de Route Handlers en Next.js para coordinar la integridad entre la base de datos (Supabase DB) y el almacenamiento físico (Supabase Storage), incluyendo limpieza automática de assets.
-- **Performance de Elite:** Estrategias de prefetching de datos con TanStack Query al hacer hover en las cards, logrando transiciones de página instantáneas.
-- **Seguridad Robusta:** Autenticación gestionada mediante Supabase Auth con persistencia en Cookies para Server-Side Rendering (SSR).
+- **Arquitectura FSD (Feature-Sliced Design):** Organización modular para máxima escalabilidad y separación de intereses.
+- **Seguridad Multi-capa:** Protección de datos mediante Middleware (Next.js), Route Handlers y Row Level Security (Supabase).
+- **Modo Demo (Sandbox):** Sistema de protección que bloquea escrituras para usuarios invitados y reinicia el progreso automáticamente al iniciar sesión.
+- **Gestión Inteligente de Assets:** Sincronización automática entre DB y Storage para evitar archivos huérfanos al editar o borrar cursos.
 
 ## 🛠️ Stack Tecnológico
 
-- **Frontend:** Next.js 16 (App Router), React, TypeScript.
-- **Estado & Datos:** TanStack Query (Caché & Prefetching), Zustand (Estado Global).
+- **Frontend:** Next.js 15+ (App Router), React, TypeScript.
+- **Estado & Datos:** Zustand (Estado Global), Supabase Client (SSR Friendly).
 - **Backend:** Supabase (PostgreSQL, Auth, Storage).
 - **Styling:** Tailwind CSS, shadcn/ui.
 - **Validación:** Zod + React Hook Form.
@@ -25,28 +25,29 @@ Este proyecto no es solo un LMS, es una demostración de arquitectura frontend m
 
 ### Para el Alumno (Emprendedor)
 - **Visualizador Pro:** Interfaz de clases sin distracciones.
-- **Sistema de Favoritos:** Marcadores persistentes para lecciones clave.
-- **Progreso en tiempo real:** Tracking visual de lecciones completadas vs. pendientes.
-- **Comunidad:** Foro interactivo por curso y notificaciones de respuestas.
+- **Progreso en tiempo real:** Tracking visual de lecciones completadas.
+- **Comunidad:** Foro interactivo por curso con sistema de hilos.
 
-### Para el Mentor (Admin) - [VER CAPTURAS]
+### Para el Mentor (Admin)
 - **Gestión de Catálogo:** CRUD completo de cursos y lecciones con carga de imágenes.
-- **Limpieza de Assets:** El sistema elimina automáticamente del Storage las imágenes de cursos borrados o actualizados.
-- **Control de Alumnos:** Gestión de accesos y visualización de métricas de progreso individual.
+- **Limpieza de Assets:** Sistema automático de borrado de imágenes huérfanas en Storage.
+- **Métricas de Alumnos:** Visualización detallada del avance de cada emprendedor.
 
 ---
 
-## 🏗️ Arquitectura de Datos
+## 🏗️ Arquitectura de Seguridad (Demo Mode)
 
-El sistema utiliza un modelo relacional optimizado para acceso controlado. Puedes consultar el [Data Model Detallado aquí](./docs/DATA_MODEL.md).
+Para facilitar la evaluación del proyecto por parte de reclutadores, se implementó una cuenta de demostración (`admin@demo.com`) con las siguientes características:
 
+1. **Interceptores de API:** Bloqueo de peticiones `POST/PUT/DELETE` en el servidor para evitar alteraciones en la base de datos pública.
+2. **Auto-Reset:** Al detectar el inicio de sesión del usuario demo, un proceso de limpieza (Trigger o Hook) reinicia la tabla `user_progress`.
+3. **UI Condicional:** Los elementos administrativos muestran estados deshabilitados y Tooltips informativos para usuarios invitados.
 
+---
 
 ## 🔧 Instalación y Setup
 
-1. Clonar el repo: `git clone ...`
-2. Instalar dependencias: `npm install`
-3. Configurar variables de entorno (`.env.local`):
-   ```env
-   NEXT_PUBLIC_SUPABASE_URL=...
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+1. **Clonar el repo:**
+   ```bash
+   git clone [https://github.com/tu-usuario/javacourses.git](https://github.com/tu-usuario/javacourses.git)
+   cd javacourses

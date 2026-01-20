@@ -54,6 +54,10 @@ Plataforma educativa privada de acceso controlado, diseñada como un valor agreg
 * **Acceso Controlado:** Registro y Login gestionado con **Supabase Auth** (JWT & Cookies).
 * **Validación de Datos:** Uso de **react-hook-form + Zod** para asegurar la integridad de los datos en formularios de acceso y perfil.
 * **Protección de Rutas:** Seguridad a nivel de servidor y cliente para prevenir acceso no autorizado.
+* **Seguridad Multi-capa:** * **Capa de UI:** Feedback visual y deshabilitación de controles según el estado del usuario.
+    * **Capa de API:** Middleware y Route Handlers que validan el JWT del usuario antes de procesar operaciones sensibles.
+    * **Capa de DB (RLS):** Implementación de **Row Level Security** en Supabase para restringir acciones de escritura basadas en el correo electrónico y rol del usuario.
+* **Rate Limiting:** Control de frecuencia en la creación de hilos y comentarios en el foro para prevenir spam y abuso de la API.
 
 ### 4.4 Perfil de Usuario
 * **Gestión de Cuenta:** Actualización de datos personales y de seguridad.
@@ -68,7 +72,11 @@ Plataforma educativa privada de acceso controlado, diseñada como un valor agreg
 * **Gestión de Assets Inteligente: * Limpieza Automática de Storage** * Sistema sincronizado que detecta y elimina archivos huérfanos (imágenes antiguas) en Supabase Storage al actualizar o borrar cursos, evitando costos innecesarios y desorden en el servidor.
 * **Moderación del Foro:** * Herramientas para editar o borrar comentarios/hilos inapropiados para mantener el entorno profesional.
 * **Métricas de Alumnos** * Visualización detallada de qué lecciones ha completado cada emprendedor para dar seguimiento personalizado.
-
+### 4.6 Estrategia de Modo Demostración (Sandbox)
+Para facilitar la evaluación de la plataforma por parte de reclutadores y terceros, se implementó un entorno de pruebas controlado:
+* **Restricciones de Escritura:** Bloqueo preventivo de métodos `POST`, `PUT` y `DELETE` para la cuenta de demostración (`admin@demo.com`), impidiendo la alteración de la estructura de cursos y usuarios.
+* **Mantenimiento Automático:** Sistema de limpieza de datos que detecta el inicio de sesión de la cuenta demo y reinicia automáticamente su tabla de `UserProgress`. Esto garantiza que cada visitante tenga una experiencia de usuario desde cero (0% de progreso).
+* **Protección de Comunidad:** El usuario demo posee permisos de lectura total en el foro pero tiene restringida la eliminación de contenido e interacciones masivas.
 
 
 ## 5. Modelo de Datos (Esquema Inicial)
