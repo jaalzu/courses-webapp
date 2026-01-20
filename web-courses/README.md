@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# JavaCourses - LMS Privado para Mentores
 
-## Getting Started
+![JavaCourses Banner](https://tu-url-de-imagen.com/banner.png) 
 
-First, run the development server:
+JavaCourses es una plataforma educativa de acceso controlado diseñada para programas de mentoría profesional. Permite a los mentores gestionar contenido exclusivo, realizar seguimiento del progreso de los alumnos y fomentar la comunidad en un entorno privado.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Highlights Técnicos
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Este proyecto no es solo un LMS, es una demostración de arquitectura frontend moderna:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- **Arquitectura FSD (Feature-Sliced Design):** Organización de código basada en funcionalidades para máxima escalabilidad y desacoplamiento.
+- **Orquestación de API:** Implementación de Route Handlers en Next.js para coordinar la integridad entre la base de datos (Supabase DB) y el almacenamiento físico (Supabase Storage), incluyendo limpieza automática de assets.
+- **Performance de Elite:** Estrategias de prefetching de datos con TanStack Query al hacer hover en las cards, logrando transiciones de página instantáneas.
+- **Seguridad Robusta:** Autenticación gestionada mediante Supabase Auth con persistencia en Cookies para Server-Side Rendering (SSR).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠️ Stack Tecnológico
 
-## Learn More
+- **Frontend:** Next.js 16 (App Router), React, TypeScript.
+- **Estado & Datos:** TanStack Query (Caché & Prefetching), Zustand (Estado Global).
+- **Backend:** Supabase (PostgreSQL, Auth, Storage).
+- **Styling:** Tailwind CSS, shadcn/ui.
+- **Validación:** Zod + React Hook Form.
 
-To learn more about Next.js, take a look at the following resources:
+## 📦 Características Principales
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Para el Alumno (Emprendedor)
+- **Visualizador Pro:** Interfaz de clases sin distracciones.
+- **Sistema de Favoritos:** Marcadores persistentes para lecciones clave.
+- **Progreso en tiempo real:** Tracking visual de lecciones completadas vs. pendientes.
+- **Comunidad:** Foro interactivo por curso y notificaciones de respuestas.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Para el Mentor (Admin) - [VER CAPTURAS]
+- **Gestión de Catálogo:** CRUD completo de cursos y lecciones con carga de imágenes.
+- **Limpieza de Assets:** El sistema elimina automáticamente del Storage las imágenes de cursos borrados o actualizados.
+- **Control de Alumnos:** Gestión de accesos y visualización de métricas de progreso individual.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🏗️ Arquitectura de Datos
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+El sistema utiliza un modelo relacional optimizado para acceso controlado. Puedes consultar el [Data Model Detallado aquí](./docs/DATA_MODEL.md).
+
+
+
+## 🔧 Instalación y Setup
+
+1. Clonar el repo: `git clone ...`
+2. Instalar dependencias: `npm install`
+3. Configurar variables de entorno (`.env.local`):
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=...
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=...
