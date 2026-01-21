@@ -3,7 +3,8 @@
 import Image from 'next/image'
 import { Button, Input } from "@/shared/ui"
 import { LockIcon, EnvelopeIcon } from "../../shared/icons/Icons"
-import type { UseFormRegister, FieldErrors } from "react-hook-form"
+import type { FieldErrors } from "react-hook-form"
+import type { UseFormRegister } from "react-hook-form"
 import type { LoginFormData } from "@/features/auth/lib/schemas"
 
 interface LoginFormViewProps {
@@ -13,7 +14,7 @@ interface LoginFormViewProps {
   isLoading: boolean
   onSubmit: (e: React.FormEvent) => void
   onGoogleLogin: () => void
-  onAdminDemo: () => void // <--- Agregamos la prop al interface
+  onAdminDemo: () => void 
 }
 
 export function LoginFormView({
