@@ -8,7 +8,7 @@ Plataforma educativa privada de acceso controlado, diseñada como un valor agreg
 | **Tipo** | LMS Privado (Learning Management System) |
 | **Mercado** | Mentoría profesional y Formación de Emprendedores |
 | **Plataforma** | Web (Responsive - Desktop/Mobile) |
-| **Estado actual** | MVP - UI implementada con datos mock (Frontend completo) |
+| **Estado actual** | MVP funcional con frontend completo y backend real (Supabase) |
 
 ---
 
@@ -31,8 +31,8 @@ Plataforma educativa privada de acceso controlado, diseñada como un valor agreg
 
 | Rol | Descripción | Permisos Clave |
 | :--- | :--- | :--- |
-| **Mentor (Admin)** | Dueño de la academia y gestor del programa. | • Crear/Editar cursos y módulos.<br>• Subir material (imagenes).<br>• Gestionar acceso de alumnos (Invitaciones).<br>• Dashboard con métricas de progreso. |
-| **Emprendedor (Alumno)** | Cliente exclusivo del programa de mentoría. | • Visualizar contenido de cursos asignados.<br>• Editar perfil personal. |
+| **Mentor (Admin)** | Dueño de la academia y gestor del programa. | • Crear/Editar cursos y módulos.<br>• Subir material (imagenes).<br>• Gestionar acceso de alumnos (Invitaciones).<br>• Dashboard con métricas de progreso. | <br>• Promover estudiantes a administradores y viceversa.
+| **Emprendedor (Alumno)** | Cliente exclusivo del programa de mentoría. | • Visualizar contenido de cursos asignados.<br>• Editar perfil personal. | <br>• Participar del foro abiertamente
 
 ---
 

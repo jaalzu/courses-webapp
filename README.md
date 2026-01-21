@@ -63,5 +63,5 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_anon_key_aca
 3. **Levantar el proyecto:**
 npm run dev
 
-3. **Ejecutar Tests:**
+4. **Ejecutar Tests:**
 npm run test
