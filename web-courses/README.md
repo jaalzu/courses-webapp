@@ -1,6 +1,6 @@
 # JavaCourses - LMS Privado para Mentores
 
-![JavaCourses Banner](https://tu-url-de-imagen.com/banner.png) 
+![JavaCourses Banner](./public/showcase.webp)
 
 JavaCourses es una plataforma educativa de acceso controlado diseñada para programas de mentoría profesional. Permite a los mentores gestionar contenido exclusivo, realizar seguimiento del progreso de los alumnos y fomentar la comunidad en un entorno privado.
 
@@ -15,8 +15,9 @@ Este proyecto es una demostración de arquitectura frontend de alto nivel:
 
 ## 🛠️ Stack Tecnológico
 
-- **Frontend:** Next.js 15+ (App Router), React, TypeScript.
+- **Frontend:** Next.js 16+ (App Router), React, TypeScript.
 - **Estado & Datos:** Zustand (Estado Global), Supabase Client (SSR Friendly).
+- **Testing:** Vitest (Unit Testing).
 - **Backend:** Supabase (PostgreSQL, Auth, Storage).
 - **Styling:** Tailwind CSS, shadcn/ui.
 - **Validación:** Zod + React Hook Form.
@@ -48,6 +49,19 @@ Para facilitar la evaluación del proyecto por parte de reclutadores, se impleme
 ## 🔧 Instalación y Setup
 
 1. **Clonar el repo:**
-   ```bash
    git clone [https://github.com/tu-usuario/javacourses.git](https://github.com/tu-usuario/javacourses.git)
    cd javacourses
+
+   
+2. **Instalar dependencias:**
+  npm install
+
+3. **Configurar variables de entorno:**
+ NEXT_PUBLIC_SUPABASE_URL=tu_url_supabase_aca
+NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_anon_key_aca
+
+3. **Levantar el proyecto:**
+npm run dev
+
+3. **Ejecutar Tests:**
+npm run test
