@@ -9,7 +9,7 @@
     "lint": "eslint",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage",
+    "test:coverage": "vitest --coverage"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
