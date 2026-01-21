@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import dynamic from 'next/dynamic' 
 import { SidebarProvider } from "@/widgets/sidebar/sidebar"
 import { AppSidebar } from "@/widgets/sidebar/app-sidebar"
+import { AuthSync } from "./AuthSync"  // ← IMPORTAR
 
 const Navbar = dynamic(() => import("@/widgets/navbar/Navbar").then(mod => ({ default: mod.Navbar })), {
   ssr: false, 
@@ -33,6 +34,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <SidebarProvider>
+      <AuthSync />  {/* ← AGREGAR ACÁ */}
       <div className="flex min-h-screen">
         <div className="hidden md:flex">
           <AppSidebar />

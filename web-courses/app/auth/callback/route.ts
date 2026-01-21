@@ -6,6 +6,8 @@ export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
 
+  console.log('Code:', code)
+
   if (code) {
     const cookieStore = await cookies()
 
@@ -18,13 +20,13 @@ export async function GET(request: Request) {
             return cookieStore.getAll()
           },
           setAll(cookiesToSet) {
-            try {
-              cookiesToSet.forEach(({ name, value, options }) => {
+            cookiesToSet.forEach(({ name, value, options }) => {
+              try {
                 cookieStore.set(name, value, options)
-              })
-            } catch (error) {
-              console.error('Error setting cookies:', error)
-            }
+              } catch (error) {
+                // Ignorar errores de cookies
+              }
+            })
           },
         },
       }
@@ -33,10 +35,10 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     
     if (error) {
-      console.error('Error exchanging code:', error)
-      return NextResponse.redirect(new URL('/login?error=auth_error', request.url))
+      return NextResponse.redirect(new URL('/login?error=auth_error', requestUrl.origin))
     }
   }
 
-  return NextResponse.redirect(new URL('/dashboard', request.url))
+  // Redirigir con parámetro para forzar recarga del usuario
+  return NextResponse.redirect(new URL('/dashboard?refresh=true', requestUrl.origin))
 }
