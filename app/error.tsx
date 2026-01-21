@@ -1,6 +1,6 @@
 'use client'
 
-import { ErrorBoundaryUI } from '@/shared/lib/utils/ErrorBoundary'
+import { ErrorBoundaryUI } from '../src/shared/lib/utils/ErrorBoundary'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 
 export default function Error({

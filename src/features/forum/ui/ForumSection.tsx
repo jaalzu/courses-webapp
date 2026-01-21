@@ -2,7 +2,7 @@
 
 // 1. React & Next.js
 import { useState } from 'react';
-
+import Image from 'next/image';
 // 2. Features & Hooks
 import { useForum } from '../model/useForum';
 import { PostCard } from './PostCard';
@@ -58,20 +58,42 @@ export const ForumSection = ({
     <div className="max-w-5xl mx-auto space-y-6">
       <div className="bg-white dark:bg-gray-900 rounded-2xl border border-blue-100 dark:border-gray-800 shadow-sm overflow-hidden transition-all">
         
-        {/* Header con estilo moderno */}
-        <div className="p-6 border-b border-gray-100 dark:border-gray-800 bg-gradient-to-br from-blue-50/50 to-transparent dark:from-blue-900/10">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-600 rounded-lg   dark:shadow-none">
-              <ChatBubbleOvalLeftIcon className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
-                Foro de la Comunidad
-              </h2>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Pregunta, responde y aprende junto a otros.</p>
-            </div>
-          </div>
-        </div>
+       
+   {/* Header con estilo moderno */}
+<div className="p-6 border-b border-gray-100 dark:border-gray-800 bg-gradient-to-br from-blue-50/50 to-transparent dark:from-blue-900/10">
+  {/* justify-between para separar los bloques, wrap para que en mobile bajen */}
+  <div className="flex flex-wrap items-center justify-between gap-4">
+    
+    {/* Lado Izquierdo: Foro */}
+    <div className="flex items-center gap-3">
+      <div className="p-2 bg-blue-600 rounded-lg shrink-0">
+        <ChatBubbleOvalLeftIcon className="w-6 h-6 text-white" />
+      </div>
+      <div>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+          Foro de la Comunidad
+        </h2>
+        <p className="text-xs text-gray-500 dark:text-gray-400">Pregunta, responde y aprende junto a otros.</p>
+      </div>
+    </div>
+
+    {/* Lado Derecho: Logo - Sin 'fill' para evitar que explote el tamaño */}
+    <div className="flex items-center gap-2 ml-auto sm:ml-0">
+      <Image 
+        src="/icons/svg/logo1.svg" 
+        alt="JavaCourse Logo" 
+        width={32} 
+        height={32}
+        loading="lazy"
+        className="w-8 h-8 md:w-10 md:h-10 object-contain"
+      />
+      <span className="text-md font-black text-white-100   tracking-tighter">
+        javacourses
+      </span>
+    </div>
+
+  </div>
+</div>
 
         {/* Formulario de Nueva Publicación */}
         <div className="p-6">

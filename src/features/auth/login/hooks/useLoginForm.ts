@@ -4,8 +4,6 @@ import { useAuthStore } from "@/features/auth/model/useAuthStore"
 import { getAuthErrorMessage } from '@/shared/lib/supabase/errorHandler'
 import { loginSchema, type LoginFormData } from "@/features/auth/lib/schemas"
 import { useState } from "react"
-import { supabase } from '@/shared/lib/supabase/client' 
-import { toast } from "sonner" 
 
 export function useLoginForm() {
   const { login, loginWithGoogle, isLoading } = useAuthStore()

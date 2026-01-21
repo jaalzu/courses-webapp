@@ -24,6 +24,7 @@ Plataforma educativa privada de acceso controlado, diseñada como un valor agreg
 | **Styling** | Tailwind CSS |
 | **Estado global** | Zustand |
 | **Auth** | Supabase Auth (JWT & Cookies)  |
+| **Hosting** | Vercel  |
 
 ---
 
