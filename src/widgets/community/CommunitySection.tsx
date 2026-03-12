@@ -1,12 +1,12 @@
-import Image from 'next/image'
-import { DashboardLayout } from '@/shared/layouts/DashboardLayout'
+import Image from "next/image";
+import { DashboardLayout } from "@/shared/layouts/DashboardLayout";
 
 export function CommunitySection() {
   const communityAvatars = [
-    '/icons/avatar/avatar1.webp',
-    '/icons/avatar/avatar2.svg',
-    '/icons/avatar/avatar3.svg'
-  ]
+    "/icons/avatar/avatar1.webp",
+    "/icons/avatar/avatar2.svg",
+    "/icons/avatar/avatar3.svg",
+  ];
 
   return (
     <DashboardLayout
@@ -16,11 +16,10 @@ export function CommunitySection() {
       {/* Sección Principal */}
       <section className="relative w-full py-8 lg:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          
           {/* Texto */}
           <div className="flex flex-col items-start">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-              Unite a nuestro servidor oficial de{' '}
+              Unite a nuestro servidor oficial de{" "}
               <span className="text-[#5865F2]">Discord</span>
             </h2>
 
@@ -35,12 +34,12 @@ export function CommunitySection() {
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-3 mt-10 px-10 py-4 rounded-xl bg-[#5865F2] text-white font-bold text-base md:text-lg hover:bg-[#4752c4] transition-all hover:scale-[1.02] active:scale-95 shadow-lg shadow-[#5865F2]/20 w-auto min-w-[200px]"
             >
-              <Image 
+              <Image
                 src="/icons/svg/discord.svg"
-                alt="Discord Icon" 
-                width={24} 
-                height={24} 
-                className="brightness-0 invert" 
+                alt="Discord Icon"
+                width={24}
+                height={24}
+                className="brightness-0 invert"
               />
               UNIRSE AHORA
             </a>
@@ -64,8 +63,16 @@ export function CommunitySection() {
               <div className="flex items-center gap-3 bg-secondary/40 backdrop-blur-md p-2 px-4 rounded-full border border-border/60 dark:border-white/20 shadow-sm">
                 <div className="flex -space-x-2">
                   {communityAvatars.map((src, index) => (
-                    <div key={index} className="relative h-7 w-7 rounded-full ring-2 ring-background bg-muted overflow-hidden">
-                      <Image src={src} alt="Member" fill className="object-cover" />
+                    <div
+                      key={index}
+                      className="relative h-7 w-7 rounded-full ring-2 ring-background bg-muted overflow-hidden"
+                    >
+                      <Image
+                        src={src}
+                        alt="Member"
+                        fill
+                        className="object-cover"
+                      />
                     </div>
                   ))}
                 </div>
@@ -84,19 +91,17 @@ export function CommunitySection() {
         </div>
       </section>
 
-
-
       {/* --- Nueva Sección: Quote --- */}
       <section className="w-full py-5 mt-2 border-t border-border/40">
         <div className="max-w-4xl mx-auto text-center px-4">
           <div className="relative inline-block">
             {/* Comillas decorativas */}
-            
+
             <blockquote className="text-2xl md:text-3xl lg:text-4xl italic font-medium text-foreground leading-relaxed">
-             La duda es uno de los nombres de la inteligencia.
+              La duda es uno de los nombres de la inteligencia.
             </blockquote>
           </div>
-          
+
           <footer className="mt-8 flex items-center justify-center gap-3">
             <div className="h-[1px] w-8 bg-border"></div>
             <cite className="text-base font-semibold text-muted-foreground not-italic tracking-widest uppercase">
@@ -107,5 +112,5 @@ export function CommunitySection() {
         </div>
       </section>
     </DashboardLayout>
-  )
+  );
 }

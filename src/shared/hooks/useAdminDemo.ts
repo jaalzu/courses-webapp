@@ -1,13 +1,11 @@
-import { useAuthStore } from '@/features/auth/model/useAuthStore';
-import { toast } from 'sonner'; // O la librería que uses para notificaciones
+import { useAuthStore } from "@/features/auth/model/useAuthStore";
+import { toast } from "sonner";
 
 export const useAdminDemo = () => {
   const currentUser = useAuthStore((state) => state.currentUser);
-  
-  // Definimos quién es el admin de prueba
-  const isDemoAdmin = currentUser?.email === 'admin@demo.com';
 
-  // Esta función envuelve cualquier acción sensible
+  const isDemoAdmin = currentUser?.email === "admin@demo.com";
+
   const runIfAllowed = (action: () => void) => {
     if (isDemoAdmin) {
       toast.error("Acción deshabilitada", {
@@ -21,6 +19,6 @@ export const useAdminDemo = () => {
 
   return {
     isDemoAdmin,
-    runIfAllowed
+    runIfAllowed,
   };
 };
