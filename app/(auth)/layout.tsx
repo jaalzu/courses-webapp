@@ -21,7 +21,14 @@ export default function AuthLayout({
           <a href="mailto:javieralzuu@gmail.com" className="hover:underline">
             javieralzuu@gmail.com
           </a>
-          <span>© javalzu</span>
+          <a
+            href="https://javalzu.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 text-md underline"
+          >
+            javalzu
+          </a>
         </footer>
       </div>
 

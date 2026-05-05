@@ -73,7 +73,7 @@ export function RegisterFormView({
             </span>
             <Input
               placeholder="nombre_apellido"
-              className={`pl-8 rounded-xl h-11 transition-all ${
+              className={`pl-9 rounded-xl h-11 transition-all ${
                 errors.name
                   ? "border-red-500 ring-red-100"
                   : "focus:border-black"
@@ -96,7 +96,7 @@ export function RegisterFormView({
             <Input
               type="email"
               placeholder="tucorreo@email.com"
-              className={`pl-10 rounded-xl h-11 transition-all ${
+              className={`pl-9 rounded-xl h-11 transition-all ${
                 errors.email ? "border-red-500" : "focus:border-black"
               }`}
               disabled={isLoading}
@@ -118,7 +118,7 @@ export function RegisterFormView({
               <Input
                 type="password"
                 placeholder="Contraseña"
-                className={`pl-9 rounded-xl h-11 text-xs ${
+                className={`pl-9 rounded-xl h-11 transition-all ${
                   errors.password ? "border-red-500" : "focus:border-black"
                 }`}
                 disabled={isLoading}
