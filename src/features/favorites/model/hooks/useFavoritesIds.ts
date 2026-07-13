@@ -1,17 +1,21 @@
-// hooks/useFavorites.ts
-import { useState, useEffect } from 'react';
-import { useAuthStore } from '@/features/auth/model/useAuthStore';
-import { supabaseFavorites } from '@/features/favorites/lib/supabaseFavorites';
-import { localStorageFavorites } from '@/features/favorites/lib/favoriteStorage';
+import { useState, useEffect } from "react";
+import { useAuthStore } from "@/features/auth/model/useAuthStore";
+import { supabaseFavorites } from "@/features/favorites/lib/supabaseFavorites";
+import { mockFavorites } from "@/features/favorites/lib/mockFavorites";
+import { localStorageFavorites } from "@/features/favorites/lib/favoriteStorage";
+
+const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === "true";
 
 export function useFavoriteIds() {
-  const currentUser = useAuthStore(state => state.currentUser);
+  const currentUser = useAuthStore((state) => state.currentUser);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storage = currentUser?.id 
-      ? supabaseFavorites(currentUser.id) 
+    const storage = currentUser?.id
+      ? USE_MOCKS
+        ? mockFavorites(currentUser.id)
+        : supabaseFavorites(currentUser.id)
       : localStorageFavorites;
 
     const sync = () => {
@@ -26,13 +30,15 @@ export function useFavoriteIds() {
     return () => {
       unsubscribe();
     };
-  }, [currentUser?.id]); 
+  }, [currentUser?.id]);
 
   const toggleFavorite = async (id: string) => {
-    const storage = currentUser?.id 
-      ? supabaseFavorites(currentUser.id!) 
+    const storage = currentUser?.id
+      ? USE_MOCKS
+        ? mockFavorites(currentUser.id!)
+        : supabaseFavorites(currentUser.id!)
       : localStorageFavorites;
-    
+
     if (favorites.includes(id)) {
       await storage.remove(id);
     } else {
@@ -40,10 +46,10 @@ export function useFavoriteIds() {
     }
   };
 
-  return { 
-    favorites, 
-    isFavorite: (id: string) => favorites.includes(id), 
+  return {
+    favorites,
+    isFavorite: (id: string) => favorites.includes(id),
     toggleFavorite,
-    isLoading 
+    isLoading,
   };
 }

@@ -1,15 +1,20 @@
-import { useState, useEffect, useCallback } from 'react';
-import { ForumPost } from '@/entities/forum-post';
-import { forumQueries } from '@/shared/lib/supabase/queries/forum';
-import { rateLimiter, RATE_LIMITS } from '@/shared/lib/utils/rateLimiter';
+import { useState, useEffect, useCallback } from "react";
+import { ForumPost } from "@/entities/forum-post";
+// import { forumQueries } from '@/shared/lib/supabase/queries/forum';
+import { rateLimiter, RATE_LIMITS } from "@/shared/lib/utils/rateLimiter";
 import { useAdminDemo } from "@/shared/hooks/useAdminDemo";
+import { forumApi } from "@/shared/api/forum";
 
-type NotifyFn = (message: string, type: 'error' | 'success' | 'warning') => void;
+type NotifyFn = (
+  message: string,
+  type: "error" | "success" | "warning",
+) => void;
 
 export const useForum = (courseId: string) => {
-  const { runIfAllowed } = useAdminDemo(); 
+  const { runIfAllowed } = useAdminDemo();
   const [posts, setPosts] = useState<ForumPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const forumQueries = forumApi;
 
   const loadPosts = useCallback(async () => {
     setLoading(true);
@@ -18,7 +23,7 @@ export const useForum = (courseId: string) => {
       if (error) throw error;
       setPosts(data || []);
     } catch (error) {
-      console.error('Error cargando posts:', error);
+      console.error("Error cargando posts:", error);
     } finally {
       setLoading(false);
     }
@@ -28,82 +33,108 @@ export const useForum = (courseId: string) => {
     loadPosts();
   }, [loadPosts]);
 
-  const createPost = async (content: string, userId: string, notify?: NotifyFn) => {
+  const createPost = async (
+    content: string,
+    userId: string,
+    notify?: NotifyFn,
+  ) => {
     runIfAllowed(async () => {
       const rateLimitKey = `forum-post:${userId}`;
-      const check = rateLimiter.canProceed(rateLimitKey, RATE_LIMITS.FORUM_POST);
+      const check = rateLimiter.canProceed(
+        rateLimitKey,
+        RATE_LIMITS.FORUM_POST,
+      );
 
       if (!check.allowed) {
-        notify?.(check.message || 'Límite de publicaciones alcanzado', 'warning');
+        notify?.(
+          check.message || "Límite de publicaciones alcanzado",
+          "warning",
+        );
         return;
       }
 
       try {
-        const { data, error } = await forumQueries.createPost(courseId, userId, content);
-        
+        const { data, error } = await forumQueries.createPost(
+          courseId,
+          userId,
+          content,
+        );
+
         if (error || !data) {
-          notify?.(error?.message || 'Error al crear publicación', 'error');
+          notify?.(error?.message || "Error al crear publicación", "error");
           return;
         }
-        
-        setPosts(prevPosts => [data, ...prevPosts]);
-        notify?.('Publicación creada exitosamente', 'success');
-        
+
+        setPosts((prevPosts) => [data, ...prevPosts]);
+        notify?.("Publicación creada exitosamente", "success");
       } catch (error: any) {
-        notify?.('Error inesperado al crear publicación', 'error');
+        notify?.("Error inesperado al crear publicación", "error");
       }
     });
   };
 
-  const addComment = async (postId: string, content: string, userId: string, notify?: NotifyFn) => {
+  const addComment = async (
+    postId: string,
+    content: string,
+    userId: string,
+    notify?: NotifyFn,
+  ) => {
     runIfAllowed(async () => {
       const rateLimitKey = `forum-comment:${userId}`;
-      const check = rateLimiter.canProceed(rateLimitKey, RATE_LIMITS.FORUM_COMMENT);
+      const check = rateLimiter.canProceed(
+        rateLimitKey,
+        RATE_LIMITS.FORUM_COMMENT,
+      );
 
       if (!check.allowed) {
-        notify?.(check.message || 'Espera un momento antes de comentar de nuevo', 'warning');
+        notify?.(
+          check.message || "Espera un momento antes de comentar de nuevo",
+          "warning",
+        );
         return;
       }
 
       try {
-        const { data, error } = await forumQueries.createComment(postId, userId, content);
+        const { data, error } = await forumQueries.createComment(
+          postId,
+          userId,
+          content,
+        );
 
         if (error || !data) {
-          notify?.(error?.message || 'Error al agregar comentario', 'error');
+          notify?.(error?.message || "Error al agregar comentario", "error");
           return;
         }
 
-        setPosts(prevPosts => prevPosts.map(p =>
-          p.id === postId
-            ? { ...p, comments: [...p.comments, data] }
-            : p
-        ));
-        
+        setPosts((prevPosts) =>
+          prevPosts.map((p) =>
+            p.id === postId ? { ...p, comments: [...p.comments, data] } : p,
+          ),
+        );
       } catch (error: any) {
-        notify?.('Error inesperado al agregar comentario', 'error');
+        notify?.("Error inesperado al agregar comentario", "error");
       }
     });
   };
-
-  const deleteComment = async (postId: string, commentId: string, notify?: NotifyFn) => {
+  const deleteComment = async (
+    postId: string,
+    commentId: string,
+    notify?: NotifyFn,
+  ) => {
     runIfAllowed(async () => {
       try {
-        const { error } = await forumQueries.deleteComment(commentId);
-        
-        if (error) {
-          notify?.(error.message || 'Error al eliminar comentario', 'error');
-          return;
-        }
+        await forumQueries.deleteComment(commentId); // ← Sin destructuring
 
-        setPosts(prevPosts => prevPosts.map(p =>
-          p.id === postId
-            ? { ...p, comments: p.comments.filter(c => c.id !== commentId) }
-            : p
-        ));
-        notify?.('Comentario eliminado', 'success');
-        
+        setPosts((prevPosts) =>
+          prevPosts.map((p) =>
+            p.id === postId
+              ? { ...p, comments: p.comments.filter((c) => c.id !== commentId) }
+              : p,
+          ),
+        );
+        notify?.("Comentario eliminado", "success");
       } catch (error: any) {
-        notify?.('Error inesperado al eliminar comentario', 'error');
+        notify?.(error.message || "Error al eliminar comentario", "error");
       }
     });
   };
@@ -111,18 +142,12 @@ export const useForum = (courseId: string) => {
   const deletePost = async (postId: string, notify?: NotifyFn) => {
     runIfAllowed(async () => {
       try {
-        const { error } = await forumQueries.deletePost(postId);
-        
-        if (error) {
-          notify?.(error.message || 'Error al eliminar publicación', 'error');
-          return;
-        }
+        await forumQueries.deletePost(postId); // ← Sin destructuring
 
-        setPosts(prevPosts => prevPosts.filter(p => p.id !== postId));
-        notify?.('Publicación eliminada', 'success');
-        
+        setPosts((prevPosts) => prevPosts.filter((p) => p.id !== postId));
+        notify?.("Publicación eliminada", "success");
       } catch (error: any) {
-        notify?.('Error inesperado al eliminar publicación', 'error');
+        notify?.(error.message || "Error al eliminar publicación", "error");
       }
     });
   };
