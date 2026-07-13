@@ -12,8 +12,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (initialized.current) return;
     initialized.current = true;
 
-    // En modo mock, no hay que escuchar onAuthStateChange
-    // El checkAuth() que se llama al init del app es suficiente
     if (useMocks) {
       return;
     }
