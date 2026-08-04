@@ -1,6 +1,9 @@
 export function formatTimeAgo(date: Date | string): string {
   const now = new Date()
   const past = new Date(date)
+
+  if (Number.isNaN(past.getTime())) return 'hace un momento'
+
   const diffInSeconds = Math.floor((now.getTime() - past.getTime()) / 1000)
 
   if (diffInSeconds < 60) return 'hace un momento'

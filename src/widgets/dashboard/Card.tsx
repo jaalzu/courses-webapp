@@ -21,7 +21,7 @@ import { Button } from "@/shared/ui/button"
 import { Progress, Badge } from "@/shared/ui"
 import { CheckCircleIcon } from "@heroicons/react/24/solid"
 import { useQueryClient } from '@tanstack/react-query'
-import { courseQueries } from '@/shared/lib/supabase/queries/courses'
+import { coursesApi } from '@/entities/course/application/coursesApi'
 
 interface CardProps {
   courseId: string
@@ -54,13 +54,18 @@ export default function Card({
   // --- Lógica de Negocio ---
   const levelConfig = level ? getLevelConfig(level) : null
   const stats = getCourseStats(courseData, progress, userId || "user-default")
+  const statusConfig = stats.isCompleted
+    ? { label: "Completado", className: "bg-green-100 text-green-700 border-green-200" }
+    : stats.completedLessons > 0
+      ? { label: "En progreso", className: "bg-blue-100 text-blue-700 border-blue-200" }
+      : { label: "No iniciado", className: "bg-gray-100 text-gray-700 border-gray-200" }
 
   // --- PREFETCH "Nivel Dios" ---
   const prefetchCourseData = async () => {
     // Esto precarga los datos del curso en el caché antes del click
     await queryClient.prefetchQuery({
       queryKey: ['course', courseId],
-      queryFn: () => courseQueries.getById(courseId),
+      queryFn: () => coursesApi.getCourse(courseId),
       staleTime: 5 * 60 * 1000, 
     })
   }
@@ -104,9 +109,14 @@ export default function Card({
               {courseData.title}
             </h3>
 
-            {levelConfig && (
-              <Badge variant={levelConfig.variant}>{levelConfig.label}</Badge>
-            )}
+            <div className="mt-2 flex flex-wrap gap-2">
+              {levelConfig && (
+                <Badge variant={levelConfig.variant}>{levelConfig.label}</Badge>
+              )}
+              <span className={`inline-flex h-6 items-center rounded-full border px-2 text-xs font-medium ${statusConfig.className}`}>
+                {statusConfig.label}
+              </span>
+            </div>
 
             <p className="text-sm text-gray-600 dark:text-gray-300 mt-5 line-clamp-5">
               {courseData.description}

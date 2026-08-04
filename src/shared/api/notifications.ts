@@ -10,7 +10,7 @@ export const notificationsApi = {
   async getAll() {
     const { data, error } = await notificationQueries.getAll();
     if (error) throw new Error(error.message);
-    return data || [];
+    return (data || []).map(mapNotificationFromDb);
   },
 
   async getUnreadCount() {
@@ -29,3 +29,19 @@ export const notificationsApi = {
     if (error) throw new Error(error.message);
   },
 };
+
+function mapNotificationFromDb(row: any) {
+  return {
+    id: row.id,
+    userId: row.user_id,
+    postId: row.post_id,
+    commentId: row.comment_id,
+    actorId: row.actor_id,
+    type: row.type,
+    isRead: row.is_read,
+    createdAt: row.created_at,
+    actorName: row.actor?.name,
+    actorAvatar: row.actor?.avatar_url,
+    postTitle: row.post?.title,
+  };
+}

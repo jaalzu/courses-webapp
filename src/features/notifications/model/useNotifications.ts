@@ -4,7 +4,6 @@ import { useNotificationStore } from "./useNotificationStore";
 import { notificationsApi } from "@/shared/api/notifications";
 
 import { useEffect } from "react";
-import { mapNotificationFromDb } from "./mapper";
 
 export function useNotifications() {
   const setUnreadCount = useNotificationStore((s) => s.setUnreadCount);
