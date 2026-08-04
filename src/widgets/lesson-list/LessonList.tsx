@@ -14,14 +14,14 @@ export function LessonList({ lessons, currentLessonId, courseId, userId, onLesso
   const { data: progress = [] } = useUserProgress(userId)
   const { toggleLesson, isUpdating } = useProgressMutations()
 
-  const completedCount = lessons.filter(l => progress.some(p => p.lessonId === l.id)).length
+  const completedCount = lessons.filter(l => progress.some(p => p.lessonId === l.id && p.completed)).length
 const percentage = useMemo(() => 
   lessons.length > 0 ? Math.round((completedCount / lessons.length) * 100) : 0,
 [completedCount, lessons.length])
 
   const handleToggleProgress = (e: React.MouseEvent, lessonId: string) => {
     e.preventDefault(); e.stopPropagation()
-    const isActuallyCompleted = progress.some(p => p.lessonId === lessonId)
+    const isActuallyCompleted = progress.some(p => p.lessonId === lessonId && p.completed)
     toggleLesson.mutate({ userId, courseId, lessonId, currentCompleted: isActuallyCompleted })
   }
 
@@ -47,7 +47,7 @@ const percentage = useMemo(() =>
               key={lesson.id}
               lesson={lesson}
               isActive={lesson.id === currentLessonId}
-              isCompleted={progress.some(p => p.lessonId === lesson.id)}
+              isCompleted={progress.some(p => p.lessonId === lesson.id && p.completed)}
               isUpdating={isUpdating}
               onSelect={onLessonSelect}
               onToggleProgress={handleToggleProgress}
