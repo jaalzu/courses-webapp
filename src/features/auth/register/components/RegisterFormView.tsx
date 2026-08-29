@@ -26,7 +26,7 @@ export function RegisterFormView({
   return (
     <div className="w-full max-w-sm space-y-6 animate-in fade-in duration-500">
       <header className="text-center space-y-1">
-        <h1 className="text-2xl font-bold tracking-tight">Crear cuenta</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-balance">Crear cuenta</h1>
         <p className="text-sm text-muted-foreground italic">JavaCourses</p>
       </header>
 
@@ -51,7 +51,7 @@ export function RegisterFormView({
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
         </div>
-        <div className="relative flex justify-center text-[10px] uppercase">
+        <div className="relative flex justify-center text-[0.625rem] uppercase">
           <span className="bg-background px-4 text-muted-foreground font-bold tracking-widest text-gray-400">
             o
           </span>
@@ -83,7 +83,7 @@ export function RegisterFormView({
             />
           </div>
           {errors.name && (
-            <p className="text-[10px] text-red-500 font-bold ml-2">
+            <p className="text-[0.625rem] text-red-500 font-bold ml-2">
               {errors.name.message}
             </p>
           )}
@@ -104,7 +104,7 @@ export function RegisterFormView({
             />
           </div>
           {errors.email && (
-            <p className="text-[10px] text-red-500 font-bold ml-2">
+            <p className="text-[0.625rem] text-red-500 font-bold ml-2">
               {errors.email.message}
             </p>
           )}
@@ -126,7 +126,7 @@ export function RegisterFormView({
               />
             </div>
             {errors.password && (
-              <p className="text-[10px] text-red-500 font-bold ml-2">
+              <p className="text-[0.625rem] text-red-500 font-bold ml-2">
                 {errors.password.message}
               </p>
             )}

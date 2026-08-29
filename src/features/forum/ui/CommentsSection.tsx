@@ -72,7 +72,7 @@ export const CommentsSection = ({
                     <span className="font-bold text-xs text-gray-900 dark:text-gray-100">
                       {comment.userName}
                     </span>
-                    <span className="text-[10px] text-gray-400">
+                    <span className="text-[0.625rem] text-gray-400">
                       {formatDate(comment.createdAt)}
                     </span>
                   </div>
@@ -119,7 +119,7 @@ export const CommentsSection = ({
         <div className="flex flex-col items-center shrink-0 w-10">
           <div className="w-0.5 h-4 bg-gray-200 dark:bg-gray-800" />
           <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center shadow-sm z-10 shrink-0">
-             <span className="text-[10px] font-bold text-white">Tú</span>
+             <span className="text-[0.625rem] font-bold text-white">Tú</span>
           </div>
         </div>
 

@@ -31,13 +31,13 @@ export function LessonItem({
           )}
 
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate">{lesson.title}</p>
+            <p className="text-sm font-medium truncate break-words [overflow-wrap:break-word]">{lesson.title}</p>
             <div className="flex items-center gap-2 mt-1">
-              <Badge variant="outline" className="text-[10px] h-4">
+              <Badge variant="outline" className="text-[0.625rem] h-4">
                 <ClockIcon className="w-3 h-3 mr-1" /> {lesson.duration}
               </Badge>
               {isActive && (
-                <Badge className="text-[10px] h-4 bg-blue-700 text-white border-0">Viendo ahora</Badge>
+                <Badge className="text-[0.625rem] h-4 bg-blue-700 text-white border-0">Viendo ahora</Badge>
               )}
             </div>
           </div>

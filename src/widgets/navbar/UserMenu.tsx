@@ -36,7 +36,7 @@ export function UserMenu() {
       <DropdownMenuContent align="end" className="w-56 mt-2">
         <div className="flex flex-col space-y-1 p-2">
           <p className="text-sm font-semibold leading-none">{userName}</p>
-          <p className="text-xs text-gray-500 truncate leading-none">{currentUser?.email || ''}</p>
+          <p className="text-xs text-gray-500 truncate break-words [overflow-wrap:break-word] leading-none">{currentUser?.email || ''}</p>
         </div>
         <DropdownMenuSeparator />
         <Link href="/perfil">

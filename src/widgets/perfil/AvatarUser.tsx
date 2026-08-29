@@ -110,7 +110,7 @@ export function AvatarUser({ name, email }: AvatarUserProps) {
           ) : (
             <div className="space-y-2">
               <div className="flex items-center justify-center md:justify-start gap-3">
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100">
+                <h1 className="text-2xl md:text-3xl font-bold text-balance text-gray-900 dark:text-gray-100">
                   {name}
                 </h1>
                 {!isDemoAdmin && (
@@ -124,7 +124,7 @@ export function AvatarUser({ name, email }: AvatarUserProps) {
                   </Button>
                 )}
               </div>
-              <p className="text-gray-600 dark:text-gray-400 flex items-center justify-center md:justify-start gap-2">
+              <p className="text-gray-600 dark:text-gray-400 flex items-center break-words [overflow-wrap:break-word] justify-center md:justify-start gap-2">
                 {email}
               </p>
             </div>

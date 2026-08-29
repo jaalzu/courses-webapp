@@ -31,7 +31,7 @@ const percentage = useMemo(() =>
       {/* HEADER  */}
       <div className="p-6 border-b border-gray-100 dark:border-gray-700">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Contenido del curso</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white text-balance">Contenido del curso</h3>
           <Badge variant="secondary" className="text-xs">{completedCount}/{lessons.length} completadas</Badge>
         </div>
         <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2">

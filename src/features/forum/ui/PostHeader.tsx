@@ -27,10 +27,10 @@ export const PostHeader = ({ post, currentUserName, isCurrentUserAdmin, onDelete
     <div className="flex-1">
       <div className="flex items-center justify-between mb-1">
         <div className="flex items-center gap-2">
-          <h4 className="font-bold text-gray-900 dark:text-white">
+          <h4 className="font-bold text-gray-900 dark:text-white text-balance">
             {post.userName}
           </h4>
-          <span className="text-[11px] text-gray-500">
+          <span className="text-[0.6875rem] text-gray-500">
             {formatDate(post.createdAt)}
           </span>
         </div>
@@ -59,7 +59,7 @@ export const PostHeader = ({ post, currentUserName, isCurrentUserAdmin, onDelete
         )}
       </div>
 
-      <div className="text-gray-800 dark:text-gray-200 text-sm leading-relaxed whitespace-pre-wrap">
+      <div className="text-gray-800 dark:text-gray-200 text-sm leading-relaxed whitespace-pre-wrap break-words text-pretty max-w-prose [overflow-wrap:break-word]">
         {post.content}
       </div>
     </div>

@@ -61,7 +61,7 @@ export function ErrorBoundaryUI({
 
         {/* Mensaje */}
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 text-balance">
             {title}
           </h2>
           <p className="text-gray-600 dark:text-gray-400">
@@ -81,7 +81,7 @@ export function ErrorBoundaryUI({
             {error.stack && (
               <details className="mt-2">
                 <summary className="text-xs text-gray-500 cursor-pointer">Stack trace</summary>
-                <pre className="text-[10px] text-gray-600 dark:text-gray-400 mt-2 overflow-auto max-h-32">
+                <pre className="text-[0.625rem] text-gray-600 dark:text-gray-400 mt-2 overflow-auto max-h-32">
                   {error.stack}
                 </pre>
               </details>

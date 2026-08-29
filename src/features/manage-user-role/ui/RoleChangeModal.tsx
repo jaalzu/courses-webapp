@@ -57,7 +57,7 @@ const { runIfAllowed, isDemoAdmin } = useAdminDemo() // <--- Usamos el hook
         
         {/* Header */}
         <div className="mb-4">
-          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 text-balance">
             Confirmar cambio de rol
           </h3>
         </div>

@@ -70,7 +70,7 @@ export const ForumSection = ({
         <ChatBubbleOvalLeftIcon className="w-6 h-6 text-white" />
       </div>
       <div>
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+        <h2 className="text-xl font-bold text-gray-900 text-balance dark:text-white tracking-tight">
           Foro de la Comunidad
         </h2>
         <p className="text-xs text-gray-500 dark:text-gray-400">Pregunta, responde y aprende junto a otros.</p>
@@ -115,7 +115,7 @@ export const ForumSection = ({
             </div>
             
             <div className="flex justify-end items-center gap-3">
-              <span className="text-[10px] text-gray-400 font-medium italic">
+              <span className="text-[0.625rem] text-gray-400 font-medium italic">
                 {newPostContent.length > 0 && `${newPostContent.length} caracteres`}
               </span>
               <button
@@ -136,8 +136,8 @@ export const ForumSection = ({
               <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-full mb-4">
                 <SparklesIcon className="w-8 h-8 text-blue-500" />
               </div>
-              <h3 className="font-bold text-gray-900 dark:text-white">Aún no hay preguntas</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs mt-1">
+              <h3 className="font-bold text-gray-900 dark:text-white text-balance">Aún no hay preguntas</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs mt-1 text-pretty">
                 Sé el primero en romper el hielo. Tu duda puede ser la de muchos otros.
               </p>
             </div>
