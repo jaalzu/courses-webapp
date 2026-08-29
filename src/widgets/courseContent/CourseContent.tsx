@@ -39,7 +39,7 @@ export default function CourseContent({ course, currentVideoUrl }: CourseContent
       {/* HEADER */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white text-balance">
             {course.title}
           </h1>
           <p className="text-sm text-gray-500 dark:text-blue-200">
@@ -104,10 +104,10 @@ export default function CourseContent({ course, currentVideoUrl }: CourseContent
 
       {/* DESCRIPCIÓN */}
       <div>
-        <h2 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
-          Descripción del curso
-        </h2>
-        <p className="text-gray-800 text-sm leading-relaxed dark:text-blue-100 break-words whitespace-normal">
+        <h2 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white text-balance">
+           Descripción del curso
+         </h2>
+         <p className="text-gray-800 text-sm leading-relaxed dark:text-blue-100 break-words whitespace-normal text-pretty max-w-prose">
           {course.description}
         </p>
       </div>
@@ -115,7 +115,7 @@ export default function CourseContent({ course, currentVideoUrl }: CourseContent
       {/* PUNTOS CLAVE */}
       {course.keyPoints && course.keyPoints.length > 0 && (
         <div>
-          <h3 className="text-md font-semibold mb-2 text-gray-900 dark:text-white">
+          <h3 className="text-base font-semibold mb-2 text-gray-900 dark:text-white text-balance">
             Puntos clave
           </h3>
           <ul className="list-disc list-inside text-sm text-gray-700 dark:text-blue-100 space-y-3">

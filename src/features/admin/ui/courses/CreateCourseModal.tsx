@@ -164,7 +164,7 @@ export function CreateCourseModal({ open, onClose }: CreateCourseModalProps) {
             {/* Header */}
             <div className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 mb-4 pb-2">
               <div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Crear nuevo curso</h2>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 text-balance">Crear nuevo curso</h2>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Paso 1: Información básica</p>
               </div>
               <button 

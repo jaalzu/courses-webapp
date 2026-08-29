@@ -35,7 +35,7 @@ export function CourseAccessItem({
 
         {/* Info del curso */}
         <div className="flex-1">
-          <h3 className="font-semibold text-gray-900 dark:text-gray-100">
+          <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-balance">
             {course.title}
           </h3>
           {isInitial && (

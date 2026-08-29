@@ -24,7 +24,7 @@ export default function InstructorCard({
         </Avatar>
 
         <div>
-          <h3 className="text-md font-semibold text-green-600">
+          <h3 className="text-md font-semibold text-green-600 text-balance">
             {name}
           </h3>
           <p className="text-sm text-gray-700 dark:text-gray-300 underline">

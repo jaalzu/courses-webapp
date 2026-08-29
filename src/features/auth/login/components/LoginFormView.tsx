@@ -29,7 +29,7 @@ export function LoginFormView({
   return (
     <div className="w-full max-w-sm space-y-6 animate-in fade-in duration-500">
       <header className="text-center space-y-0">
-        <h1 className="text-2xl font-bold tracking-tight">Iniciar sesión</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-balance">Iniciar sesión</h1>
         <p className="text-sm text-muted-foreground italic">JavaCourses</p>
       </header>
 
@@ -55,7 +55,7 @@ export function LoginFormView({
       <Button
         variant="ghost"
         size="sm"
-        className="w-full border border border-gray-300 text-gray-500 hover:bg-gray-50 text-[12px] h-8 mb-8"
+        className="w-full border border border-gray-300 text-gray-500 hover:bg-gray-50 text-xs h-8 mb-8"
         onClick={onAdminDemo}
         type="button"
       >
@@ -66,7 +66,7 @@ export function LoginFormView({
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
         </div>
-        <div className="relative flex justify-center text-[10px] uppercase">
+        <div className="relative flex justify-center text-[0.625rem] uppercase">
           <span className="bg-background px-4 ">o con email</span>
         </div>
       </div>
@@ -98,7 +98,7 @@ export function LoginFormView({
             />
           </div>
           {errors.email && (
-            <p className="text-[11px] text-red-500 ml-1 font-medium">
+            <p className="text-[0.6875rem] text-red-500 ml-1 font-medium">
               {errors.email.message}
             </p>
           )}
@@ -117,7 +117,7 @@ export function LoginFormView({
             />
           </div>
           {errors.password && (
-            <p className="text-[11px] text-red-500 ml-1 font-medium">
+            <p className="text-[0.6875rem] text-red-500 ml-1 font-medium">
               {errors.password.message}
             </p>
           )}

@@ -30,7 +30,7 @@ export function FavoriteCourses() {
   title="Tus Favoritos"
   description="Cursos que guardaste para ver más tarde"
 >
-      <h1 className="text-2xl font-bold">Tus Favoritos</h1>
+      <h1 className="text-2xl font-bold text-balance">Tus Favoritos</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-3 xl:gap-x-8 gap-y-9 justify-items-center">
         {favoriteCourses.map(({ id, image, title, description, level, ...courseData }) => (

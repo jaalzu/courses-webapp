@@ -47,12 +47,12 @@ export function UserProgressTable({ users }: UserProgressTableProps) {
                   </div>
                   <div>
                     <span className="text-xs text-gray-500 dark:text-gray-400">Correo: </span>
-                    <span className="text-sm text-gray-600 dark:text-gray-300 font-mono">
+                    <span className="text-sm text-gray-600 dark:text-gray-300 font-mono break-words [overflow-wrap:break-word]">
                       {user.email}
                     </span>
                   </div>
                 </div>
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase whitespace-nowrap ${getRoleStyles(user.role)}`}>
+                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.625rem] font-black uppercase whitespace-nowrap ${getRoleStyles(user.role)}`}>
                   {user.role}
                 </span>
               </div>
@@ -63,7 +63,7 @@ export function UserProgressTable({ users }: UserProgressTableProps) {
                   <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
                     Cursos Completos
                   </p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  <p className="text-2xl font-bold tabular-nums text-gray-900 dark:text-gray-100">
                     {user.completedCoursesCount}
                   </p>
                 </div>
@@ -71,7 +71,7 @@ export function UserProgressTable({ users }: UserProgressTableProps) {
                   <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
                     Lecciones Totales
                   </p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  <p className="text-2xl font-bold tabular-nums text-gray-900 dark:text-gray-100">
                     {user.totalLessonsCompleted}
                   </p>
                 </div>
@@ -107,24 +107,24 @@ export function UserProgressTable({ users }: UserProgressTableProps) {
                 <td className="px-6 py-4">
                   <div className="flex flex-col">
                     <span className="font-semibold text-gray-600 dark:text-gray-300">{user.name}</span>
-                    <span className="text-xs text-gray-600 dark:text-gray-300 font-mono">{user.email}</span>
+                    <span className="text-xs text-gray-600 dark:text-gray-300 font-mono break-words [overflow-wrap:break-word]">{user.email}</span>
                   </div>
                 </td>
                 
                 <td className="px-6 py-4">
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${getRoleStyles(user.role)}`}>
+                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.625rem] font-black uppercase ${getRoleStyles(user.role)}`}>
                     {user.role}
                   </span>
                 </td>
                 
                 <td className="px-6 py-4 text-center">
-                  <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400">
+                  <span className="text-sm font-bold tabular-nums text-indigo-600 dark:text-indigo-400">
                     {user.completedCoursesCount}
                   </span>
                 </td>
 
                 <td className="px-6 py-4 text-right">
-                  <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <span className="text-sm font-medium tabular-nums text-gray-600 dark:text-gray-400">
                     {user.totalLessonsCompleted} lecciones
                   </span>
                 </td>

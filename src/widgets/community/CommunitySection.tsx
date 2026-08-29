@@ -18,12 +18,12 @@ export function CommunitySection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Texto */}
           <div className="flex flex-col items-start">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-balance">
               Unite a nuestro servidor oficial de{" "}
               <span className="text-[#5865F2]">Discord</span>
             </h2>
 
-            <p className="mt-6 text-base md:text-lg text-muted-foreground max-w-xl">
+            <p className="mt-6 text-base md:text-lg text-muted-foreground max-w-xl text-pretty">
               Sumate a la comunidad para compartir ideas, resolver dudas,
               participar en charlas y acceder a todo el material exclusivo.
             </p>
@@ -97,7 +97,7 @@ export function CommunitySection() {
           <div className="relative inline-block">
             {/* Comillas decorativas */}
 
-            <blockquote className="text-2xl md:text-3xl lg:text-4xl italic font-medium text-foreground leading-relaxed">
+            <blockquote className="text-2xl md:text-3xl lg:text-4xl italic font-medium text-foreground leading-relaxed text-balance">
               La duda es uno de los nombres de la inteligencia.
             </blockquote>
           </div>

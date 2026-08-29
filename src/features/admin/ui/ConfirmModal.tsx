@@ -30,7 +30,7 @@ export function ConfirmModal({
       
       {/* Card del Modal */}
       <div className="relative bg-white dark:bg-gray-900 w-full max-w-md p-6 rounded-2xl shadow-2xl animate-in zoom-in-95 duration-200 border border-gray-100 dark:border-gray-800">
-        <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+        <h3 className="text-xl font-bold text-gray-900 dark:text-white text-balance">
           {title}
         </h3>
         <p className="mt-3 text-gray-500 dark:text-gray-400 leading-relaxed">

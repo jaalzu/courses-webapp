@@ -105,7 +105,7 @@ export default function Card({
 
         <div className="p-4 flex flex-col flex-1 justify-between">
           <div>
-            <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">
+            <h3 className="text-lg font-semibold mb-2 text-gray-900 text-balance dark:text-gray-100">
               {courseData.title}
             </h3>
 
@@ -118,7 +118,7 @@ export default function Card({
               </span>
             </div>
 
-            <p className="text-sm text-gray-600 dark:text-gray-300 mt-5 line-clamp-5">
+            <p className="text-sm text-gray-600 dark:text-gray-300 mt-5 line-clamp-5 text-pretty break-words [overflow-wrap:break-word]">
               {courseData.description}
             </p>
           </div>
@@ -134,7 +134,7 @@ export default function Card({
                 <span className="text-sm font-semibold">¡Completado!</span>
               </div>
             ) : (
-              <span className="text-sm font-medium">
+              <span className="text-sm font-medium tabular-nums">
                 {stats.completedLessons}/{stats.totalLessons}
               </span>
             )}

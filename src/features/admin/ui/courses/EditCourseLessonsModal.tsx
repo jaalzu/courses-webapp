@@ -107,7 +107,7 @@ return (
         {/* Header */}
         <div className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 mb-6 pb-4">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 text-balance">
               Editar Contenido del Curso
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
@@ -123,7 +123,7 @@ return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* COLUMNA IZQUIERDA: LECCIONES */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 text-balance">
               Lecciones ({lessons.length})
             </h3>
 
@@ -133,7 +133,7 @@ return (
                 <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   {editingLesson ? 'Editar lección' : 'Nueva lección'}
                 </p>
-                <span className={`text-[10px] ${lessonForm.title.length >= 80 ? 'text-red-500 font-bold' : 'text-gray-400'}`}>
+                <span className={`text-[0.625rem] ${lessonForm.title.length >= 80 ? 'text-red-500 font-bold' : 'text-gray-400'}`}>
                   {lessonForm.title.length} / 80
                 </span>
               </div>
@@ -230,7 +230,7 @@ return (
                             {lesson.duration}
                           </p>
                           {lesson.videoUrl && (
-                            <span className="text-[10px] px-1.5 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded">
+                            <span className="text-[0.625rem] px-1.5 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded">
                               VIDEO
                             </span>
                           )}
@@ -260,7 +260,7 @@ return (
 
           {/* COLUMNA DERECHA: KEY POINTS */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 text-balance">
               Puntos Clave ({keyPoints.length})
             </h3>
 
@@ -269,7 +269,7 @@ return (
                 <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Agregar punto clave
                 </p>
-                <span className={`text-[10px] ${keyPointInput.length >= 150 ? 'text-red-500 font-bold' : 'text-gray-400'}`}>
+                <span className={`text-[0.625rem] ${keyPointInput.length >= 150 ? 'text-red-500 font-bold' : 'text-gray-400'}`}>
                   {keyPointInput.length} / 150
                 </span>
               </div>

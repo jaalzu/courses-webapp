@@ -160,7 +160,7 @@ export default function EditCourseModal({ course, isOpen, onClose }: Props) {
         
         {/* Header */}
         <div className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 p-6 pb-4">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 text-balance">
             Editar Curso
           </h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">

@@ -31,7 +31,7 @@ export function CourseFormField({
         </label>
         
         {maxLength && type !== 'select' && (
-          <span className={`text-[10px] ${safeValue.length >= maxLength ? 'text-red-500 font-bold' : 'text-gray-400'}`}>
+          <span className={`text-[0.625rem] ${safeValue.length >= maxLength ? 'text-red-500 font-bold' : 'text-gray-400'}`}>
             {safeValue.length} / {maxLength}
           </span>
         )}
