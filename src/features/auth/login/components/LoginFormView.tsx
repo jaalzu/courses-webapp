@@ -37,7 +37,7 @@ export function LoginFormView({
       <Button
         variant="outline"
         size="lg"
-        className="w-full flex items-center justify-center gap-3 bg-black text-white hover:bg-gray-800 hover:text-white border-black transition-all mb-4"
+        className="w-full flex items-center justify-center gap-3 bg-foreground text-background hover:bg-foreground/90 dark:bg-white dark:text-black dark:hover:bg-zinc-200 border-transparent dark:border-transparent transition-all mb-4"
         onClick={onGoogleLogin}
         disabled={isLoading}
         type="button"
@@ -55,7 +55,7 @@ export function LoginFormView({
       <Button
         variant="ghost"
         size="sm"
-        className="w-full border border border-gray-300 text-gray-500 hover:bg-gray-50 text-xs h-8 mb-8"
+        className="w-full border border-border/40 text-foreground dark:text-muted-foreground hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 text-sm font-medium h-8 mb-8"
         onClick={onAdminDemo}
         type="button"
       >
@@ -67,7 +67,7 @@ export function LoginFormView({
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-[0.625rem] uppercase">
-          <span className="bg-background px-4 ">o con email</span>
+          <span className="bg-background px-4 text-muted-foreground font-bold tracking-widest">o con email</span>
         </div>
       </div>
 
@@ -89,7 +89,7 @@ export function LoginFormView({
             />
             <Input
               type="email"
-              placeholder="chef@gastronomy.com"
+              placeholder="tu@email.com"
               className={`pl-10 h-11 rounded-xl transition-all ${
                 errors.email ? "border-red-500 focus-visible:ring-red-500" : ""
               }`}
@@ -127,27 +127,19 @@ export function LoginFormView({
           type="submit"
           variant="default"
           size="lg"
-          className="w-full h-11 font-bold rounded-md bg-black hover:bg-gray-800 transition-all active:scale-[0.98]"
+          className="w-full h-11 font-bold rounded-md bg-primary text-primary-foreground hover:bg-primary/90 dark:bg-white dark:text-black dark:hover:bg-zinc-200 transition-all active:scale-[0.98]"
           disabled={isLoading}
         >
           {isLoading ? "Validando credenciales..." : "Iniciar Sesión"}
         </Button>
       </form>
 
-      <footer className="space-y-4 pt-2">
-        <div className="text-center">
-          <a
-            href="#"
-            className="text-xs text-muted-foreground hover:text-black transition-colors underline-offset-4 hover:underline"
-          >
-            ¿Olvidaste tu contraseña?
-          </a>
-        </div>
+      <footer className="pt-2">
         <div className="text-center text-sm text-muted-foreground">
           ¿Nuevo en la academia?{" "}
           <a
             href="/register"
-            className="text-black font-bold hover:underline underline-offset-4"
+            className="text-foreground dark:text-white font-bold hover:underline underline-offset-4"
           >
             Crea una cuenta
           </a>

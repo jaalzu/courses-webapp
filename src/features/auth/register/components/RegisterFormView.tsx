@@ -33,7 +33,7 @@ export function RegisterFormView({
       <Button
         variant="outline"
         size="lg"
-        className="w-full flex items-center justify-center gap-3 bg-black text-white hover:bg-gray-800 hover:text-white border-black transition-all active:scale-95"
+        className="w-full flex items-center justify-center gap-3 bg-foreground text-background hover:bg-foreground/90 dark:bg-white dark:text-black dark:hover:bg-zinc-200 border-transparent dark:border-transparent transition-all active:scale-95"
         onClick={onGoogleRegister}
         disabled={isLoading}
         type="button"
@@ -95,7 +95,7 @@ export function RegisterFormView({
             <EnvelopeIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <Input
               type="email"
-              placeholder="tucorreo@email.com"
+              placeholder="tu@email.com"
               className={`pl-9 rounded-xl h-11 transition-all ${
                 errors.email ? "border-red-500" : "focus:border-black"
               }`}
@@ -135,7 +135,7 @@ export function RegisterFormView({
 
         <Button
           type="submit"
-          className="w-full h-12 bg-black text-white font-black rounded-md hover:bg-gray-800 transition-all active:scale-[0.98] shadow-md hover:shadow-lg"
+          className="w-full h-12 bg-primary text-primary-foreground dark:bg-white dark:text-black dark:hover:bg-zinc-200 font-black rounded-md hover:bg-primary/90 transition-all active:scale-[0.98] shadow-md hover:shadow-lg"
           disabled={isLoading}
         >
           {isLoading ? "Creando perfil." : "Unirse "}
@@ -146,7 +146,7 @@ export function RegisterFormView({
         <span className="text-muted-foreground">¿Ya eres parte?</span>{" "}
         <a
           href="/login"
-          className="font-bold text-black hover:underline underline-offset-4"
+          className="font-bold text-foreground dark:text-white hover:underline underline-offset-4"
         >
           Inicia sesión
         </a>

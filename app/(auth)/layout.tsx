@@ -17,15 +17,12 @@ export default function AuthLayout({
           {children}
         </div>
 
-        <footer className="text-xs flex justify-between mt-4">
-          <a href="mailto:javieralzuu@gmail.com" className="hover:underline">
-            javieralzuu@gmail.com
-          </a>
+        <footer className="text-xs flex justify-end mt-4">
           <a
             href="https://javalzu.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-500 text-md underline"
+            className="text-blue-500 dark:text-blue-400 text-md underline hover:text-blue-600 dark:hover:text-blue-300"
           >
             javalzu
           </a>
